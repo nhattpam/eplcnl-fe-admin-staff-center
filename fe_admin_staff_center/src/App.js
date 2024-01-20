@@ -9,6 +9,7 @@ import EditTutor from './components/tutor/EditTutor';
 import EditCenter from './components/center/EditCenter';
 import ListLeaner from './components/learner/ListLeaner';
 import EditLearner from './components/learner/EditLearner';
+import CreateTutor from './components/tutor/CreateTutor';
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
         <Route path="/list-staff" element={<ListStaff />} />
         <Route path="/edit-staff" element={<EditStaff />} />
         <Route path="/list-tutor" element={<ListTutor />} />
-        <Route path="/edit-staff" element={<EditTutor />} />
+        <Route path="/create-tutor" element={<CreateTutor />} />
+        <Route path="/edit-tutor" element={<EditTutor />} />
         <Route path="/list-learner" element={<ListLeaner />} />
         <Route path="/edit-learner" element={<EditLearner />} />
 
