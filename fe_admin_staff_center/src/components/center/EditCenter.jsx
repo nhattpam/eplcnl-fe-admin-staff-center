@@ -16,8 +16,7 @@ const EditCenter = () => {
                             <div className="col-12">
                                 <div className="card-box">
                                     <h4 className="header-title">Center Information</h4>
-                                    <p className="sub-header">Parsley is a javascript form validation library. It helps you provide your users with feedback on
-                                        their form submission before sending it to your server.</p>
+                               
                                     <div className="alert alert-warning d-none fade show">
                                         <h4 className="mt-0 text-warning">Oh snap!</h4>
                                         <p className="mb-0">This form seems to be invalid :(</p>
@@ -28,7 +27,7 @@ const EditCenter = () => {
                                     </div>
                                     <form id="demo-form" data-parsley-validate>
                                         <div className="form-group">
-                                            <label htmlFor="fullname">Full Name * :</label>
+                                            <label htmlFor="fullname">Center Name * :</label>
                                             <input type="text" className="form-control" name="fullname" id="fullname" required />
                                         </div>
                                         <div className="form-group">
@@ -36,49 +35,21 @@ const EditCenter = () => {
                                             <input type="email" id="email" className="form-control" name="email" data-parsley-trigger="change" required />
                                         </div>
                                         <div className="form-group">
-                                            <label>Gender *:</label>
+                                            <label>Is Managed By *:</label>
                                             <div className="radio mb-1">
                                                 <input type="radio" name="gender" id="genderM" defaultValue="Male" required />
                                                 <label htmlFor="genderM">
-                                                    Male
+                                                    Staff 1
                                                 </label>
                                             </div>
                                             <div className="radio">
                                                 <input type="radio" name="gender" id="genderF" defaultValue="Female" />
                                                 <label htmlFor="genderF">
-                                                    Female
+                                                    Staff 2
                                                 </label>
                                             </div>
                                         </div>
-                                        <div className="form-group">
-                                            <label>Hobbies (Optional, but 2 minimum):</label>
-                                            <div className="checkbox checkbox-pink mb-1">
-                                                <input type="checkbox" name="hobbies[]" id="hobby1" defaultValue="ski" data-parsley-mincheck={2} />
-                                                <label htmlFor="hobby1"> Skiing </label>
-                                            </div>
-                                            <div className="checkbox checkbox-pink mb-1">
-                                                <input type="checkbox" name="hobbies[]" id="hobby2" defaultValue="run" />
-                                                <label htmlFor="hobby2"> Running </label>
-                                            </div>
-                                            <div className="checkbox checkbox-pink">
-                                                <input type="checkbox" name="hobbies[]" id="hobby3" defaultValue="eat" />
-                                                <label htmlFor="hobby3"> Eating </label>
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="heard">Heard about us via *:</label>
-                                            <select id="heard" className="form-control" required>
-                                                <option value>Choose..</option>
-                                                <option value="press">Press</option>
-                                                <option value="net">Internet</option>
-                                                <option value="mouth">Word of mouth</option>
-                                                <option value="other">Other..</option>
-                                            </select>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="message">Message (20 chars min, 100 max) :</label>
-                                            <textarea id="message" className="form-control" name="message" data-parsley-trigger="keyup" data-parsley-minlength={20} data-parsley-maxlength={100} data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment.." data-parsley-validation-threshold={10} defaultValue={"                                            "} />
-                                        </div>
+                                        
                                         <div className="form-group mb-0">
                                             {/* Approve Button */}
                                             <button type="submit" className="btn btn-success mr-2">

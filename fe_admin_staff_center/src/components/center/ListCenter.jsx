@@ -54,23 +54,23 @@ const ListCenter = () => {
                                             <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                                                 <thead>
                                                     <tr>
-                                                        <th data-toggle="true">First Name</th>
-                                                        <th>Last Name</th>
-                                                        <th data-hide="phone">Job Title</th>
-                                                        <th data-hide="phone, tablet">DOB</th>
-                                                        <th data-hide="phone, tablet">Status</th>
+                                                        <th data-toggle="true">Center Name</th>
+                                                        <th>Email</th>
+                                                        <th data-hide="phone">Description</th>
+                                                        <th data-hide="phone, tablet">Address</th>
                                                         <th>Is Managed By</th>
+                                                        <th>Status</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
                                                         <td>Isidra</td>
-                                                        <td>Boudreaux</td>
-                                                        <td>Traffic Court Referee</td>
-                                                        <td>22 Jun 1972</td>
-                                                        <td><span className="badge label-table badge-success">Active</span></td>
+                                                        <td>center1@gmail.com</td>
+                                                        <td>Pro vip</td>
+                                                        <td>2 Lien Phuong street</td>
                                                         <td>Staff1</td>
+                                                        <td><span className="badge label-table badge-success">Active</span></td>
                                                         <td>
                                                             <Link to={"/edit-center"}>
                                                                 <i class="fa-regular fa-eye"></i>
@@ -79,11 +79,11 @@ const ListCenter = () => {
                                                     </tr>
                                                     <tr>
                                                         <td>Shona</td>
-                                                        <td>Woldt</td>
-                                                        <td>Airline Transport Pilot</td>
-                                                        <td>3 Oct 1981</td>
+                                                        <td>center2@gmail.com</td>
+                                                        <td>Pro vip</td>
+                                                        <td>23 Pham Van Dong</td>
+                                                        <td>Staff2</td>
                                                         <td><span className="badge label-table badge-secondary">Disabled</span></td>
-                                                        <td>Staff1</td>
                                                         <td>
                                                             <Link to={"/edit-center"}>
                                                                 <i class="fa-regular fa-eye"></i>
@@ -92,11 +92,11 @@ const ListCenter = () => {
                                                     </tr>
                                                     <tr>
                                                         <td>Granville</td>
-                                                        <td>Leonardo</td>
-                                                        <td>Business Services Sales Representative</td>
-                                                        <td>19 Apr 1969</td>
+                                                        <td>center3@gmail.com</td>
+                                                        <td>Pro vip</td>
+                                                        <td>665 Vo Van Ngan</td>
+                                                        <td>Staff3</td>
                                                         <td><span className="badge label-table badge-danger">Suspended</span></td>
-                                                        <td>Staff1</td>
                                                         <td>
                                                             <Link to={"/edit-center"}>
                                                                 <i class="fa-regular fa-eye"></i>
