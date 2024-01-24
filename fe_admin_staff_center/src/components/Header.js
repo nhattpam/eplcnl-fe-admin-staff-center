@@ -38,7 +38,7 @@ const Header = () => {
 
                         <li className="dropdown notification-list topbar-dropdown">
                             <a className="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                <img src={`${process.env.PUBLIC_URL}/tutor_resources/assets/images/users/user-1.jpg`} alt="user-image" className="rounded-circle" />
+                                <img src={`https://icons8.com/icon/52883/administrator-male`} alt="user-image" className="rounded-circle" />
                                 <span className="pro-user-name ml-1">
                                     Geneva <i className="mdi mdi-chevron-down" />
                                 </span>
@@ -79,7 +79,7 @@ const Header = () => {
                     </ul>
                     {/* LOGO */}
                     <div className="logo-box">
-                        <Link to={"/dashboard"} className="logo logo-light text-center">
+                        <Link to={"/home"} className="logo logo-light text-center">
                             <span style={{ fontFamily: 'Comic Sans MS', fontSize: '24px', fontWeight: 'bold', color: '#fff' }}>
                                 MEOWLISH
                             </span>

@@ -10,13 +10,30 @@ import EditCenter from './components/center/EditCenter';
 import ListLeaner from './components/learner/ListLeaner';
 import EditLearner from './components/learner/EditLearner';
 import CreateTutor from './components/tutor/CreateTutor';
+import SignIn from './components/SignIn';
+import { useState, useEffect } from 'react';
 
 function App() {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Add a state for login status
+
+  useEffect(() => {
+    // Check if the user is already logged in by retrieving the login status from local storage
+    const storedLoginStatus = localStorage.getItem('isLoggedIn');
+    setIsLoggedIn(storedLoginStatus === 'true');
+
+  }, []);
+
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route
+          path="/login"
+          element={<SignIn setIsLoggedIn={setIsLoggedIn} />} // Pass setIsLoggedIn prop to Login component
+        />
         <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<SignIn />} />
         <Route path="/list-center" element={<ListCenter />} />
         <Route path="/edit-center" element={<EditCenter />} />
         <Route path="/list-staff" element={<ListStaff />} />

@@ -1,10 +1,64 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import Footer from '../Footer'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
 import { Link } from 'react-router-dom'
+import centerService from '../../services/center.service';
+import ReactPaginate from 'react-paginate';
+import { IconContext } from 'react-icons';
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai"; // icons form react-icons
+
 
 const ListCenter = () => {
+
+    const [centerList, setCenterList] = useState([]);
+    const [msg, setMsg] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+    const [centersPerPage] = useState(5);
+
+
+
+    useEffect(() => {
+        centerService
+            .getAllCenter()
+            .then((res) => {
+                console.log(res.data);
+                setCenterList(res.data);
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredCenters = centerList
+        .filter((center) => {
+            return (
+                center.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                center.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                center.description.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                center.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                center.address.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                center.isActive.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
+
+            );
+        });
+
+    const pageCount = Math.ceil(filteredCenters.length / centersPerPage);
+
+    const handlePageClick = (data) => {
+        setCurrentPage(data.selected);
+    };
+
+    const offset = currentPage * centersPerPage;
+    const currentCenters = filteredCenters.slice(offset, offset + centersPerPage);
+
     return (
         <>
             <div id="wrapper">
@@ -45,7 +99,9 @@ const ListCenter = () => {
                                                         </select>
                                                     </div>
                                                     <div className="form-group">
-                                                        <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" />
+                                                        <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on"
+                                                            value={searchTerm}
+                                                            onChange={handleSearch} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -64,61 +120,68 @@ const ListCenter = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Isidra</td>
-                                                        <td>center1@gmail.com</td>
-                                                        <td>Pro vip</td>
-                                                        <td>2 Lien Phuong street</td>
-                                                        <td>Staff1</td>
-                                                        <td><span className="badge label-table badge-success">Active</span></td>
-                                                        <td>
-                                                            <Link to={"/edit-center"}>
-                                                                <i class="fa-regular fa-eye"></i>
-                                                            </Link>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Shona</td>
-                                                        <td>center2@gmail.com</td>
-                                                        <td>Pro vip</td>
-                                                        <td>23 Pham Van Dong</td>
-                                                        <td>Staff2</td>
-                                                        <td><span className="badge label-table badge-secondary">Disabled</span></td>
-                                                        <td>
-                                                            <Link to={"/edit-center"}>
-                                                                <i class="fa-regular fa-eye"></i>
-                                                            </Link>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Granville</td>
-                                                        <td>center3@gmail.com</td>
-                                                        <td>Pro vip</td>
-                                                        <td>665 Vo Van Ngan</td>
-                                                        <td>Staff3</td>
-                                                        <td><span className="badge label-table badge-danger">Suspended</span></td>
-                                                        <td>
-                                                            <Link to={"/edit-center"}>
-                                                                <i class="fa-regular fa-eye"></i>
-                                                            </Link>
-                                                        </td>
-                                                    </tr>
+                                                    {currentCenters.map((cus) => (
+                                                        <tr key={cus.id}>
+                                                            <td>{cus.name}</td>
+                                                            <td>{cus.email}</td>
+                                                            <td>{cus.description}</td>
+                                                            <td>{cus.address}</td>
+                                                            <td>{cus.staffId}</td>
+                                                            <td>
+                                                                {cus.isActive ? (
+                                                                    <span className="badge label-table badge-success">Active</span>
+                                                                ) : (
+                                                                    <span className="badge label-table badge-danger">Inactive</span>
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                <Link to={"/edit-center"}>
+                                                                    <i className="fa-regular fa-eye"></i>
+                                                                </Link>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
                                                 </tbody>
-                                                <tfoot>
-                                                    <tr className="active">
-                                                        <td colSpan={5}>
-                                                            <div className="text-right">
-                                                                <ul className="pagination pagination-rounded justify-content-end footable-pagination m-t-10 mb-0" />
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tfoot>
+
                                             </table>
                                         </div> {/* end .table-responsive*/}
                                     </div> {/* end card-box */}
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}
+                            {/* Pagination */}
+                            <div className='container-fluid'>
+                                {/* Pagination */}
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <ReactPaginate
+                                        previousLabel={
+                                            <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                                <AiFillCaretLeft />
+                                            </IconContext.Provider>
+                                        }
+                                        nextLabel={
+                                            <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                                <AiFillCaretRight />
+                                            </IconContext.Provider>
+                                        } breakLabel={'...'}
+                                        breakClassName={'page-item'}
+                                        breakLinkClassName={'page-link'}
+                                        pageCount={pageCount}
+                                        marginPagesDisplayed={2}
+                                        pageRangeDisplayed={5}
+                                        onPageChange={handlePageClick}
+                                        containerClassName={'pagination'}
+                                        activeClassName={'active'}
+                                        previousClassName={'page-item'}
+                                        nextClassName={'page-item'}
+                                        pageClassName={'page-item'}
+                                        previousLinkClassName={'page-link'}
+                                        nextLinkClassName={'page-link'}
+                                        pageLinkClassName={'page-link'}
+                                    />
+                                </div>
+
+                            </div>
 
 
 
