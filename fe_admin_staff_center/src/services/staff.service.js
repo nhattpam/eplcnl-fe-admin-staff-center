@@ -10,7 +10,14 @@ class StaffService {
   setToken(token) {
     this.token = token;
   }
-  
+  saveStaff(staff) {
+    return axios.post(API_URL + "/staffs/", staff, {
+		headers: {
+			Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+		  }
+	});
+  }
+
     getAllStaff() {
       return axios.get(API_URL + "/staffs", {
         headers: {

@@ -29,7 +29,9 @@ const SignIn = ({ setIsLoggedIn }) => {
                 const decodedToken = JSON.parse(atob(response.data.data.split('.')[1])); // Decoding the JWT token
 
                 console.log('this is role: ' + decodedToken.role);
-                if (decodedToken.role.toString() === "5f9a0e31-e7b2-417b-917d-111468a18a53") {
+                if (decodedToken.role.toString() === "5f9a0e31-e7b2-417b-917d-111468a18a53"
+                 || decodedToken.role.toString() === "887428d0-9ded-449c-94ee-7c8a489ab763"
+                 || decodedToken.role.toString() === "14191b0a-2ec2-48e3-9ede-c34d5de0ba32") {
                     setIsLoggedIn(true);
 
                     // Store the JWT token in localStorage
@@ -39,14 +41,21 @@ const SignIn = ({ setIsLoggedIn }) => {
                     centerService.setToken(response.data.data);
 
                     // Store other necessary information
-                    sessionStorage.setItem('email', email);
                     if (decodedToken.role === "5f9a0e31-e7b2-417b-917d-111468a18a53") {
-                        sessionStorage.setItem('isAdmin', true);
-                        sessionStorage.setItem('isStaff', false);
+                        console.log("admin")
                     }
-                    if (decodedToken.isStaff === "887428d0-9ded-449c-94ee-7c8a489ab763") {
-                        sessionStorage.setItem('isAdmin', false);
-                        sessionStorage.setItem('isStaff', true);
+                    if (decodedToken.role === "887428d0-9ded-449c-94ee-7c8a489ab763") {
+                        console.log("staff")
+
+                    }
+                    if (decodedToken.role === "14191b0a-2ec2-48e3-9ede-c34d5de0ba32") {
+                        console.log("center")
+                        console.log("token")
+                        console.log(decodedToken)
+                        console.log("DAY LA ID" + decodedToken.Id.toString())
+                        
+
+
                     }
 
                     // Navigate to the home page

@@ -1,10 +1,82 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Footer from '../Footer'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
 import { Link } from 'react-router-dom'
+import accountService from '../../services/account.service'
+import tutorService from '../../services/tutor.service'
 
 const CreateTutor = () => {
+
+    const [account, setAccount] = useState({
+        fullName: "",
+        email: "",
+        password: "",
+        IsActive: true,
+        RoleId: 'be6af804-81b7-4b86-9575-6e26fc7f6b6f',
+        gender: true
+    });
+
+    const [tutor, setTutor] = useState({
+        accountId: "",
+        isFreelancer: false,
+        centerId: "128ce62b-a0d3-4db6-87ab-f579f0548529",
+    });
+
+
+    const [errors, setErrors] = useState({});
+    const [msg, setMsg] = useState("");
+
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setAccount({ ...account, [e.target.name]: value });
+    }
+
+    const validateForm = () => {
+        let isValid = true;
+        const errors = {};
+
+        if (account.fullName.trim() === '') {
+            errors.fullName = 'Full Name is required';
+            isValid = false;
+        }
+
+        if (account.password.trim() === '') {
+            errors.password = 'Password is required';
+            isValid = false;
+        }
+
+        setErrors(errors);
+        return isValid;
+    };
+
+
+    const submitAccount = async (e) => {
+        e.preventDefault();
+    
+        if (validateForm()) {
+            try {
+                // Save account
+                const accountResponse = await accountService.saveAccount(account);
+                console.log(accountResponse.data);
+    
+                // Update tutor with accountId and save tutor
+                const updatedTutor = { ...tutor, accountId: accountResponse.data.id };
+                setTutor(updatedTutor);
+
+                console.log(updatedTutor)
+                
+                const tutorResponse = await tutorService.saveTutor(updatedTutor);
+                console.log(tutorResponse.data);
+    
+                setMsg('Account and Tutor Added Successfully');
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+    
     return (
         <>
         <div id="wrapper">
@@ -17,24 +89,18 @@ const CreateTutor = () => {
                         <div className="col-12">
                             <div className="card-box">
                                 <h4 className="header-title">Create new tutor</h4>
-                                <p className="sub-header">Parsley is a javascript form validation library. It helps you provide your users with feedback on
-                                    their form submission before sending it to your server.</p>
-                                <div className="alert alert-warning d-none fade show">
-                                    <h4 className="mt-0 text-warning">Oh snap!</h4>
-                                    <p className="mb-0">This form seems to be invalid :(</p>
-                                </div>
-                                <div className="alert alert-info d-none fade show">
-                                    <h4 className="mt-0 text-info">Yay!</h4>
-                                    <p className="mb-0">Everything seems to be ok :)</p>
-                                </div>
-                                <form id="demo-form" data-parsley-validate>
+                                <form id="demo-form" data-parsley-validate onSubmit={(e) => submitAccount(e)}>
                                     <div className="form-group">
-                                        <label htmlFor="fullname">Full Name * :</label>
-                                        <input type="text" className="form-control" name="fullname" id="fullname" required />
+                                        <label htmlFor="fullName">Full Name * :</label>
+                                        <input type="text" className="form-control" name="fullName" id="fullName" required value={account.fullName} onChange={(e) => handleChange(e)}/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="email">Email * :</label>
-                                        <input type="email" id="email" className="form-control" name="email" data-parsley-trigger="change" required />
+                                        <input type="email" id="email" className="form-control" name="email" data-parsley-trigger="change" required value={account.email} onChange={(e) => handleChange(e)}/>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="password">Password * :</label>
+                                        <input type="password" className="form-control" name="password" id="password" required value={account.password} onChange={(e) => handleChange(e)}/>
                                     </div>
                                     <div className="form-group">
                                         <label>Gender *:</label>
@@ -51,44 +117,13 @@ const CreateTutor = () => {
                                             </label>
                                         </div>
                                     </div>
-                                    <div className="form-group">
-                                        <label>Hobbies (Optional, but 2 minimum):</label>
-                                        <div className="checkbox checkbox-pink mb-1">
-                                            <input type="checkbox" name="hobbies[]" id="hobby1" defaultValue="ski" data-parsley-mincheck={2} />
-                                            <label htmlFor="hobby1"> Skiing </label>
-                                        </div>
-                                        <div className="checkbox checkbox-pink mb-1">
-                                            <input type="checkbox" name="hobbies[]" id="hobby2" defaultValue="run" />
-                                            <label htmlFor="hobby2"> Running </label>
-                                        </div>
-                                        <div className="checkbox checkbox-pink">
-                                            <input type="checkbox" name="hobbies[]" id="hobby3" defaultValue="eat" />
-                                            <label htmlFor="hobby3"> Eating </label>
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="heard">Heard about us via *:</label>
-                                        <select id="heard" className="form-control" required>
-                                            <option value>Choose..</option>
-                                            <option value="press">Press</option>
-                                            <option value="net">Internet</option>
-                                            <option value="mouth">Word of mouth</option>
-                                            <option value="other">Other..</option>
-                                        </select>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="message">Message (20 chars min, 100 max) :</label>
-                                        <textarea id="message" className="form-control" name="message" data-parsley-trigger="keyup" data-parsley-minlength={20} data-parsley-maxlength={100} data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment.." data-parsley-validation-threshold={10} defaultValue={"                                            "} />
-                                    </div>
+                                    
                                     <div className="form-group mb-0">
                                         {/* Approve Button */}
                                         <button type="submit" className="btn btn-success mr-2">
-                                            <i className="bi bi-check-lg"></i> Approve
+                                            <i className="bi bi-check-lg"></i> Create
                                         </button>
-                                        {/* Disapprove Button */}
-                                        <button type="button" className="btn btn-danger">
-                                            <i className="bi bi-x-lg"></i> Disapprove
-                                        </button>
+                                       
                                     </div>
                                 </form>
                             </div> {/* end card-box*/}

@@ -1,7 +1,32 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // Clear user session or perform any necessary logout actions
+        // For example, you can use localStorage or sessionStorage to store authentication status
+        localStorage.removeItem('authToken'); // Assuming you store authentication token in localStorage
+
+        // Redirect to the login page or any other page after logout
+        navigate('/login');
+    };
+
+    useEffect(() => {
+        const handleBackwardNavigation = () => {
+            // Redirect users to a specific page when they try to go back
+            navigate('/prevent-back');
+        };
+
+        window.addEventListener('popstate', handleBackwardNavigation);
+
+        return () => {
+            window.removeEventListener('popstate', handleBackwardNavigation);
+        };
+    }, [navigate]);
+
     return (
         <>
             {/* Topbar Start */}
@@ -65,7 +90,7 @@ const Header = () => {
                                 </a>
                                 <div className="dropdown-divider" />
                                 {/* item*/}
-                                <a href="javascript:void(0);" className="dropdown-item notify-item">
+                                <a href="javascript:void(0);" className="dropdown-item notify-item" onClick={handleLogout}>
                                     <i className="fe-log-out" />
                                     <span>Logout</span>
                                 </a>
