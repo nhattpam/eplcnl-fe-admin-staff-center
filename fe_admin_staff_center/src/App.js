@@ -35,7 +35,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/list-center" element={<ListCenter />} />
-        <Route path="/edit-center" element={<EditCenter />} />
+        <Route path="/edit-center/:id" element={<EditCenter />} />
         <Route path="/list-staff" element={<ListStaff />} />
         <Route path="/edit-staff" element={<EditStaff />} />
         <Route path="/list-tutor" element={<ListTutor />} />

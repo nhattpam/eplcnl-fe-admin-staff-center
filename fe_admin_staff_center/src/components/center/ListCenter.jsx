@@ -45,7 +45,7 @@ const ListCenter = () => {
                 center.description.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
                 center.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
                 center.address.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-                center.isActive.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
+                center.isActive.toString().toLowerCase().includes(searchTerm.toLowerCase())
 
             );
         });
@@ -126,7 +126,7 @@ const ListCenter = () => {
                                                             <td>{cus.email}</td>
                                                             <td>{cus.description}</td>
                                                             <td>{cus.address}</td>
-                                                            <td>{cus.staffId}</td>
+                                                            <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
                                                             <td>
                                                                 {cus.isActive ? (
                                                                     <span className="badge label-table badge-success">Active</span>
@@ -135,13 +135,14 @@ const ListCenter = () => {
                                                                 )}
                                                             </td>
                                                             <td>
-                                                                <Link to={"/edit-center"}>
+                                                                <Link to={`/edit-center/${cus.id}`}>
                                                                     <i className="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
+
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
