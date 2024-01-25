@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import authenticationService from '../services/authentication.service';
 import centerService from '../services/center.service';
+import accountService from '../services/account.service';
 
 
 const SignIn = ({ setIsLoggedIn }) => {
 
+    //login and set jwt token
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [token, setBearerToken] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    //get centerId by accountId
+    const [account, setAccount] = useState({
+        id: ''
+    });
+    //get centerId by accountId
+
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -30,8 +39,8 @@ const SignIn = ({ setIsLoggedIn }) => {
 
                 console.log('this is role: ' + decodedToken.role);
                 if (decodedToken.role.toString() === "5f9a0e31-e7b2-417b-917d-111468a18a53"
-                 || decodedToken.role.toString() === "887428d0-9ded-449c-94ee-7c8a489ab763"
-                 || decodedToken.role.toString() === "14191b0a-2ec2-48e3-9ede-c34d5de0ba32") {
+                    || decodedToken.role.toString() === "887428d0-9ded-449c-94ee-7c8a489ab763"
+                    || decodedToken.role.toString() === "14191b0a-2ec2-48e3-9ede-c34d5de0ba32") {
                     setIsLoggedIn(true);
 
                     // Store the JWT token in localStorage
@@ -50,12 +59,19 @@ const SignIn = ({ setIsLoggedIn }) => {
                     }
                     if (decodedToken.role === "14191b0a-2ec2-48e3-9ede-c34d5de0ba32") {
                         console.log("center")
-                        console.log("token")
-                        console.log(decodedToken)
-                        console.log("DAY LA ID" + decodedToken.Id.toString())
-                        
 
+                        console.log("This is accountId: " + decodedToken.Id.toString())
 
+                        const accountResponse = await accountService.getAccountById(decodedToken.Id);
+                        const accountData = accountResponse.data;
+
+                        setAccount(accountData);
+                        console.log("This is centerId:", accountData.center.id);
+
+                        // Access centerId from localStorage
+                        localStorage.setItem('centerId', accountData.center.id);
+                        const storedCenterId = localStorage.getItem('centerId');
+                        console.log("This is centerId from localStorage:", storedCenterId);
                     }
 
                     // Navigate to the home page
@@ -74,6 +90,7 @@ const SignIn = ({ setIsLoggedIn }) => {
             setError('Login failed. Please try again.');
         }
     };
+
 
 
     return (
