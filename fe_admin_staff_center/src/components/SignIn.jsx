@@ -15,9 +15,8 @@ const SignIn = ({ setIsLoggedIn }) => {
     const navigate = useNavigate();
 
     //get centerId by accountId
-    const [account, setAccount] = useState({
-        id: ''
-    });
+    const centersResponse = centerService.getAllCenter();
+
     //get centerId by accountId
 
 
@@ -62,16 +61,21 @@ const SignIn = ({ setIsLoggedIn }) => {
 
                         console.log("This is accountId: " + decodedToken.Id.toString())
 
-                        const accountResponse = await accountService.getAccountById(decodedToken.Id);
-                        const accountData = accountResponse.data;
+                        console.log((await centersResponse).data)
 
-                        setAccount(accountData);
-                        console.log("This is centerId:", accountData.center.id);
+                        // Find the center with matching accountId
+                        const matchedCenter = (await centersResponse).data.find(center => center.account.id === decodedToken.Id);
 
-                        // Access centerId from localStorage
-                        localStorage.setItem('centerId', accountData.center.id);
-                        const storedCenterId = localStorage.getItem('centerId');
-                        console.log("This is centerId from localStorage:", storedCenterId);
+                        if (matchedCenter) {
+                            console.log("This is centerId:", matchedCenter.id);
+
+                            // Access centerId from localStorage
+                            localStorage.setItem('centerId', matchedCenter.id);
+                            const storedCenterId = localStorage.getItem('centerId');
+                            console.log("This is centerId from localStorage:", storedCenterId);
+                        } else {
+                            console.log("No matching center found for the given accountId");
+                        }
                     }
 
                     // Navigate to the home page
