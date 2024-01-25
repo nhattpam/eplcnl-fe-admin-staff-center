@@ -30,7 +30,7 @@ const Header = () => {
     return (
         <>
             {/* Topbar Start */}
-            <div className="navbar-custom" style={{ backgroundColor: '#f58d04' }}>
+            <div className="navbar-custom" style={{ backgroundColor: '#242732' }}>
                 <div className="container-fluid">
                     <ul className="list-unstyled topnav-menu float-right mb-0">
                         <li className="d-none d-lg-block">

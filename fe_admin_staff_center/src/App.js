@@ -38,9 +38,9 @@ function App() {
         <Route path="/edit-center/:id" element={<EditCenter />} />
         <Route path="/list-staff" element={<ListStaff />} />
         <Route path="/edit-staff" element={<EditStaff />} />
-        <Route path="/list-tutor" element={<ListTutor />} />
+        <Route path="/list-tutor/:centerId" element={<ListTutor />} />
         <Route path="/create-tutor" element={<CreateTutor />} />
-        <Route path="/edit-tutor" element={<EditTutor />} />
+        <Route path="/edit-tutor/:id" element={<EditTutor />} />
         <Route path="/list-learner" element={<ListLeaner />} />
         <Route path="/edit-learner" element={<EditLearner />} />
 

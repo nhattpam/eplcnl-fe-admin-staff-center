@@ -2,6 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
+
+    const centerId = localStorage.getItem('centerId');
+    // console.log("This is centerId from TUOTR:", centerId);
+
+
+
     return (
         <>
             {/* ========== Left Sidebar Start ========== */}
@@ -68,7 +74,7 @@ const Sidebar = () => {
                                             <Link to={"/list-staff"}>Staff</Link>
                                         </li>
                                         <li>
-                                            <Link to={"/list-tutor"}>Tutor</Link>
+                                            <Link to={`/list-tutor/${centerId}`}>Tutor</Link>
                                         </li>
                                         <li>
                                             <Link to={"/list-learner"}>Learner</Link>
