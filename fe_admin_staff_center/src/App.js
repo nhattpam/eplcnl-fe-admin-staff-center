@@ -13,6 +13,8 @@ import CreateTutor from './components/tutor/CreateTutor';
 import SignIn from './components/SignIn';
 import { useState, useEffect } from 'react';
 import ListTutor from './components/tutor/ListTutor';
+import ListCourseInActive from './components/course/ListCourseInActive';
+import ListCourseActive from './components/course/ListCourseActive';
 
 function App() {
 
@@ -45,6 +47,8 @@ function App() {
         <Route path="/edit-tutor/:id" element={<EditTutor />} />
         <Route path="/list-learner" element={<ListLeaner />} />
         <Route path="/edit-learner" element={<EditLearner />} />
+        <Route path="/list-course-active" element={<ListCourseActive />} />
+        <Route path="/list-course-inactive" element={<ListCourseInActive />} />
 
       </Routes>
     </div>
