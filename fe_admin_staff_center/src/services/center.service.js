@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://localhost:7215/api";
+const API_URL = "https://nhatpmse.twentytwo.asia/api";
 
 
 class CenterService {
