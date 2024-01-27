@@ -4,7 +4,7 @@ import Home from './components/Home';
 import ListCenter from './components/center/ListCenter';
 import ListStaff from './components/staff/ListStaff';
 import EditStaff from './components/staff/EditStaff';
-import ListTutor from './components/tutor/ListTutor';
+import ListTutorByCenter from './components/tutor/ListTutorByCenter';
 import EditTutor from './components/tutor/EditTutor';
 import EditCenter from './components/center/EditCenter';
 import ListLeaner from './components/learner/ListLeaner';
@@ -12,6 +12,7 @@ import EditLearner from './components/learner/EditLearner';
 import CreateTutor from './components/tutor/CreateTutor';
 import SignIn from './components/SignIn';
 import { useState, useEffect } from 'react';
+import ListTutor from './components/tutor/ListTutor';
 
 function App() {
 
@@ -38,7 +39,8 @@ function App() {
         <Route path="/edit-center/:id" element={<EditCenter />} />
         <Route path="/list-staff" element={<ListStaff />} />
         <Route path="/edit-staff" element={<EditStaff />} />
-        <Route path="/list-tutor/:centerId" element={<ListTutor />} />
+        <Route path="/list-tutor-by-center/:centerId" element={<ListTutorByCenter />} />
+        <Route path="/list-tutor" element={<ListTutor />} />
         <Route path="/create-tutor" element={<CreateTutor />} />
         <Route path="/edit-tutor/:id" element={<EditTutor />} />
         <Route path="/list-learner" element={<ListLeaner />} />

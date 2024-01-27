@@ -89,7 +89,7 @@ const CreateTutor = () => {
 
                 setMsg('Account and Tutor Added Successfully');
 
-                navigate(`/list-tutor/${centerId}`);
+                navigate(`/list-tutor-by-center/${centerId}`);
 
             } catch (error) {
                 console.log(error);

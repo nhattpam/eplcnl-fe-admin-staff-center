@@ -63,10 +63,7 @@ const Header = () => {
 
                         <li className="dropdown notification-list topbar-dropdown">
                             <a className="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                <img src={`https://icons8.com/icon/52883/administrator-male`} alt="user-image" className="rounded-circle" />
-                                <span className="pro-user-name ml-1">
-                                    Geneva <i className="mdi mdi-chevron-down" />
-                                </span>
+                                <img src={`https://static.thenounproject.com/png/3324336-200.png`} alt="user-image" className="rounded-circle" />
                             </a>
                             <div className="dropdown-menu dropdown-menu-right profile-dropdown ">
                                 {/* item*/}

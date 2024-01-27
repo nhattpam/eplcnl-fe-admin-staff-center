@@ -3,12 +3,11 @@ import Footer from '../Footer'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
 import { Link } from 'react-router-dom'
-import centerService from '../../services/center.service'
 import { useNavigate, useParams } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai"; // icons form react-icons
-
+import tutorService from '../../services/tutor.service';
 const ListTutor = () => {
 
     const [tutorList, setTutorList] = useState([]);
@@ -20,11 +19,10 @@ const ListTutor = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [tutorsPerPage] = useState(5);
 
-    const { centerId } = useParams();
 
     useEffect(() => {
-        centerService
-            .getAllTutorsByCenter(centerId)
+        tutorService
+            .getAllTutor()
             .then((res) => {
                 console.log(res.data);
                 setTutorList(res.data);
@@ -33,7 +31,7 @@ const ListTutor = () => {
             .catch((error) => {
                 console.log(error);
             });
-    }, [centerId]);
+    }, []);
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
