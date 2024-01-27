@@ -112,6 +112,7 @@ const ListTutor = () => {
                                             <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                                                 <thead>
                                                     <tr>
+                                                        <th data-toggle="true">Image</th>
                                                         <th data-toggle="true">Full Name</th>
                                                         <th data-toggle="true">Phone</th>
                                                         <th data-hide="phone">Gender</th>
@@ -123,6 +124,11 @@ const ListTutor = () => {
                                                 <tbody>
                                                     {currentTutors.map((tutor) => (
                                                         <tr key={tutor.id}>
+                                                            <td>
+                                                                <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+
+                                                                </img>
+                                                            </td>
                                                             <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
                                                             <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
                                                             <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>

@@ -116,7 +116,7 @@ const ListStaff = () => {
 
                                                         <tr>
                                                             <td>
-                                                                <img src={cus.account.imageUrl} style={{height: '70px', width: '50px'}}>
+                                                                <img src={cus.account.imageUrl} style={{ height: '70px', width: '50px' }}>
 
                                                                 </img>
                                                             </td>
@@ -155,7 +155,39 @@ const ListStaff = () => {
                             {/* end row */}
 
 
+                            {/* Pagination */}
+                            <div className='container-fluid'>
+                                {/* Pagination */}
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <ReactPaginate
+                                        previousLabel={
+                                            <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                                <AiFillCaretLeft />
+                                            </IconContext.Provider>
+                                        }
+                                        nextLabel={
+                                            <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                                <AiFillCaretRight />
+                                            </IconContext.Provider>
+                                        } breakLabel={'...'}
+                                        breakClassName={'page-item'}
+                                        breakLinkClassName={'page-link'}
+                                        pageCount={pageCount}
+                                        marginPagesDisplayed={2}
+                                        pageRangeDisplayed={5}
+                                        onPageChange={handlePageClick}
+                                        containerClassName={'pagination'}
+                                        activeClassName={'active'}
+                                        previousClassName={'page-item'}
+                                        nextClassName={'page-item'}
+                                        pageClassName={'page-item'}
+                                        previousLinkClassName={'page-link'}
+                                        nextLinkClassName={'page-link'}
+                                        pageLinkClassName={'page-link'}
+                                    />
+                                </div>
 
+                            </div>
                         </div> {/* container */}
                     </div> {/* content */}
                 </div>
