@@ -54,9 +54,9 @@ function App() {
         <Route path="/edit-learner" element={<EditLearner />} />
         <Route path="/list-course-active" element={<ListCourseActive />} />
         <Route path="/list-course-inactive" element={<ListCourseInActive />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/staff-dashboard" element={<StaffDashboard />} />
-        <Route path="/center-dashboard" element={<CenterDashboard />} />
+        <Route path="/admin-home" element={<AdminDashboard />} />
+        <Route path="/staff-home" element={<StaffDashboard />} />
+        <Route path="/center-home" element={<CenterDashboard />} />
 
       </Routes>
     </div>

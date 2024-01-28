@@ -65,6 +65,8 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                         sessionStorage.setItem('isStaff', false);
                         sessionStorage.setItem('isCenter', false);
                     }
+                    // Navigate to the home page
+                    navigate('/admin-home');
                     if (decodedToken.role === "887428d0-9ded-449c-94ee-7c8a489ab763") {
                         console.log("staff")
                         sessionStorage.setItem('isAdmin', false);
@@ -89,6 +91,8 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                         } else {
                             console.log("No matching center found for the given accountId");
                         }
+                        // Navigate to the home page
+                        navigate('/staff-home');
                     }
                     if (decodedToken.role === "14191b0a-2ec2-48e3-9ede-c34d5de0ba32") {
                         console.log("center")
@@ -114,10 +118,11 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                         } else {
                             console.log("No matching center found for the given accountId");
                         }
+                        // Navigate to the home page
+                        navigate('/center-home');
                     }
 
-                    // Navigate to the home page
-                    navigate('/home');
+
                 } else {
                     setIsLoggedIn(false);
                     setError('You are not authorized to access this page.');

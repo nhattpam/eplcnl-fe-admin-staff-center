@@ -83,7 +83,11 @@ const ListStaff = () => {
                                     <div className="card-box">
                                         <div className="mb-2">
                                             <div className="row">
+
                                                 <div className="col-12 text-sm-center form-inline">
+                                                    <Link to="/create-staff" className="btn btn-primary">
+                                                        Create 
+                                                    </Link>
                                                     <div className="form-group mr-2">
                                                         <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
                                                             <option value>Show all</option>
