@@ -19,6 +19,7 @@ import AdminDashboard from './components/dashboard/AdminDashboard';
 import CenterDashboard from './components/dashboard/CenterDashboard';
 import StaffDashboard from './components/dashboard/StaffDashboard';
 import ListTutorByStaff from './components/tutor/ListTutorByStaff';
+import CreateStaff from './components/staff/CreateStaff';
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
         <Route path="/list-center" element={<ListCenter />} />
         <Route path="/edit-center/:id" element={<EditCenter />} />
         <Route path="/list-staff" element={<ListStaff />} />
+        <Route path="/create-staff" element={<CreateStaff />} />
         <Route path="/edit-staff" element={<EditStaff />} />
         <Route path="/list-tutor-by-center/:centerId" element={<ListTutorByCenter />} />
         <Route path="/list-tutor-by-staff/:staffId" element={<ListTutorByStaff />} />

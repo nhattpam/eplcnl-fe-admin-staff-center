@@ -5,14 +5,6 @@ const Sidebar = ({ isAdmin, isStaff, isCenter }) => {
 
     const centerId = localStorage.getItem('centerId');
     const staffId = localStorage.getItem('staffId');
-    // console.log("This is centerId from TUOTR:", centerId);
-    // const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
-    // const isStaff = sessionStorage.getItem('isStaff') === 'true';
-    // const isCenter = sessionStorage.getItem('isCenter') === 'true';
-
-    console.log("admin: " + isAdmin)
-    console.log("staff: " + isStaff)
-    console.log("center: " + isCenter)
 
     return (
         <>
