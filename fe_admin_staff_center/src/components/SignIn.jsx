@@ -3,9 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import authenticationService from '../services/authentication.service';
 import centerService from '../services/center.service';
 import accountService from '../services/account.service';
+import courseService from '../services/course.service';
+import learnerService from '../services/learner.service';
+import staffService from '../services/staff.service';
+import tutorService from '../services/tutor.service';
 
 
-const SignIn = ({ setIsLoggedIn }) => {
+const SignIn = ({ setIsLoggedIn, setRole }) => {
 
     //login and set jwt token
     const [email, setEmail] = useState('');
@@ -17,8 +21,8 @@ const SignIn = ({ setIsLoggedIn }) => {
     //get centerId by accountId
     const centersResponse = centerService.getAllCenter();
 
-    //get centerId by accountId
-
+    //get staffId by accountId
+    const staffsResponse = staffService.getAllStaff();
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -47,17 +51,51 @@ const SignIn = ({ setIsLoggedIn }) => {
                     // Pass the token to the module
                     console.log('this is token: ' + response.data.data);
                     centerService.setToken(response.data.data);
+                    accountService.setToken(response.data.data);
+                    courseService.setToken(response.data.data);
+                    learnerService.setToken(response.data.data);
+                    centerService.setToken(response.data.data);
+                    staffService.setToken(response.data.data);
+                    tutorService.setToken(response.data.data);
 
                     // Store other necessary information
                     if (decodedToken.role === "5f9a0e31-e7b2-417b-917d-111468a18a53") {
                         console.log("admin")
+                        sessionStorage.setItem('isAdmin', true);
+                        sessionStorage.setItem('isStaff', false);
+                        sessionStorage.setItem('isCenter', false);
                     }
                     if (decodedToken.role === "887428d0-9ded-449c-94ee-7c8a489ab763") {
                         console.log("staff")
+                        sessionStorage.setItem('isAdmin', false);
+                        sessionStorage.setItem('isStaff', true);
+                        sessionStorage.setItem('isCenter', false);
 
+
+                        console.log("This is accountId: " + decodedToken.Id.toString())
+
+                        console.log((await staffsResponse).data)
+
+                        // Find the staff with matching accountId
+                        const matchedStaff = (await staffsResponse).data.find(staff => staff.account.id === decodedToken.Id);
+
+                        if (matchedStaff) {
+                            console.log("This is staffId:", matchedStaff.id);
+
+                            // Access centerId from localStorage
+                            localStorage.setItem('staffId', matchedStaff.id);
+                            const storedStaffId = localStorage.getItem('staffId');
+                            console.log("This is staffId from localStorage:", storedStaffId);
+                        } else {
+                            console.log("No matching center found for the given accountId");
+                        }
                     }
                     if (decodedToken.role === "14191b0a-2ec2-48e3-9ede-c34d5de0ba32") {
                         console.log("center")
+                        sessionStorage.setItem('isAdmin', false);
+                        sessionStorage.setItem('isStaff', false);
+                        sessionStorage.setItem('isCenter', true);
+
 
                         console.log("This is accountId: " + decodedToken.Id.toString())
 
@@ -108,8 +146,8 @@ const SignIn = ({ setIsLoggedIn }) => {
                             <div className="auth-brand text-center text-lg-left">
                                 <div className="auth-logo">
                                     <a href="index.html" className="logo logo-dark text-center">
-                                        <span className="logo-lg">
-                                            <img src="../assets/images/logo-dark.png" alt height={22} />
+                                        <span style={{ fontFamily: 'Comic Sans MS', fontSize: '24px', fontWeight: 'bold', color: '#000037' }}>
+                                            MEOWLISH
                                         </span>
                                     </a>
                                     <a href="index.html" className="logo logo-light text-center">
@@ -161,7 +199,7 @@ const SignIn = ({ setIsLoggedIn }) => {
                         <p className="lead"><i className="mdi mdi-format-quote-open" /> I've been using your theme from the previous developer for our web app, once I knew new version is out, I immediately bought with no hesitation. Great themes, good documentation with lots of customization available and sample app that really fit our need. <i className="mdi mdi-format-quote-close" />
                         </p>
                         <h5 className="text-white">
-                            - Fadlisaad (Ubold Admin User)
+                            - MeowLish developer
                         </h5>
                     </div> {/* end auth-user-testimonial*/}
                 </div>

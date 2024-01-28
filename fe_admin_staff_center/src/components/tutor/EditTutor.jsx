@@ -52,7 +52,9 @@ const EditTutor = () => {
         <>
             <div id="wrapper">
                 <Header />
-                <Sidebar />
+                <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
+                    isStaff={sessionStorage.getItem('isStaff') === 'true'}
+                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />
                 <div className="content-page">
                     {/* Start Content*/}
                     <div className="container-fluid">

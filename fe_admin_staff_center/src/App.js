@@ -15,6 +15,10 @@ import { useState, useEffect } from 'react';
 import ListTutor from './components/tutor/ListTutor';
 import ListCourseInActive from './components/course/ListCourseInActive';
 import ListCourseActive from './components/course/ListCourseActive';
+import AdminDashboard from './components/dashboard/AdminDashboard';
+import CenterDashboard from './components/dashboard/CenterDashboard';
+import StaffDashboard from './components/dashboard/StaffDashboard';
+import ListTutorByStaff from './components/tutor/ListTutorByStaff';
 
 function App() {
 
@@ -42,6 +46,7 @@ function App() {
         <Route path="/list-staff" element={<ListStaff />} />
         <Route path="/edit-staff" element={<EditStaff />} />
         <Route path="/list-tutor-by-center/:centerId" element={<ListTutorByCenter />} />
+        <Route path="/list-tutor-by-staff/:staffId" element={<ListTutorByStaff />} />
         <Route path="/list-tutor" element={<ListTutor />} />
         <Route path="/create-tutor" element={<CreateTutor />} />
         <Route path="/edit-tutor/:id" element={<EditTutor />} />
@@ -49,6 +54,9 @@ function App() {
         <Route path="/edit-learner" element={<EditLearner />} />
         <Route path="/list-course-active" element={<ListCourseActive />} />
         <Route path="/list-course-inactive" element={<ListCourseInActive />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/staff-dashboard" element={<StaffDashboard />} />
+        <Route path="/center-dashboard" element={<CenterDashboard />} />
 
       </Routes>
     </div>

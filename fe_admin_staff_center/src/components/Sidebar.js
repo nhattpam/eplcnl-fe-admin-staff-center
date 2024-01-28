@@ -1,12 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Sidebar = () => {
+const Sidebar = ({ isAdmin, isStaff, isCenter }) => {
 
     const centerId = localStorage.getItem('centerId');
+    const staffId = localStorage.getItem('staffId');
     // console.log("This is centerId from TUOTR:", centerId);
+    // const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+    // const isStaff = sessionStorage.getItem('isStaff') === 'true';
+    // const isCenter = sessionStorage.getItem('isCenter') === 'true';
 
-
+    console.log("admin: " + isAdmin)
+    console.log("staff: " + isStaff)
+    console.log("center: " + isCenter)
 
     return (
         <>
@@ -47,20 +53,24 @@ const Sidebar = () => {
                     <div id="sidebar-menu">
                         <ul id="side-menu">
                             <li className="menu-title">Navigation</li>
-                            <li>
-                                <Link to={"/home"} data-toggle="collapse">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
-                                    <span> Dashboards </span>
-                                </Link>
+                            {isAdmin && (
+                                <li>
+                                    <Link to={"/home"} data-toggle="collapse">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
+                                        <span> Dashboards </span>
+                                    </Link>
 
-                            </li>
+                                </li>
+                            )}
                             <li className="menu-title mt-2">Manages</li>
-                            <li>
-                                <Link to={"/list-center"}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                                    <span> Center </span>
-                                </Link>
-                            </li>
+                            {isAdmin && (
+                                <li>
+                                    <Link to={"/list-center"}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                                        <span> Center </span>
+                                    </Link>
+                                </li>
+                            )}
 
                             <li>
                                 <a href="#sidebarEcommerce" data-toggle="collapse">
@@ -70,38 +80,50 @@ const Sidebar = () => {
                                 </a>
                                 <div className="collapse" id="sidebarEcommerce">
                                     <ul className="nav-second-level">
+                                        {isAdmin && (
+                                            <li>
+                                                <Link to={"/list-staff"}>Staff</Link>
+                                            </li>
+                                        )}
                                         <li>
-                                            <Link to={"/list-staff"}>Staff</Link>
+                                            {isAdmin && (
+                                                <Link to={`/list-tutor/`}>Tutor</Link>
+                                            )}
+                                            {isCenter && (
+                                                <Link to={`/list-tutor-by-center/${centerId}`}>Tutor</Link>
+                                            )}
+                                            {isStaff && (
+                                                <Link to={`/list-tutor-by-staff/${staffId}`}>Tutor</Link>
+                                            )}
                                         </li>
-                                        <li>
-                                            <Link to={`/list-tutor-by-center/${centerId}`}>Tutor</Link>
-                                            <Link to={`/list-tutor/`}>Tutor</Link>
-                                        </li>
-                                        <li>
-                                            <Link to={"/list-learner"}>Learner</Link>
-                                        </li>
+                                        {isAdmin && (
+                                            <li>
+                                                <Link to={"/list-learner"}>Learner</Link>
+                                            </li>
+                                        )}
+                                    </ul>
+                                </div>
+                            </li>
+                            {isStaff && (
+                                <li>
+                                    <a href="#sidebarEcommercea" data-toggle="collapse">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder-plus"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+                                        <span> Course </span>
+                                        <span className="menu-arrow" />
+                                    </a>
+                                    <div className="collapse" id="sidebarEcommercea">
+                                        <ul className="nav-second-level">
+                                            <li>
+                                                <Link to={"/list-course-active"}>Active</Link>
+                                            </li>
+                                            <li>
+                                                <Link to={`/list-course-inactive/`}>InActive</Link>
+                                            </li>
 
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#sidebarEcommercea" data-toggle="collapse">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder-plus"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>                   
-                                    <span> Course </span>
-                                    <span className="menu-arrow" />
-                                </a>
-                                <div className="collapse" id="sidebarEcommercea">
-                                    <ul className="nav-second-level">
-                                        <li>
-                                            <Link to={"/list-course-active"}>Active</Link>
-                                        </li>
-                                        <li>
-                                            <Link to={`/list-course-inactive/`}>InActive</Link>
-                                        </li>
-                              
-                                    </ul>
-                                </div>
-                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            )}
                         </ul>
                     </div>
                     {/* End Sidebar */}

@@ -63,7 +63,9 @@ const ListTutorByCenter = () => {
         <>
             <div id="wrapper">
                 <Header />
-                <Sidebar />
+                <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
+                    isStaff={sessionStorage.getItem('isStaff') === 'true'}
+                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />
                 {/* ============================================================== */}
                 {/* Start Page Content here */}
                 {/* ============================================================== */}
