@@ -20,6 +20,11 @@ import CenterDashboard from './components/dashboard/CenterDashboard';
 import StaffDashboard from './components/dashboard/StaffDashboard';
 import ListTutorByStaff from './components/tutor/ListTutorByStaff';
 import CreateStaff from './components/staff/CreateStaff';
+import EditCourse from './components/course/EditCourse';
+import EditModule from './components/module/EditModule';
+import EditClassModule from './components/module/EditClassModule';
+import ListLesson from './components/lesson/ListLesson';
+import EditTopic from './components/topic/EditTopic';
 
 function App() {
 
@@ -59,6 +64,11 @@ function App() {
         <Route path="/admin-home" element={<AdminDashboard />} />
         <Route path="/staff-home" element={<StaffDashboard />} />
         <Route path="/center-home" element={<CenterDashboard />} />
+        <Route path="/edit-course/:id" element={<EditCourse />} />
+        <Route path="/edit-module/:moduleId" element={<EditModule />} />
+        <Route path="/edit-class-module/:moduleId" element={<EditClassModule />} />
+        <Route path="/list-lesson/:storedModuleId" element={<ListLesson />} />
+        <Route path="/edit-topic/:classTopicId" element={<EditTopic />} />
 
       </Routes>
     </div>

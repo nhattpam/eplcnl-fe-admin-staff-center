@@ -4,24 +4,23 @@ import axios from "axios";
 const API_URL = "https://nhatpmse.twentytwo.asia/api";
 
 
-class CourseService {
+class ModuleService {
 
   token = '';
 
   setToken(token) {
     this.token = token;
   }
-
-  savecourse(course) {
-    return axios.post(API_URL + "/courses/", course, {
+  saveModule(module) {
+    return axios.post(API_URL + "/modules/", module, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
     });
   }
 
-  getAllCourse() {
-    return axios.get(API_URL + "/courses", {
+  getAllModule() {
+    return axios.get(API_URL + "/modules", {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
@@ -29,9 +28,8 @@ class CourseService {
   }
   
 
-
-  updateCourse(id, course) {
-    return axios.put(API_URL + "/courses/" + id, course, {
+  updateModule(id, module) {
+    return axios.put(API_URL + "/modules/" + id, module, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
@@ -39,41 +37,36 @@ class CourseService {
   }
 
 
-  getCourseById(id) {
-    return axios.get(API_URL + "/courses/" + id, {
+  getModuleById(id) {
+    return axios.get(API_URL + "/modules/" + id, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
     });
   }
 
-  getAllModulesByCourse(id) {
-    return axios.get(`${API_URL}/courses/${id}/modules`, {
+  getAllLessonsByModule(id) {
+    return axios.get(`${API_URL}/modules/${id}/lessons`, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
     });
   }
 
-  getAllClassModulesByCourse(id) {
-    return axios.get(`${API_URL}/courses/${id}/class-modules`, {
+  getAllQuizzesByModule(id) {
+    return axios.get(`${API_URL}/modules/${id}/quizzes`, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
     });
   }
 
-
-
-  uploadImage(course) {
-    return axios.post(API_URL + "/courses/upload-images/", course, {
+  getAllAssignmentsByModule(id) {
+    return axios.get(`${API_URL}/modules/${id}/assignments`, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
     });
   }
-
-  
-
 }
-export default new CourseService;
+export default new ModuleService;

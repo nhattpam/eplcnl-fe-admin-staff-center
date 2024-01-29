@@ -139,7 +139,7 @@ const ListCourseActive = () => {
                                                                 )}
                                                             </td>
                                                             <td>
-                                                                <Link to={"/check-center"}>
+                                                                <Link to={`/edit-course/${cus.id}`}>
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>

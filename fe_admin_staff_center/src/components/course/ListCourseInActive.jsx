@@ -18,18 +18,18 @@ const ListCourseInActive = () => {
 
     useEffect(() => {
         courseService
-          .getAllCourse()
-          .then((res) => {
-            // Filter the courses where isActive is true
-            const activeCourses = res.data.filter(course => course.isActive === false);
-            console.log(activeCourses);
-            setCourseList(activeCourses);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }, []);
-      
+            .getAllCourse()
+            .then((res) => {
+                // Filter the courses where isActive is true
+                const activeCourses = res.data.filter(course => course.isActive === false);
+                console.log(activeCourses);
+                setCourseList(activeCourses);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
 
 
     const handleSearch = (event) => {
@@ -139,7 +139,7 @@ const ListCourseInActive = () => {
                                                                 )}
                                                             </td>
                                                             <td>
-                                                                <Link to={"/check-center"}>
+                                                                <Link to={`/edit-course/${cus.id}`}>
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
