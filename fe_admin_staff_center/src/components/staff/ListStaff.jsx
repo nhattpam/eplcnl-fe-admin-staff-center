@@ -145,7 +145,7 @@ const ListStaff = () => {
                                                                 )}
                                                             </td>
                                                             <td>
-                                                                <Link to={"/check-center"}>
+                                                                <Link to={`/edit-staff/${cus.account.id}`}>
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>

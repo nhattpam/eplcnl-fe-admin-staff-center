@@ -46,14 +46,14 @@ function App() {
         <Route path="/edit-center/:id" element={<EditCenter />} />
         <Route path="/list-staff" element={<ListStaff />} />
         <Route path="/create-staff" element={<CreateStaff />} />
-        <Route path="/edit-staff" element={<EditStaff />} />
+        <Route path="/edit-staff/:id" element={<EditStaff />} />
         <Route path="/list-tutor-by-center/:centerId" element={<ListTutorByCenter />} />
         <Route path="/list-tutor-by-staff/:staffId" element={<ListTutorByStaff />} />
         <Route path="/list-tutor" element={<ListTutor />} />
         <Route path="/create-tutor" element={<CreateTutor />} />
         <Route path="/edit-tutor/:id" element={<EditTutor />} />
         <Route path="/list-learner" element={<ListLeaner />} />
-        <Route path="/edit-learner" element={<EditLearner />} />
+        <Route path="/edit-learner/:id" element={<EditLearner />} />
         <Route path="/list-course-active" element={<ListCourseActive />} />
         <Route path="/list-course-inactive" element={<ListCourseInActive />} />
         <Route path="/admin-home" element={<AdminDashboard />} />

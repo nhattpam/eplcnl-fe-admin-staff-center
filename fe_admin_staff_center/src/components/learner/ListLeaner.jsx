@@ -122,9 +122,9 @@ const ListLearner = () => {
 
                                                                 </img>
                                                             </td>
-                                                            <td>{cus.account.fullName}</td>
-                                                            <td>{cus.account.email}</td>
-                                                            <td>{cus.account.dateOfBirth}</td>
+                                                            <td>{cus.account?.fullName}</td>
+                                                            <td>{cus.account?.email}</td>
+                                                            <td>{cus.account?.dateOfBirth}</td>
                                                             <td>
                                                                 {cus.account.gender ? (
                                                                     <span className="badge label-table badge-success">Male</span>
@@ -141,7 +141,7 @@ const ListLearner = () => {
                                                                 )}
                                                             </td>
                                                             <td>
-                                                                <Link to={"/check-center"}>
+                                                                <Link to={`/edit-learner/${cus.account.id}`}>
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>

@@ -8,16 +8,16 @@ import accountService from '../../services/account.service';
 const EditTutor = () => {
 
     const [account, setAccount] = useState({
-      id: "",
-      email: "",
-      fullName: "",
-      phoneNumber:"",
-      imageUrl: "",
-      dateOfBirth: "",
-      gender: "",
-      address:"",
-      isActive: "",
-      createdDate: "",
+        id: "",
+        email: "",
+        fullName: "",
+        phoneNumber: "",
+        imageUrl: "",
+        dateOfBirth: "",
+        gender: "",
+        address: "",
+        isActive: "",
+        createdDate: "",
     });
 
 
@@ -27,7 +27,7 @@ const EditTutor = () => {
 
 
 
-   
+
 
 
     const { id } = useParams();
@@ -74,13 +74,23 @@ const EditTutor = () => {
                                         </div>
 
                                         <div className="form-group">
-                                            <label htmlFor="description">Phone Number * :</label>
-                                            <input type="text" id="description" className="form-control" name="description" data-parsley-trigger="change" value={account.description} readOnly />
+                                            <label htmlFor="phoneNumber">Phone Number * :</label>
+                                            <input type="text" id="phoneNumber" className="form-control" name="phoneNumber" data-parsley-trigger="change" value={account.phoneNumber} readOnly />
                                         </div>
 
                                         <div className="form-group">
-                                            <label htmlFor="description">DOB * :</label>
-                                            <input type="text" id="description" className="form-control" name="description" data-parsley-trigger="change" value={account.description} readOnly />
+                                            <label htmlFor="dateOfBirth">DOB * :</label>
+                                            <input type="text" id="dateOfBirth" className="form-control" name="dateOfBirth" data-parsley-trigger="change" value={account.dateOfBirth} readOnly />
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label htmlFor="dateOfBirth">Gender * :</label>
+
+                                            {account.gender ? (
+                                                <input type="text" id="dateOfBirth" className="form-control" name="dateOfBirth" data-parsley-trigger="change" value={"Male"} readOnly />
+                                            ) : (
+                                                <input type="text" id="dateOfBirth" className="form-control" name="dateOfBirth" data-parsley-trigger="change" value={"Female"} readOnly />
+                                            )}
                                         </div>
 
                                         <div className="form-group mb-0">
