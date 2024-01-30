@@ -101,7 +101,7 @@ const Header = () => {
                     </ul>
                     {/* LOGO */}
                     <div className="logo-box">
-                        <Link to={"/home"} className="logo logo-light text-center">
+                        <Link  className="logo logo-light text-center">
                             <span style={{ fontFamily: 'Comic Sans MS', fontSize: '24px', fontWeight: 'bold', color: '#fff' }}>
                                 MEOWLISH
                             </span>

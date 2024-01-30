@@ -25,6 +25,7 @@ import EditModule from './components/module/EditModule';
 import EditClassModule from './components/module/EditClassModule';
 import ListLesson from './components/lesson/ListLesson';
 import EditTopic from './components/topic/EditTopic';
+import ListCenterByStaff from './components/center/ListCenterByStaff';
 
 function App() {
 
@@ -48,6 +49,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/list-center" element={<ListCenter />} />
+        <Route path="/list-center-by-staff/:staffId" element={<ListCenterByStaff />} />
         <Route path="/edit-center/:id" element={<EditCenter />} />
         <Route path="/list-staff" element={<ListStaff />} />
         <Route path="/create-staff" element={<CreateStaff />} />

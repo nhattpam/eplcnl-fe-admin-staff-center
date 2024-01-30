@@ -51,5 +51,13 @@ class StaffService {
       }
     });
   }
+
+  getAllCentersByStaff(id) {
+    return axios.get(`${API_URL}/staffs/${id}/centers`, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
 }
 export default new StaffService;
