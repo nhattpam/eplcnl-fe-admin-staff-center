@@ -121,6 +121,7 @@ const ListCenterByStaff = () => {
                                                         <th>Is Managed By</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
+                                                        <th>Tutors</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -141,6 +142,11 @@ const ListCenterByStaff = () => {
                                                             <td>
                                                                 <Link to={`/edit-center/${cus.id}`}>
                                                                     <i className="fa-regular fa-eye"></i>
+                                                                </Link>
+                                                            </td>
+                                                            <td>
+                                                                <Link to={`/list-tutor-by-center/${cus.id}`}>
+                                                                    View
                                                                 </Link>
                                                             </td>
                                                         </tr>

@@ -2,62 +2,58 @@ import React, { useEffect, useState } from 'react';
 import Footer from '../Footer'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
-import { Link } from 'react-router-dom'
-import staffService from '../../services/staff.service'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai"; // icons form react-icons
+import courseService from '../../services/course.service';
+import tutorService from '../../services/tutor.service';
 
-const ListTutorByStaff = () => {
+const ListCourseByTutor = () => {
 
-    const [tutorList, setTutorList] = useState([]);
-
-    const [errors, setErrors] = useState({});
+    const [courseList, setCourseList] = useState([]);
     const [msg, setMsg] = useState('');
-    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
-    const [tutorsPerPage] = useState(5);
+    const [coursesPerPage] = useState(5);
 
-    const { staffId } = useParams();
+    const { tutorId } = useParams();
+
 
     useEffect(() => {
-        staffService
-            .getAllTutorsByStaff(staffId)
-            .then((res) => {
-                console.log(res.data);
-                setTutorList(res.data);
+        tutorService
+          .getAllCoursesByTutor(tutorId)
+          .then((res) => {
+            // Filter the courses where isActive is true
+            setCourseList(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }, []);
+      
 
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [staffId]);
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    console.log(typeof tutorList);
-
-    const filteredTutors = tutorList
-        .filter((tutor) => {
+    const filteredCourses = courseList
+        .filter((course) => {
             return (
-                tutor.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                course.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
 
             );
         });
 
-    const pageCount = Math.ceil(filteredTutors.length / tutorsPerPage);
+    const pageCount = Math.ceil(filteredCourses.length / coursesPerPage);
 
     const handlePageClick = (data) => {
         setCurrentPage(data.selected);
     };
 
-    const offset = currentPage * tutorsPerPage;
-    const currentTutors = filteredTutors.slice(offset, offset + tutorsPerPage);
-
+    const offset = currentPage * coursesPerPage;
+    const currentCourses = filteredCourses.slice(offset, offset + coursesPerPage);
 
     return (
         <>
@@ -81,7 +77,7 @@ const ListTutorByStaff = () => {
                                             <ol className="breadcrumb m-0">
                                             </ol>
                                         </div>
-                                        <h4 className="page-title">List tutor</h4>
+                                        <h4 className="page-title">List Course</h4>
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +88,6 @@ const ListTutorByStaff = () => {
                                         <div className="mb-2">
                                             <div className="row">
                                                 <div className="col-12 text-sm-center form-inline">
-                                                    
                                                     <div className="form-group mr-2">
                                                         <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
                                                             <option value>Show all</option>
@@ -102,8 +97,7 @@ const ListTutorByStaff = () => {
                                                         </select>
                                                     </div>
                                                     <div className="form-group">
-                                                        <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on"
-                                                            value={searchTerm}
+                                                        <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm}
                                                             onChange={handleSearch} />
                                                     </div>
                                                 </div>
@@ -114,55 +108,53 @@ const ListTutorByStaff = () => {
                                                 <thead>
                                                     <tr>
                                                         <th data-toggle="true">Image</th>
-                                                        <th data-toggle="true">Full Name</th>
-                                                        <th data-toggle="true">Phone</th>
-                                                        <th data-hide="phone">Gender</th>
-                                                        <th data-hide="phone, tablet">DOB</th>
+                                                        <th data-toggle="true">Code</th>
+                                                        <th data-toggle="true">Name</th>
+                                                        <th data-hide="phone">Price</th>
+                                                        <th data-hide="phone, tablet">Rating</th>
+                                                        <th data-hide="phone, tablet">Tags</th>
+                                                        <th data-hide="phone, tablet">Category</th>
                                                         <th data-hide="phone, tablet">Status</th>
                                                         <th>Action</th>
-                                                        <th>Courses</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentTutors.map((tutor) => (
-                                                        <tr key={tutor.id}>
+                                                    {currentCourses.map((cus) => (
+
+                                                        <tr>
                                                             <td>
-                                                                <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+                                                                <img src={cus.imageUrl} style={{ height: '70px', width: '100px' }}>
 
                                                                 </img>
                                                             </td>
-                                                            <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
-                                                            <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
-                                                            <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
+                                                            <td>{cus.code}</td>
+                                                            <td>{cus.name}</td>
+                                                            <td>{cus.stockPrice}</td>
+                                                            <td>{cus.rating}</td>
+                                                            <td>{cus.tags}</td>
+                                                            <td>{cus.category.name}</td>
                                                             <td>
-                                                                {tutor.account.isActive ? (
+                                                                {cus.isActive ? (
                                                                     <span className="badge label-table badge-success">Active</span>
                                                                 ) : (
                                                                     <span className="badge label-table badge-danger">Inactive</span>
                                                                 )}
                                                             </td>
                                                             <td>
-                                                                <Link to={`/edit-tutor/${tutor.account.id}`}>
-                                                                    <i className="fa-regular fa-eye"></i>
-                                                                </Link>
-                                                            </td>
-                                                            <td>
-                                                                <Link to={`/list-course-by-tutor/${tutor.id}`}>
-                                                                    View
+                                                                <Link to={`/edit-course/${cus.id}`}>
+                                                                    <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
-                                            </table>
-                                        </div>
 
+                                            </table>
+                                        </div> {/* end .table-responsive*/}
                                     </div> {/* end card-box */}
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}
-
-
                             {/* Pagination */}
                             <div className='container-fluid'>
                                 {/* Pagination */}
@@ -196,6 +188,8 @@ const ListTutorByStaff = () => {
                                 </div>
 
                             </div>
+
+
                         </div> {/* container */}
                     </div> {/* content */}
                 </div>
@@ -209,4 +203,4 @@ const ListTutorByStaff = () => {
     )
 }
 
-export default ListTutorByStaff
+export default ListCourseByTutor

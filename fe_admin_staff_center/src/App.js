@@ -26,6 +26,7 @@ import EditClassModule from './components/module/EditClassModule';
 import ListLesson from './components/lesson/ListLesson';
 import EditTopic from './components/topic/EditTopic';
 import ListCenterByStaff from './components/center/ListCenterByStaff';
+import ListCourseByTutor from './components/course/ListCourseByTutor';
 
 function App() {
 
@@ -63,6 +64,7 @@ function App() {
         <Route path="/edit-learner/:id" element={<EditLearner />} />
         <Route path="/list-course-active" element={<ListCourseActive />} />
         <Route path="/list-course-inactive" element={<ListCourseInActive />} />
+        <Route path="/list-course-by-tutor/:tutorId" element={<ListCourseByTutor />} />
         <Route path="/admin-home" element={<AdminDashboard />} />
         <Route path="/staff-home" element={<StaffDashboard />} />
         <Route path="/center-home" element={<CenterDashboard />} />

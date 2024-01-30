@@ -123,6 +123,7 @@ const ListTutorByCenter = () => {
                                                         <th data-hide="phone, tablet">DOB</th>
                                                         <th data-hide="phone, tablet">Status</th>
                                                         <th>Action</th>
+                                                        <th>Courses</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -146,6 +147,11 @@ const ListTutorByCenter = () => {
                                                             <td>
                                                                 <Link to={`/edit-tutor/${tutor.account.id}`}>
                                                                     <i className="fa-regular fa-eye"></i>
+                                                                </Link>
+                                                            </td>
+                                                            <td>
+                                                                <Link to={`/list-course-by-tutor/${tutor.id}`}>
+                                                                    View
                                                                 </Link>
                                                             </td>
                                                         </tr>
