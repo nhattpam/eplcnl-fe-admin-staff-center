@@ -48,7 +48,7 @@ class LessonService {
   }
 
   uploadImage(lesson) {
-    return axios.post(API_URL + "/lessons/upload-images/", lesson, {
+    return axios.post(API_URL + "/lessons/image/", lesson, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }

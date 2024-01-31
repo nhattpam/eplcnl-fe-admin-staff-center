@@ -46,7 +46,7 @@ class CenterService {
   }
 
   sendEmail(id) {
-    return axios.post(API_URL + `/centers/${id}/send-mail/`, {
+    return axios.post(API_URL + `/centers/${id}/mail/`, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }

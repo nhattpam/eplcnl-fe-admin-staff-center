@@ -66,7 +66,7 @@ class CourseService {
 
 
   uploadImage(course) {
-    return axios.post(API_URL + "/courses/upload-images/", course, {
+    return axios.post(API_URL + "/courses/image/", course, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
