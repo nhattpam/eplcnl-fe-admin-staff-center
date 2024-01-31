@@ -101,6 +101,9 @@ const EditCenter = () => {
             centerService
                 .updateCenter(center.id, center)
                 .then((res) => {
+                    if(center.isActive){
+                        centerService.sendEmail(center.id);
+                    }
                     navigate("/list-center/");
                 })
                 .catch((error) => {
