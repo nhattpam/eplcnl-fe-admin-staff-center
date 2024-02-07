@@ -134,7 +134,7 @@ const ListTopic = () => {
                               <td>{classTopic.createdDate}</td>
                               <td>{classTopic.updatedDate}</td>
                               <td>
-                                <Link to={"/tutor/courses/create/create-class-course/edit-topic"}>
+                                <Link to={`/edit-topic/${classTopic.id}`}>
                                   <i class="fa-regular fa-eye"></i>
                                 </Link>
                               </td>

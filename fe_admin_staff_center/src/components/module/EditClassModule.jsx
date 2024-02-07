@@ -95,14 +95,6 @@ const EditClassModule = () => {
 
                                         </div>
 
-                                        <div className="form-group mb-0">
-                                            <button
-                                                type="submit"
-                                                className="btn btn-danger"
-                                            >
-                                                <i className="bi bi-x-lg"></i> Request to delete
-                                            </button>
-                                        </div>
                                     </form>
                                 </div> {/* end card-box*/}
                             </div> {/* end col*/}

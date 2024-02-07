@@ -35,6 +35,7 @@ import EditLesson from './components/lesson/EditLesson';
 import EditAssignment from './components/assignment/EditAssignment';
 import ListAssignment from './components/assignment/ListAssignment';
 import ListLessonMaterial from './components/material/ListLessonMaterial';
+import ListClassTopicMaterial from './components/material/ListClassTopicMaterial';
 import EditQuestion from './components/question/EditQuestion';
 
 function App() {
@@ -91,7 +92,8 @@ function App() {
         <Route path="/list-assignment/:storedModuleId" element={<ListAssignment />} />
         <Route path="/edit-assignment/:assignmentId" element={<EditAssignment />} />
         {/* topic */}
-        <Route path="/edit-topic/:classTopicId" element={<EditTopic />} />
+        <Route path="/edit-topic/:storedClassTopicId" element={<EditTopic />} />
+        <Route path="/list-topic/:storedClassLessonId" element={<EditTopic />} />
         {/* refund request  */}
         <Route path="/list-refund" element={<ListRefundRequest />} />
         <Route path="/edit-refund/:refundId" element={<EditRefundRequest />} />
@@ -99,6 +101,7 @@ function App() {
         <Route path="/edit-question/:questionId" element={<EditQuestion />} />
         {/* material */}
         <Route path="/list-material-by-lesson/:storedLessonId" element={<ListLessonMaterial />} />
+        <Route path="/list-material-by-topic/:storedClassTopicId" element={<ListClassTopicMaterial />} />
 
       </Routes>
     </div>

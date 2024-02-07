@@ -1,4 +1,4 @@
-import axios from "axios"; 
+import axios from "axios";
 
 // const API_URL = "https://localhost:7215/api";
 const API_URL = "https://nhatpmse.twentytwo.asia/api";
@@ -41,6 +41,14 @@ class ClassTopicService {
 
     getClassTopicById(id) {
         return axios.get(API_URL + "/class-topics/" + id, {
+            headers: {
+                Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+            }
+        });
+    }
+
+    getAllMaterialsByClassTopic(id) {
+        return axios.get(`${API_URL}/class-topics/${id}/lesson-materials`, {
             headers: {
                 Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
             }

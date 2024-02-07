@@ -170,11 +170,20 @@ const EditCourse = () => {
                                                         <i className="bi bi-plus"></i> Create new module
                                                     </Link> */}
 
-
                                                     {isStaff && (
+
                                                         <button
                                                             type="submit"
-                                                            className="btn btn-danger"
+                                                            className="btn btn-success"
+                                                        >
+                                                            <i className="bi bi-x-lg"></i> Approve
+                                                        </button>
+                                                    )}
+                                                    {isStaff && (
+
+                                                        <button
+                                                            type="submit"
+                                                            className="btn btn-danger ml-1"
                                                         >
                                                             <i className="bi bi-x-lg"></i> Request to delete
                                                         </button>
@@ -209,14 +218,24 @@ const EditCourse = () => {
 
 
                                                     {isStaff && (
+
                                                         <button
                                                             type="submit"
-                                                            className="btn btn-danger"
+                                                            className="btn btn-success"
+                                                        >
+                                                            <i className="bi bi-x-lg"></i> Approve
+                                                        </button>
+                                                    )}
+                                                    {isStaff && (
+
+                                                        <button
+                                                            type="submit"
+                                                            className="btn btn-danger ml-1"
                                                         >
                                                             <i className="bi bi-x-lg"></i> Request to delete
                                                         </button>
                                                     )}
-                                                     {isAdmin && (
+                                                    {isAdmin && (
                                                         <button
                                                             type="submit"
                                                             className="btn btn-danger"

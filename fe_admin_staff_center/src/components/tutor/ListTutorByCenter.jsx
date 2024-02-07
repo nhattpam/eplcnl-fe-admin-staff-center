@@ -93,9 +93,9 @@ const ListTutorByCenter = () => {
                                             <div className="row">
                                                 <div className="col-12 text-sm-center form-inline">
                                                     {/* Create Tutor Button */}
-                                                    <Link to="/create-tutor" className="btn btn-primary">
+                                                    {/* <Link to="/create-tutor" className="btn btn-primary">
                                                         Create Tutor
-                                                    </Link>
+                                                    </Link> */}
                                                     <div className="form-group mr-2">
                                                         <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
                                                             <option value>Show all</option>

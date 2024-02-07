@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Footer from '../../Footer'
-import Header from '../../Header'
-import Sidebar from '../../Sidebar'
+import Footer from '../Footer'
+import Header from '../Header'
+import Sidebar from '../Sidebar'
 import { Link } from 'react-router-dom'
-import classLessonService from '../../../../services/class-lesson.service';
-import classTopicService from '../../../../services/class-topic.service';
+import classLessonService from '../../services/class-lesson.service';
+import classTopicService from '../../services/class-topic.service';
 
 const ListClassTopicMaterial = () => {
 
@@ -92,9 +92,9 @@ const ListClassTopicMaterial = () => {
                       <div className="row">
                         <div className="col-12 text-sm-center form-inline">
                           {/* Create Tutor Button */}
-                          <Link to={`/tutor/courses/create-class-material/${storedClassTopicId}`} className="btn btn-primary">
+                          {/* <Link to={`/tutor/courses/create-class-material/${storedClassTopicId}`} className="btn btn-primary">
                             Add Material
-                          </Link>
+                          </Link> */}
                           <div className="form-group mr-2">
                             <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
                               <option value>Show all</option>
@@ -117,7 +117,7 @@ const ListClassTopicMaterial = () => {
                             <th>Url</th>
                             <th data-hide="phone">Created Date</th>
                             <th data-hide="phone, tablet">Updated Date</th>
-                            <th>Action</th>
+                            {/* <th>Action</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -127,11 +127,11 @@ const ListClassTopicMaterial = () => {
                               <td>{material.materialUrl}</td>
                               <td>{material.createdDate}</td>
                               <td>{material.updatedDate}</td>
-                              <td>
+                              {/* <td>
                                 <Link to={`/tutor/courses/edit-class-material/${material.id}`}>
                                   <i class="fas fa-trash-alt"></i>
                               </Link>
-                            </td>
+                            </td> */}
                             </tr>
                           ))}
 
