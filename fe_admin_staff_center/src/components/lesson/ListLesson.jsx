@@ -91,7 +91,7 @@ const ListLesson = () => {
                                             <ol className="breadcrumb m-0">
                                             </ol>
                                         </div>
-                                        <h4 className="page-title">List Lesson Of Course {module.course?.name} | Module {module.name}</h4>
+                                        <h4 className="page-title">Course {module.course?.name} | Module {module.name}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -103,9 +103,9 @@ const ListLesson = () => {
                                             <div className="row">
                                                 <div className="col-12 text-sm-center form-inline">
                                                     <div className="form-group mr-2">
-                                                    <Link to={`/tutor/courses/create/create-video-course/create-lesson/${storedModuleId}`} className="btn btn-primary">
+                                                    {/* <Link to={`/tutor/courses/create/create-video-course/create-lesson/${storedModuleId}`} className="btn btn-primary">
                                                         Create
-                                                    </Link>
+                                                    </Link> */}
                                                         <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
                                                             <option value>Show all</option>
                                                             <option value="active">Active</option>
@@ -138,7 +138,7 @@ const ListLesson = () => {
                                                             <td>{lesson.createdDate}</td>
                                                             <td>{lesson.updatedDate}</td>
                                                             <td>
-                                                                <Link to={"/tutor/courses/create/create-class-course/edit-topic"}>
+                                                                <Link to={`/edit-lesson/${lesson.id}`}>
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>

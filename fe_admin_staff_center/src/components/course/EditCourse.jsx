@@ -8,6 +8,10 @@ import moduleService from '../../services/module.service';
 
 const EditCourse = () => {
 
+    // Define isAdmin and isStaff outside of the component
+    const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+    const isStaff = sessionStorage.getItem('isStaff') === 'true';
+
     const [course, setCourse] = useState({
         name: "",
         description: "",
@@ -167,12 +171,22 @@ const EditCourse = () => {
                                                     </Link> */}
 
 
-                                                    <button
-                                                        type="submit"
-                                                        className="btn btn-danger"
-                                                    >
-                                                        <i className="bi bi-x-lg"></i> Request to delete
-                                                    </button>
+                                                    {isStaff && (
+                                                        <button
+                                                            type="submit"
+                                                            className="btn btn-danger"
+                                                        >
+                                                            <i className="bi bi-x-lg"></i> Request to delete
+                                                        </button>
+                                                    )}
+                                                    {isAdmin && (
+                                                        <button
+                                                            type="submit"
+                                                            className="btn btn-danger"
+                                                        >
+                                                            <i className="bi bi-x-lg"></i> Delete
+                                                        </button>
+                                                    )}
                                                 </>
 
 
@@ -194,12 +208,22 @@ const EditCourse = () => {
                                                     </Link> */}
 
 
-                                                    <button
-                                                        type="submit"
-                                                        className="btn btn-danger"
-                                                    >
-                                                        <i className="bi bi-x-lg"></i> Request to delete
-                                                    </button>
+                                                    {isStaff && (
+                                                        <button
+                                                            type="submit"
+                                                            className="btn btn-danger"
+                                                        >
+                                                            <i className="bi bi-x-lg"></i> Request to delete
+                                                        </button>
+                                                    )}
+                                                     {isAdmin && (
+                                                        <button
+                                                            type="submit"
+                                                            className="btn btn-danger"
+                                                        >
+                                                            <i className="bi bi-x-lg"></i> Delete
+                                                        </button>
+                                                    )}
                                                 </>
 
 

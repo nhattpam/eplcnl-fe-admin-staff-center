@@ -4,34 +4,22 @@ import axios from "axios";
 const API_URL = "https://nhatpmse.twentytwo.asia/api";
 
 
-class LessonService {
+class QuestionService {
 
   token = '';
 
   setToken(token) {
     this.token = token;
   }
-
-  savelesson(lesson) {
-    return axios.post(API_URL + "/lessons/", lesson, {
+  saveQuestion(question) {
+    return axios.post(API_URL + "/questions/", question, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
     });
   }
-
-  getAlllesson() {
-    return axios.get(API_URL + "/lessons", {
-      headers: {
-        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
-      }
-    });
-  }
-  
-
-
-  updateLesson(id, lesson) {
-    return axios.put(API_URL + "/lessons/" + id, lesson, {
+  getAllQuestion() {
+    return axios.get(API_URL + "/questions", {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
@@ -39,37 +27,46 @@ class LessonService {
   }
 
 
-  getLessonById(id) {
-    return axios.get(API_URL + "/lessons/" + id, {
+  updateQuestion(id, question) {
+    return axios.put(API_URL + "/questions/" + id, question, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
     });
   }
 
-  uploadImage(lesson) {
-    return axios.post(API_URL + "/lessons/image/", lesson, {
+
+  getQuestionById(id) {
+    return axios.get(API_URL + "/questions/" + id, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
     });
   }
 
-  uploadVideo(lesson) {
-    return axios.post(API_URL + "/lessons/video/", lesson, {
+
+  uploadImage(question) {
+    return axios.post(API_URL + "/questions/image/", question, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
     });
   }
 
-  getAllMaterialsByLesson(id) {
-    return axios.get(`${API_URL}/lessons/${id}/lesson-materials`, {
-        headers: {
-            Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
-        }
+  uploadAudio(question) {
+    return axios.post(API_URL + "/questions/audio/", question, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
     });
+  }
+
+  getAllQuestionAnswersByQuestion(id) {
+    return axios.get(`${API_URL}/questions/${id}/question-answers`, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
 }
-
-}
-export default new LessonService;
+export default new QuestionService;

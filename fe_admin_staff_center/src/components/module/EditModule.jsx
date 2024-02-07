@@ -17,6 +17,11 @@ const EditModule = () => {
     const [msg, setMsg] = useState('');
     const navigate = useNavigate();
     const { moduleId } = useParams();
+    //get number of lessons, assignments, quizzes
+    const [lessonList, setLessonList] = useState([]);
+    const [quizList, setQuizList] = useState([]);
+    const [assignmentList, setAssignmentList] = useState([]);
+
 
     useEffect(() => {
         if (moduleId) {
@@ -32,6 +37,45 @@ const EditModule = () => {
         }
     }, [moduleId]);
 
+    useEffect(() => {
+        moduleService
+            .getAllLessonsByModule(moduleId)
+            .then((res) => {
+                console.log(res.data);
+                setLessonList(res.data);
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [moduleId]);
+
+    useEffect(() => {
+        moduleService
+            .getAllAssignmentsByModule(moduleId)
+            .then((res) => {
+                console.log(res.data);
+                setAssignmentList(res.data);
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [moduleId]);
+
+    useEffect(() => {
+        moduleService
+            .getAllQuizzesByModule(moduleId)
+            .then((res) => {
+                console.log(res.data);
+                setQuizList(res.data);
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [moduleId]);
+
     const handleEditModule = (moduleId) => {
         // Add logic to navigate to the module edit page with the moduleId
         navigate(`/edit-module/${moduleId}`);
@@ -43,8 +87,7 @@ const EditModule = () => {
                 <Header />
                 <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
                     isStaff={sessionStorage.getItem('isStaff') === 'true'}
-                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />
-                <div className="content-page">
+                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />                <div className="content-page">
                     {/* Start Content*/}
                     <div className="container-fluid">
                         <div className="row">
@@ -59,7 +102,7 @@ const EditModule = () => {
                                         </div>
 
                                         <div className="form-group">
-                                            <h5>Assignments: {module.assignments?.length || 0}</h5>
+                                            <h5>Assignments: {assignmentList.length || 0}</h5>
                                             <ul>
                                                 <Link to={`/list-assignment/${module.id}`}>
                                                     View All
@@ -68,7 +111,7 @@ const EditModule = () => {
                                         </div>
 
                                         <div className="form-group">
-                                            <h5>Lessons: {module.lessons?.length || 0}</h5>
+                                            <h5>Lessons: {lessonList.length || 0}</h5>
                                             <ul>
                                                 <Link to={`/list-lesson/${module.id}`}>
                                                     View All
@@ -77,7 +120,7 @@ const EditModule = () => {
                                         </div>
 
                                         <div className="form-group">
-                                            <h5>Quizzes: {module.quizzes?.length || 0}</h5>
+                                            <h5>Quizzes: {quizList.length || 0}</h5>
                                             <ul>
                                                 <Link to={`/list-quiz/${module.id}`}>
                                                     View All
@@ -85,14 +128,14 @@ const EditModule = () => {
                                             </ul>
                                         </div>
 
-                                        <div className="form-group mb-0">
+                                        {/* <div className="form-group mb-0">
                                             <button
                                                 type="submit"
                                                 className="btn btn-danger"
                                             >
                                                 <i className="bi bi-x-lg"></i> Request to delete
                                             </button>
-                                        </div>
+                                        </div> */}
                                     </form>
                                 </div> {/* end card-box*/}
                             </div> {/* end col*/}

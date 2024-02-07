@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Footer from '../Footer'
-import Header from '../Header'
-import Sidebar from '../Sidebar'
+import Footer from '../Footer';
+import Header from '../Header';
+import Sidebar from '../Sidebar';
 import { Link } from 'react-router-dom'
 import moduleService from '../../services/module.service';
 
@@ -75,7 +75,7 @@ const ListAssignment = () => {
                 <Header />
                 <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
                     isStaff={sessionStorage.getItem('isStaff') === 'true'}
-                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />
+                    isCenter={sessionStorage.getItem('isCenter') === 'true'} /> 
                 {/* ============================================================== */}
                 {/* Start Page Content here */}
                 {/* ============================================================== */}
@@ -103,9 +103,9 @@ const ListAssignment = () => {
                                             <div className="row">
                                                 <div className="col-12 text-sm-center form-inline">
                                                     <div className="form-group mr-2">
-                                                    <Link to={`/tutor/courses/create/create-video-course/create-assignment/${storedModuleId}`} className="btn btn-primary">
-                                                        Create
-                                                    </Link>
+                                                        {/* <Link to={`/tutor/courses/create/create-video-course/create-assignment/${storedModuleId}`} className="btn btn-primary">
+                                                            Create
+                                                        </Link> */}
                                                         <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
                                                             <option value>Show all</option>
                                                             <option value="active">Active</option>
@@ -123,8 +123,8 @@ const ListAssignment = () => {
                                             <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                                                 <thead>
                                                     <tr>
-                                                        <th data-toggle="true">Assignment Name</th>
-                                                        <th>Description</th>
+                                                        <th>Time</th>
+                                                        <th>Question</th>
                                                         <th data-hide="phone">Created Date</th>
                                                         <th data-hide="phone, tablet">Updated Date</th>
                                                         <th>Action</th>
@@ -133,12 +133,12 @@ const ListAssignment = () => {
                                                 <tbody>
                                                     {currentAssignments.map((assignment) => (
                                                         <tr key={assignment.id}>
-                                                            <td>{assignment.name}</td>
-                                                            <td>{assignment.description}</td>
+                                                            <td>{assignment.deadline}</td>
+                                                            <td>{assignment.questionText}</td>
                                                             <td>{assignment.createdDate}</td>
                                                             <td>{assignment.updatedDate}</td>
                                                             <td>
-                                                                <Link to={"/tutor/courses/create/create-class-course/edit-topic"}>
+                                                                <Link to={`/edit-assignment/${assignment.id}`}>
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>

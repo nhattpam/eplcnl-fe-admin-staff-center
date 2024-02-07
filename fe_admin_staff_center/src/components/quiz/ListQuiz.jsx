@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Footer from '../../Footer'
-import Header from '../../Header'
-import Sidebar from '../../Sidebar'
+import Footer from '../Footer';
+import Header from '../Header';
+import Sidebar from '../Sidebar';
 import { Link } from 'react-router-dom'
-import moduleService from '../../../../services/module.service';
+import moduleService from '../../services/module.service';
 
 const ListQuiz = () => {
 
@@ -75,8 +75,7 @@ const ListQuiz = () => {
                 <Header />
                 <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
                     isStaff={sessionStorage.getItem('isStaff') === 'true'}
-                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />
-                {/* ============================================================== */}
+                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />                {/* ============================================================== */}
                 {/* Start Page Content here */}
                 {/* ============================================================== */}
                 <div className="content-page">
@@ -103,9 +102,9 @@ const ListQuiz = () => {
                                             <div className="row">
                                                 <div className="col-12 text-sm-center form-inline">
                                                     <div className="form-group mr-2">
-                                                    <Link to={`/tutor/courses/create/create-video-course/create-quiz/${storedModuleId}`} className="btn btn-primary">
+                                                    {/* <Link to={`/tutor/courses/create/create-video-course/create-quiz/${storedModuleId}`} className="btn btn-primary">
                                                         Create
-                                                    </Link>
+                                                    </Link> */}
                                                         <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
                                                             <option value>Show all</option>
                                                             <option value="active">Active</option>
@@ -124,7 +123,8 @@ const ListQuiz = () => {
                                                 <thead>
                                                     <tr>
                                                         <th data-toggle="true">Quiz Name</th>
-                                                        <th>Description</th>
+                                                        <th>Grade to pass</th>
+                                                        <th>Times</th>
                                                         <th data-hide="phone">Created Date</th>
                                                         <th data-hide="phone, tablet">Updated Date</th>
                                                         <th>Action</th>
@@ -134,11 +134,12 @@ const ListQuiz = () => {
                                                     {currentQuizs.map((quiz) => (
                                                         <tr key={quiz.id}>
                                                             <td>{quiz.name}</td>
-                                                            <td>{quiz.description}</td>
+                                                            <td>{quiz.gradeToPass}</td>
+                                                            <td>{quiz.deadline}</td>
                                                             <td>{quiz.createdDate}</td>
                                                             <td>{quiz.updatedDate}</td>
                                                             <td>
-                                                                <Link to={"/tutor/courses/create/create-class-course/edit-topic"}>
+                                                                <Link to={`/edit-quiz/${quiz.id}`}>
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>

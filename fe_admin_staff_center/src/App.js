@@ -29,6 +29,13 @@ import ListCenterByStaff from './components/center/ListCenterByStaff';
 import ListCourseByTutor from './components/course/ListCourseByTutor';
 import ListRefundRequest from './components/refund-request/ListRefundRequest';
 import EditRefundRequest from './components/refund-request/EditRefundRequest';
+import ListQuiz from './components/quiz/ListQuiz';
+import EditQuiz from './components/quiz/EditQuiz';
+import EditLesson from './components/lesson/EditLesson';
+import EditAssignment from './components/assignment/EditAssignment';
+import ListAssignment from './components/assignment/ListAssignment';
+import ListLessonMaterial from './components/material/ListLessonMaterial';
+import EditQuestion from './components/question/EditQuestion';
 
 function App() {
 
@@ -71,13 +78,27 @@ function App() {
         <Route path="/staff-home" element={<StaffDashboard />} />
         <Route path="/center-home" element={<CenterDashboard />} />
         <Route path="/edit-course/:id" element={<EditCourse />} />
+        {/* module */}
         <Route path="/edit-module/:moduleId" element={<EditModule />} />
         <Route path="/edit-class-module/:moduleId" element={<EditClassModule />} />
+        {/* lesson */}
         <Route path="/list-lesson/:storedModuleId" element={<ListLesson />} />
+        <Route path="/edit-lesson/:lessonId" element={<EditLesson />} />
+        {/* quiz */}
+        <Route path="/list-quiz/:storedModuleId" element={<ListQuiz />} />
+        <Route path="/edit-quiz/:quizId" element={<EditQuiz />} />
+        {/* assignment */}
+        <Route path="/list-assignment/:storedModuleId" element={<ListAssignment />} />
+        <Route path="/edit-assignment/:assignmentId" element={<EditAssignment />} />
+        {/* topic */}
         <Route path="/edit-topic/:classTopicId" element={<EditTopic />} />
         {/* refund request  */}
         <Route path="/list-refund" element={<ListRefundRequest />} />
         <Route path="/edit-refund/:refundId" element={<EditRefundRequest />} />
+        {/* question */}
+        <Route path="/edit-question/:questionId" element={<EditQuestion />} />
+        {/* material */}
+        <Route path="/list-material-by-lesson/:storedLessonId" element={<ListLessonMaterial />} />
 
       </Routes>
     </div>
