@@ -27,6 +27,7 @@ import ListLesson from './components/lesson/ListLesson';
 import EditTopic from './components/topic/EditTopic';
 import ListCenterByStaff from './components/center/ListCenterByStaff';
 import ListCourseByTutor from './components/course/ListCourseByTutor';
+import ListRefundRequest from './components/refund-request/ListRefundRequest';
 
 function App() {
 
@@ -73,6 +74,8 @@ function App() {
         <Route path="/edit-class-module/:moduleId" element={<EditClassModule />} />
         <Route path="/list-lesson/:storedModuleId" element={<ListLesson />} />
         <Route path="/edit-topic/:classTopicId" element={<EditTopic />} />
+        {/* refund request  */}
+        <Route path="/list-refund" element={<ListRefundRequest />} />
 
       </Routes>
     </div>
