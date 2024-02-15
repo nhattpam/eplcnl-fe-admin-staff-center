@@ -115,6 +115,7 @@ const ListTutor = () => {
                                                         <th data-toggle="true">Phone</th>
                                                         <th data-hide="phone">Gender</th>
                                                         <th data-hide="phone, tablet">DOB</th>
+                                                        <th data-hide="phone, tablet">Is Freelancer</th>
                                                         <th data-hide="phone, tablet">Status</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -130,6 +131,13 @@ const ListTutor = () => {
                                                             <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
                                                             <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
                                                             <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
+                                                            <td>
+                                                                {tutor.isFreelancer ? (
+                                                                    <span className="badge label-table badge-success">Yes</span>
+                                                                ) : (
+                                                                    <span className="badge label-table badge-danger">No</span>
+                                                                )}
+                                                            </td>
                                                             <td>
                                                                 {tutor.account.isActive ? (
                                                                     <span className="badge label-table badge-success">Active</span>
