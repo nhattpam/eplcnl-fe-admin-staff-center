@@ -4,8 +4,13 @@ import Sidebar from '../Sidebar';
 import Footer from '../Footer';
 import { useNavigate, useParams } from 'react-router-dom';
 import accountService from '../../services/account.service';
+import staffService from '../../services/staff.service';
 
 const EditTutor = () => {
+
+    // Define isAdmin and isStaff outside of the component
+    const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+    const isStaff = sessionStorage.getItem('isStaff') === 'true';
 
     const [account, setAccount] = useState({
         id: "",
@@ -20,14 +25,28 @@ const EditTutor = () => {
         createdDate: "",
     });
 
+    const [tutor, setTutor] = useState({
+        staffId: "",
+    });
+
 
     const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
     const navigate = useNavigate();
 
+    const [staffList, setStaffList] = useState([]);
+    useEffect(() => {
+        staffService
+            .getAllStaff()
+            .then((res) => {
+                console.log(res.data);
+                setStaffList(res.data);
 
-
-
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
 
     const { id } = useParams();
@@ -45,7 +64,35 @@ const EditTutor = () => {
         }
     }, [id]);
 
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
 
+        if (type === 'checkbox' && name === 'isActive') {
+            // For checkboxes (isActive), use the checked value
+            setAccount({ ...account, [name]: checked });
+        } else {
+            // For other fields, use the regular value
+            setAccount({ ...account, [name]: value });
+        }
+    };
+
+
+
+    const submitAccount = (e) => {
+        e.preventDefault();
+
+        accountService
+            .updateAccount(account.id, account)
+            .then((res) => {
+                if (account.isActive) {
+                    // centerService.sendEmail(center.id);
+                }
+                navigate("/list-tutor/");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
 
     return (
@@ -63,7 +110,7 @@ const EditTutor = () => {
                                 <div className="card-box">
                                     <h4 className="header-title">Tutor Information</h4>
 
-                                    <form id="demo-form" data-parsley-validate>
+                                    <form id="demo-form" data-parsley-validate onSubmit={(e) => submitAccount(e)}> 
                                         <div className="form-group">
                                             <label htmlFor="fullname">Tutor Name * :</label>
                                             <input type="text" className="form-control" name="fullname" id="fullname" value={account.fullName} readOnly />
@@ -93,17 +140,62 @@ const EditTutor = () => {
                                             )}
                                         </div>
 
-                                        <div className="form-group mb-0">
+                                        <div className="form-group">
+                                            <label htmlFor="staffId">Is Managed By *:</label>
+                                            <select
+                                                className="form-control"
+                                                id="staffId"
+                                                name="staffId"
+                                                value={tutor.staffId}
+                                                onChange={handleChange}
+                                            >
+                                                <option value="">Select Staff</option>
+                                                {staffList.map((staff) => (
+                                                    <option key={staff.id} value={staff.id}>
+                                                        {staff.account ? staff.account.fullName : 'Unknown Name'}
+                                                    </option>
+                                                ))}
+
+                                            </select>
+                                        </div>
+
+                                        {isAdmin && (
+
+                                            <button
+                                                type="submit"
+                                                className="btn btn-success mr-2"
+                                                onClick={() => setAccount({ ...account, isActive: true })}
+                                            >
+                                                <i className="bi bi-x-lg"></i> Approve
+                                            </button>
+                                        )}
+                                        {isAdmin && (
+
+                                            <button
+                                                type="submit"
+                                                className="btn btn-danger mr-2"
+                                                onClick={() => setAccount({ ...account, isActive: false })}
+                                            >
+                                                <i className="bi bi-x-lg"></i> Disapprove
+                                            </button>
+                                        )}
+                                        {isStaff && (
+
+                                            <button
+                                                type="submit"
+                                                className="btn btn-danger ml-1"
+                                            >
+                                                <i className="bi bi-x-lg"></i> Request to delete
+                                            </button>
+                                        )}
+                                        {isAdmin && (
                                             <button
                                                 type="submit"
                                                 className="btn btn-danger"
                                             >
-                                                <i className="bi bi-x-lg"></i> Request to delete
+                                                <i className="bi bi-x-lg"></i> Delete
                                             </button>
-
-
-
-                                        </div>
+                                        )}
                                     </form>
                                 </div> {/* end card-box*/}
                             </div> {/* end col*/}
