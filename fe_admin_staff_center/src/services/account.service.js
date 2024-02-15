@@ -42,5 +42,13 @@ class AccountService {
       }
     });
   }
+
+  getTutorByAccountId(id) {
+    return axios.get(API_URL + `/accounts/${id}/tutors`, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
 }
 export default new AccountService;

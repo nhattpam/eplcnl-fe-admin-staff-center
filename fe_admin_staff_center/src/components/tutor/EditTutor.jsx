@@ -5,6 +5,7 @@ import Footer from '../Footer';
 import { useNavigate, useParams } from 'react-router-dom';
 import accountService from '../../services/account.service';
 import staffService from '../../services/staff.service';
+import tutorService from '../../services/tutor.service';
 
 const EditTutor = () => {
 
@@ -64,17 +65,25 @@ const EditTutor = () => {
         }
     }, [id]);
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-
-        if (type === 'checkbox' && name === 'isActive') {
-            // For checkboxes (isActive), use the checked value
-            setAccount({ ...account, [name]: checked });
-        } else {
-            // For other fields, use the regular value
-            setAccount({ ...account, [name]: value });
+    //get tutor by accountId
+    useEffect(() => {
+        if (id) {
+            accountService
+                .getTutorByAccountId(id)
+                .then((res) => {
+                    setTutor(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
+    }, [id]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setTutor({ ...tutor, [name]: value });
     };
+    
 
 
 
@@ -86,6 +95,8 @@ const EditTutor = () => {
             .then((res) => {
                 if (account.isActive) {
                     // centerService.sendEmail(center.id);
+                    //assign staff to tutor
+                    tutorService.updateTutor(tutor.id, tutor);
                 }
                 navigate("/list-tutor/");
             })
