@@ -12,6 +12,9 @@ const EditCourse = () => {
     const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
     const isStaff = sessionStorage.getItem('isStaff') === 'true';
 
+    const staffId = localStorage.getItem('staffId');
+
+
     const [course, setCourse] = useState({
         name: "",
         description: "",
@@ -89,6 +92,25 @@ const EditCourse = () => {
         // Add logic to navigate to the module edit page with the moduleId
         navigate(`/edit-class-module/${moduleId}`);
     };
+
+    const submitCourse = (e) => {
+        e.preventDefault();
+
+        courseService
+            .updateCourse(course.id, course)
+            .then((res) => {
+                if (course.isActive) {
+                    // centerService.sendEmail(center.id);
+                    navigate(`/list-course-active/${staffId}`);
+
+                } else{
+                    navigate(`/list-course-inactive/${staffId}`);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
     return (
         <>
             <div id="wrapper">
@@ -104,7 +126,7 @@ const EditCourse = () => {
                                 <div className="card-box">
                                     <h4 className="header-title">Course Information</h4>
 
-                                    <form id="demo-form" data-parsley-validate>
+                                    <form id="demo-form" data-parsley-validate onSubmit={(e) => submitCourse(e)}>
                                         <div className="form-group">
                                             <label htmlFor="name">Course Name * :</label>
                                             <input type="text" className="form-control" name="name" id="name" value={course.name} readOnly />
@@ -222,6 +244,8 @@ const EditCourse = () => {
                                                         <button
                                                             type="submit"
                                                             className="btn btn-success"
+                                                            onClick={() => setCourse({ ...course, isActive: true })}
+
                                                         >
                                                             <i className="bi bi-x-lg"></i> Approve
                                                         </button>
@@ -231,18 +255,19 @@ const EditCourse = () => {
                                                         <button
                                                             type="submit"
                                                             className="btn btn-danger ml-1"
+                                                            onClick={() => setCourse({ ...course, isActive: false })}
                                                         >
                                                             <i className="bi bi-x-lg"></i> Disappove
                                                         </button>
                                                     )}
-                                                    {isAdmin && (
+                                                    {/* {isAdmin && (
                                                         <button
                                                             type="submit"
                                                             className="btn btn-danger"
                                                         >
                                                             <i className="bi bi-x-lg"></i> Delete
                                                         </button>
-                                                    )}
+                                                    )} */}
                                                 </>
 
 
