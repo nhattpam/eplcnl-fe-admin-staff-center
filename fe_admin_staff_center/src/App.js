@@ -37,6 +37,7 @@ import ListAssignment from './components/assignment/ListAssignment';
 import ListLessonMaterial from './components/material/ListLessonMaterial';
 import ListClassTopicMaterial from './components/material/ListClassTopicMaterial';
 import EditQuestion from './components/question/EditQuestion';
+import ListReportByStaff from './components/report/ListReportByStaff';
 
 function App() {
 
@@ -102,7 +103,8 @@ function App() {
         {/* material */}
         <Route path="/list-material-by-lesson/:storedLessonId" element={<ListLessonMaterial />} />
         <Route path="/list-material-by-topic/:storedClassTopicId" element={<ListClassTopicMaterial />} />
-
+        {/* report */}
+        <Route path="/list-report/:staffId" element={<ListReportByStaff />} />
       </Routes>
     </div>
   );

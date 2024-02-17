@@ -108,59 +108,7 @@ const Header = () => {
                         </Link>
                     </div>
 
-                    <ul className="list-unstyled topnav-menu topnav-menu-left m-0">
-                        <li>
-                            <button className="button-menu-mobile waves-effect waves-light">
-                                <i className="fe-menu" />
-                            </button>
-                        </li>
-                        <li>
-                            {/* Mobile menu toggle (Horizontal Layout)*/}
-                            <a className="navbar-toggle nav-link" data-toggle="collapse" data-target="#topnav-menu-content">
-                                <div className="lines">
-                                    <span />
-                                    <span />
-                                    <span />
-                                </div>
-                            </a>
-                            {/* End mobile menu toggle*/}
-                        </li>
-                        <li className="dropdown d-none d-xl-block">
-                            <a className="nav-link dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                Create New
-                                <i className="mdi mdi-chevron-down" />
-                            </a>
-                            <div className="dropdown-menu">
-                                {/* item*/}
-                                <a href="javascript:void(0);" className="dropdown-item">
-                                    <i className="fe-briefcase mr-1" />
-                                    <span>New Projects</span>
-                                </a>
-                                {/* item*/}
-                                <a href="javascript:void(0);" className="dropdown-item">
-                                    <i className="fe-user mr-1" />
-                                    <span>Create Users</span>
-                                </a>
-                                {/* item*/}
-                                <a href="javascript:void(0);" className="dropdown-item">
-                                    <i className="fe-bar-chart-line- mr-1" />
-                                    <span>Revenue Report</span>
-                                </a>
-                                {/* item*/}
-                                <a href="javascript:void(0);" className="dropdown-item">
-                                    <i className="fe-settings mr-1" />
-                                    <span>Settings</span>
-                                </a>
-                                <div className="dropdown-divider" />
-                                {/* item*/}
-                                <a href="javascript:void(0);" className="dropdown-item">
-                                    <i className="fe-headphones mr-1" />
-                                    <span>Help &amp; Support</span>
-                                </a>
-                            </div>
-                        </li>
-
-                    </ul>
+                    
                     <div className="clearfix" />
                 </div>
             </div>

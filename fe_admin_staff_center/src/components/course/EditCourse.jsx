@@ -185,7 +185,7 @@ const EditCourse = () => {
                                                             type="submit"
                                                             className="btn btn-danger ml-1"
                                                         >
-                                                            <i className="bi bi-x-lg"></i> Request to delete
+                                                            <i className="bi bi-x-lg"></i> Disapprove
                                                         </button>
                                                     )}
                                                     {isAdmin && (
@@ -232,7 +232,7 @@ const EditCourse = () => {
                                                             type="submit"
                                                             className="btn btn-danger ml-1"
                                                         >
-                                                            <i className="bi bi-x-lg"></i> Request to delete
+                                                            <i className="bi bi-x-lg"></i> Disappove
                                                         </button>
                                                     )}
                                                     {isAdmin && (

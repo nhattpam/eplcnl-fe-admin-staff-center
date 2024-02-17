@@ -3,67 +3,58 @@ import Footer from '../Footer'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
 import { Link } from 'react-router-dom'
-import centerService from '../../services/center.service'
 import { useNavigate, useParams } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai"; // icons form react-icons
-
-const ListTutorByCenter = () => {
-
-    // Define isAdmin and isStaff outside of the component
-    const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
-    const isStaff = sessionStorage.getItem('isStaff') === 'true';
-    const isCenter = sessionStorage.getItem('isCenter') === 'true';
+import staffService from '../../services/staff.service';
 
 
-    const [tutorList, setTutorList] = useState([]);
+const ListReportByStaff = () => {
 
-    const [errors, setErrors] = useState({});
+    const [ReportList, setReportList] = useState([]);
     const [msg, setMsg] = useState('');
-    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
-    const [tutorsPerPage] = useState(5);
+    const [ReportsPerPage] = useState(5);
 
-    const { centerId } = useParams();
+    const { staffId } = useParams();
+
 
     useEffect(() => {
-        centerService
-            .getAllTutorsByCenter(centerId)
+        staffService
+            .getAllReportsByStaff(staffId)
             .then((res) => {
-                console.log(res.data);
-                setTutorList(res.data);
+                // console.log(res.data);
+                setReportList(res.data);
 
             })
             .catch((error) => {
                 console.log(error);
             });
-    }, [centerId]);
+    }, []);
+
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    console.log(typeof tutorList);
-
-    const filteredTutors = tutorList
-        .filter((tutor) => {
+    const filteredReports = ReportList
+        .filter((Report) => {
             return (
-                tutor.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                Report.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
 
             );
         });
 
-    const pageCount = Math.ceil(filteredTutors.length / tutorsPerPage);
+    const pageCount = Math.ceil(filteredReports.length / ReportsPerPage);
 
     const handlePageClick = (data) => {
         setCurrentPage(data.selected);
     };
 
-    const offset = currentPage * tutorsPerPage;
-    const currentTutors = filteredTutors.slice(offset, offset + tutorsPerPage);
-
+    const offset = currentPage * ReportsPerPage;
+    const currentReports = filteredReports.slice(offset, offset + ReportsPerPage);
 
     return (
         <>
@@ -71,7 +62,7 @@ const ListTutorByCenter = () => {
                 <Header />
                 <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
                     isStaff={sessionStorage.getItem('isStaff') === 'true'}
-                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />
+                    isReport={sessionStorage.getItem('isReport') === 'true'} />
                 {/* ============================================================== */}
                 {/* Start Page Content here */}
                 {/* ============================================================== */}
@@ -87,7 +78,7 @@ const ListTutorByCenter = () => {
                                             <ol className="breadcrumb m-0">
                                             </ol>
                                         </div>
-                                        <h4 className="page-title">List tutor</h4>
+                                        <h4 className="page-title">List Report</h4>
                                     </div>
                                 </div>
                             </div>
@@ -97,14 +88,7 @@ const ListTutorByCenter = () => {
                                     <div className="card-box">
                                         <div className="mb-2">
                                             <div className="row">
-                                                <div className="col-12 text-sm-center form-inline">
-                                                    {/* Create Tutor Button */}
-                                                    {isCenter && (
-
-                                                     <Link to="/create-tutor" className="btn btn-primary">
-                                                        Create Tutor
-                                                    </Link> 
-                                                    )}
+                                                <div className="col-12 text-sm-Report form-inline">
                                                     <div className="form-group mr-2">
                                                         <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
                                                             <option value>Show all</option>
@@ -125,60 +109,46 @@ const ListTutorByCenter = () => {
                                             <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                                                 <thead>
                                                     <tr>
-                                                        <th data-toggle="true">Image</th>
-                                                        <th data-toggle="true">Full Name</th>
-                                                        <th data-toggle="true">Phone</th>
-                                                        <th data-hide="phone">Gender</th>
-                                                        <th data-hide="phone, tablet">DOB</th>
-                                                        <th data-hide="phone, tablet">Status</th>
-                                                        <th>Action</th>
-                                                        <th>Courses</th>
+                                                        <th data-toggle="true">Report Id</th>
+                                                        <th>Learner</th>
+                                                        <th data-hide="phone, tablet">Reason</th>
+                                                        <th>Report Date</th>
+                                                        <th data-hide="phone">Course</th>
+                                                        {/* <th>Action</th> */}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentTutors.map((tutor) => (
-                                                        <tr key={tutor.id}>
+                                                    {currentReports.map((cus) => (
+                                                        <tr key={cus.id}>
+                                                            <td>{cus.id}</td>
+                                                            <td>{cus.learner && cus.learner.account.fullName ? cus.learner.account.fullName : 'Unknown Name'}</td>
+                                                            <td>{cus.reason}</td>
+                                                            <td>{cus.reportedDate}</td>
                                                             <td>
-                                                                <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+                                                                <Link to={`/edit-course/${cus.course.id}`}>
+                                                                    {cus.course && cus.course.name ? cus.course.name : 'Unknown Name'}
+                                                                </Link>
+                                                            </td>
+                                                            {/* <td>
+                                                                <Link to={`/edit-report/${cus.id}`}>
+                                                                    <i className="fas fa-ban"></i>                                                                </Link>
+                                                            </td> */}
 
-                                                                </img>
-                                                            </td>
-                                                            <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
-                                                            <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
-                                                            <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
-                                                            <td>
-                                                                {tutor.account.isActive ? (
-                                                                    <span className="badge label-table badge-success">Active</span>
-                                                                ) : (
-                                                                    <span className="badge label-table badge-danger">Inactive</span>
-                                                                )}
-                                                            </td>
-                                                            <td>
-                                                                <Link to={`/edit-tutor/${tutor.account.id}`}>
-                                                                    <i className="fa-regular fa-eye"></i>
-                                                                </Link>
-                                                            </td>
-                                                            <td>
-                                                                <Link to={`/list-course-by-tutor/${tutor.id}`}>
-                                                                    View
-                                                                </Link>
-                                                            </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
-                                            </table>
-                                        </div>
 
+
+                                            </table>
+                                        </div> {/* end .table-responsive*/}
                                     </div> {/* end card-box */}
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}
-
-
                             {/* Pagination */}
                             <div className='container-fluid'>
                                 {/* Pagination */}
-                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <div style={{ display: 'flex', justifyContent: 'Report' }}>
                                     <ReactPaginate
                                         previousLabel={
                                             <IconContext.Provider value={{ color: "#000", size: "23px" }}>
@@ -208,6 +178,9 @@ const ListTutorByCenter = () => {
                                 </div>
 
                             </div>
+
+
+
                         </div> {/* container */}
                     </div> {/* content */}
                 </div>
@@ -221,4 +194,4 @@ const ListTutorByCenter = () => {
     )
 }
 
-export default ListTutorByCenter
+export default ListReportByStaff
