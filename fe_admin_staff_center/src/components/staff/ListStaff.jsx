@@ -138,7 +138,7 @@ const ListStaff = () => {
                                                             </td>
                                                             <td>{cus.account.phoneNumber}</td>
                                                             <td>
-                                                                {cus.isActive ? (
+                                                                {cus.account.isActive ? (
                                                                     <span className="badge label-table badge-success">Active</span>
                                                                 ) : (
                                                                     <span className="badge label-table badge-danger">Inactive</span>

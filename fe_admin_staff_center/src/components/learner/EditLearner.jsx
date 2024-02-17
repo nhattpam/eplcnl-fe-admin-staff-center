@@ -98,7 +98,7 @@ const EditLearner = () => {
                         type="submit"
                         className="btn btn-danger"
                       >
-                        <i className="bi bi-x-lg"></i> Request to delete
+                        <i className="bi bi-x-lg"></i> Delete
                       </button>
 
 
