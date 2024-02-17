@@ -73,8 +73,8 @@ function App() {
         <Route path="/edit-tutor/:id" element={<EditTutor />} />
         <Route path="/list-learner" element={<ListLeaner />} />
         <Route path="/edit-learner/:id" element={<EditLearner />} />
-        <Route path="/list-course-active" element={<ListCourseActive />} />
-        <Route path="/list-course-inactive" element={<ListCourseInActive />} />
+        <Route path="/list-course-active/:staffId" element={<ListCourseActive />} />
+        <Route path="/list-course-inactive/:staffId" element={<ListCourseInActive />} />
         <Route path="/list-course-by-tutor/:tutorId" element={<ListCourseByTutor />} />
         <Route path="/admin-home" element={<AdminDashboard />} />
         <Route path="/staff-home" element={<StaffDashboard />} />

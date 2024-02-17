@@ -67,5 +67,13 @@ class StaffService {
       }
     });
   }
+
+  getAllCoursesByStaff(id) {
+    return axios.get(`${API_URL}/staffs/${id}/courses`, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
 }
 export default new StaffService;

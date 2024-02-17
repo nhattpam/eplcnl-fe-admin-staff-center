@@ -138,10 +138,10 @@ const Sidebar = ({ isAdmin, isStaff, isCenter }) => {
                                     <div className="collapse" id="sidebarEcommercea">
                                         <ul className="nav-second-level">
                                             <li>
-                                                <Link to={"/list-course-active"}>Active</Link>
+                                                <Link to={`/list-course-active/${staffId}`}>Active</Link>
                                             </li>
                                             <li>
-                                                <Link to={`/list-course-inactive/`}>InActive</Link>
+                                                <Link to={`/list-course-inactive/${staffId}`}>InActive</Link>
                                             </li>
 
                                         </ul>

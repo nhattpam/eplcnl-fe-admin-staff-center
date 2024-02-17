@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Footer from '../Footer'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
-import { Link } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai"; // icons form react-icons
 import courseService from '../../services/course.service';
+import staffService from '../../services/staff.service';
 
 const ListCourseActive = () => {
 
@@ -16,9 +17,12 @@ const ListCourseActive = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [coursesPerPage] = useState(5);
 
+    const { staffId } = useParams();
+
+
     useEffect(() => {
-        courseService
-          .getAllCourse()
+        staffService
+          .getAllCoursesByStaff(staffId)
           .then((res) => {
             // Filter the courses where isActive is true
             const activeCourses = res.data.filter(course => course.isActive === true);
