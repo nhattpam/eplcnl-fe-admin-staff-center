@@ -64,50 +64,60 @@ const EditLearner = () => {
                   <h4 className="header-title">LEARNER INFORMATION</h4>
 
                   <form id="demo-form" data-parsley-validate>
-                    <div className="table-responsive">
-                      <table className="table table-bordered">
-                        <tbody>
-                          <tr>
-                            <th>Tutor Name:</th>
-                            <td>{account.fullName}</td>
-                          </tr>
-                          <tr>
-                            <th>Email:</th>
-                            <td>{account.email}</td>
-                          </tr>
-                          <tr>
-                            <th>Phone Number:</th>
-                            <td>{account.phoneNumber}</td>
-                          </tr>
-                          <tr>
-                            <th>Date Of Birth:</th>
-                            <td>{account.dateOfBirth}</td>
-                          </tr>
-                          <tr>
-                            <th>Gender:</th>
-                            <td>
-                              {account.gender ? (
-                                <span className="badge label-table badge-success">Male</span>
-                              ) : (
-                                <span className="badge label-table badge-danger">Female</span>
-                              )}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <div className="row">
+                      <div className="col-md-8">
+                        <div className="table-responsive">
+                          <table className="table table-bordered">
+                            <tbody>
+                              <tr>
+                                <th>Tutor Name:</th>
+                                <td>{account.fullName}</td>
+                              </tr>
+                              <tr>
+                                <th>Email:</th>
+                                <td>{account.email}</td>
+                              </tr>
+                              <tr>
+                                <th>Phone Number:</th>
+                                <td>{account.phoneNumber}</td>
+                              </tr>
+                              <tr>
+                                <th>Date Of Birth:</th>
+                                <td>{account.dateOfBirth}</td>
+                              </tr>
+                              <tr>
+                                <th>Gender:</th>
+                                <td>
+                                  {account.gender ? (
+                                    <span className="badge label-table badge-success">Male</span>
+                                  ) : (
+                                    <span className="badge label-table badge-danger">Female</span>
+                                  )}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group mb-0">
+                          <button
+                            type="submit"
+                            className="btn btn-danger"
+                          >
+                            <i class="fa-solid fa-user-xmark"></i> Delete
+                          </button>
+
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="form-group mb-0">
-                      <button
-                        type="submit"
-                        className="btn btn-danger"
-                      >
-                        <i class="fa-solid fa-user-xmark"></i> Delete
-                      </button>
+                    <div className="form-group">
+                      <label>Is Attempting Courses:</label>
 
-
-
+                      
                     </div>
+
                   </form>
                 </div> {/* end card-box*/}
               </div> {/* end col*/}
