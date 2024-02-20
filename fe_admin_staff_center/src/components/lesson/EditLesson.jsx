@@ -108,7 +108,7 @@ const EditLesson = () => {
                 <div className="col-12">
                   <div className="card">
                     <div className="card-body">
-                      <h4 className="header-title">Course {module.course?.name} | Module {module.name}</h4>
+                      <h4 className="header-title">EDITING LESSON - <span className='text-success'>{lesson.name}</span></h4>
 
                       <form
                         method="post"
@@ -120,7 +120,7 @@ const EditLesson = () => {
                         data-parsley-validate
                         onSubmit={submitLesson}>
 
-                        <div className="card">
+                        <div className="card" style={{ marginTop: '-20px' }}>
                           <div className='card-body'>
                             <label htmlFor="video">Video Url * :</label>
                             <input type="text" className="form-control" name="videoUrl" id="videoUrl" value={lesson.videoUrl} readOnly />
@@ -150,8 +150,8 @@ const EditLesson = () => {
                           {/* <button type="submit" className="btn btn-primary " style={{ marginLeft: '23px', marginTop: '10px' }} >
                             Edit
                           </button> */}
-                          <Link to={`/list-material-by-lesson/${lesson.id}`} className="btn btn-warning " style={{ marginLeft: '20px', marginTop: '10px' }} >
-                            View Materials
+                          <Link to={`/list-material-by-lesson/${lesson.id}`} className="btn btn-dark " style={{ marginLeft: '20px', marginTop: '10px' }} >
+                            <i class="fas fa-file-alt"></i> View Materials
                           </Link>
                         </div>
                       </form>

@@ -87,56 +87,41 @@ const EditModule = () => {
                 <Header />
                 <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
                     isStaff={sessionStorage.getItem('isStaff') === 'true'}
-                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />                <div className="content-page">
+                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />
+                <div className="content-page">
                     {/* Start Content*/}
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-12">
                                 <div className="card-box">
-                                    <h4 className="header-title">Course {module.course?.name} | Module Information</h4>
+                                    <h4 className="header-title">COURSE - <span className='text-success'>{module.course?.name}</span> | MODULE INFORMATION</h4>
 
-                                    <form id="demo-form" data-parsley-validate>
-                                        <div className="form-group">
-                                            <label htmlFor="name">Module Name * :</label>
-                                            <input type="text" className="form-control" name="name" id="name" value={module.name} readOnly />
-                                        </div>
 
-                                        <div className="form-group">
-                                            <h5>Assignments: {assignmentList.length || 0}</h5>
-                                            <ul>
-                                                <Link to={`/list-assignment/${module.id}`}>
-                                                    View All
-                                                </Link>
-                                            </ul>
-                                        </div>
+                                    <div className="mb-3">
+                                        <h5>Module Name:</h5>
+                                        <p>{module.name}</p>
+                                    </div>
 
-                                        <div className="form-group">
-                                            <h5>Lessons: {lessonList.length || 0}</h5>
-                                            <ul>
-                                                <Link to={`/list-lesson/${module.id}`}>
-                                                    View All
-                                                </Link>
-                                            </ul>
-                                        </div>
+                                    <div className="mb-3">
+                                        <h5>Assignments ({assignmentList.length || 0})</h5>
+                                        <Link to={`/list-assignment/${module.id}`} className='text-success'>
+                                            View All
+                                        </Link>
+                                    </div>
 
-                                        <div className="form-group">
-                                            <h5>Quizzes: {quizList.length || 0}</h5>
-                                            <ul>
-                                                <Link to={`/list-quiz/${module.id}`}>
-                                                    View All
-                                                </Link>
-                                            </ul>
-                                        </div>
+                                    <div className="mb-3">
+                                        <h5>Lessons ({lessonList.length || 0})</h5>
+                                        <Link to={`/list-lesson/${module.id}`} className='text-success'>
+                                            View All
+                                        </Link>
+                                    </div>
 
-                                        {/* <div className="form-group mb-0">
-                                            <button
-                                                type="submit"
-                                                className="btn btn-danger"
-                                            >
-                                                <i className="bi bi-x-lg"></i> Request to delete
-                                            </button>
-                                        </div> */}
-                                    </form>
+                                    <div className="mb-3">
+                                        <h5>Quizzes ({quizList.length || 0})</h5>
+                                        <Link to={`/list-quiz/${module.id}`} className='text-success'>
+                                            View All
+                                        </Link>
+                                    </div>
                                 </div> {/* end card-box*/}
                             </div> {/* end col*/}
                         </div>

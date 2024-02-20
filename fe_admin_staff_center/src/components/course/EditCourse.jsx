@@ -103,7 +103,7 @@ const EditCourse = () => {
                     // centerService.sendEmail(center.id);
                     navigate(`/list-course-active/${staffId}`);
 
-                } else{
+                } else {
                     navigate(`/list-course-inactive/${staffId}`);
                 }
             })
@@ -124,26 +124,32 @@ const EditCourse = () => {
                         <div className="row">
                             <div className="col-12">
                                 <div className="card-box">
-                                    <h4 className="header-title">Course Information</h4>
+                                    <h4 className="header-title">COURSE INFORMATION</h4>
 
                                     <form id="demo-form" data-parsley-validate onSubmit={(e) => submitCourse(e)}>
-                                        <div className="form-group">
-                                            <label htmlFor="name">Course Name * :</label>
-                                            <input type="text" className="form-control" name="name" id="name" value={course.name} readOnly />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="code">Code * :</label>
-                                            <input type="text" id="code" className="form-control" name="code" data-parsley-trigger="change" value={course.code} readOnly />
-                                        </div>
-
-                                        <div className="form-group">
-                                            <label htmlFor="stockPrice">Price * :</label>
-                                            <input type="number" id="stockPrice" className="form-control" name="stockPrice" data-parsley-trigger="change" value={course.stockPrice} readOnly />
-                                        </div>
-
-                                        <div className="form-group">
-                                            <label htmlFor="tags">Tags * :</label>
-                                            <input type="text" id="tags" className="form-control" name="tags" data-parsley-trigger="change" value={course.tags} readOnly />
+                                        <div className="table-responsive">
+                                            <table className="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <th>Course Name:</th>
+                                                        <td>{course.name}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Code:</th>
+                                                        <td>{course.code}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Price:</th>
+                                                        <td>{course.stockPrice}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Tags:</th>
+                                                        <td>
+                                                            <span className="badge label-table badge-warning">{course.tags}</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
 
                                         <div className="form-group">
@@ -155,10 +161,11 @@ const EditCourse = () => {
                                                         {module.name}
                                                         <button
                                                             type="button"
-                                                            className="btn btn-secondary btn-sm"
+                                                            className="btn btn-link text-dark"
                                                             onClick={() => handleEditModule(module.id)}
                                                         >
-                                                            Edit
+                                                            <i className="far fa-edit"></i>
+
                                                         </button>
                                                     </li>
                                                 ))}
@@ -168,10 +175,11 @@ const EditCourse = () => {
                                                         {module.startDate !== null ? module.startDate : "No start date"}
                                                         <button
                                                             type="button"
-                                                            className="btn btn-secondary btn-sm"
+                                                            className="btn btn-link text-dark"
                                                             onClick={() => handleEditClassModule(module.id)}
                                                         >
-                                                            Edit
+                                                            <i className="far fa-edit"></i>
+
                                                         </button>
                                                     </li>
                                                 ))}
@@ -215,7 +223,7 @@ const EditCourse = () => {
                                                             type="submit"
                                                             className="btn btn-danger"
                                                         >
-                                                            <i className="bi bi-x-lg"></i> Delete
+                                                            <i class="fa-solid fa-trash-can"></i> Delete
                                                         </button>
                                                     )}
                                                 </>

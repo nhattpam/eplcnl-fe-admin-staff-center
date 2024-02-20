@@ -103,7 +103,7 @@ const EditRefundRequest = () => {
                         <div className="row">
                             <div className="col-12">
                                 <div className="card-box">
-                                    <h4 className="header-title">Transaction Information</h4>
+                                    <h4 className="header-title">TRANSACTION INFORMATION</h4>
 
                                     <form id="demo-form" data-parsley-validate>
                                         <div className="form-group">
@@ -148,7 +148,7 @@ const EditRefundRequest = () => {
                                                             )}
                                                         </td>
                                                         <td>
-                                                            <Link to={`/edit-course/${course.id}`}>
+                                                            <Link to={`/edit-course/${course.id}`} className='text-secondary'>
                                                                 <i class="fa-regular fa-eye"></i>
                                                             </Link>
                                                         </td>
@@ -163,13 +163,13 @@ const EditRefundRequest = () => {
                                                 type="submit"
                                                 className="btn btn-success"
                                             >
-                                                <i className="bi bi-x-lg"></i> Approve
+                                               <i class="fa-solid fa-thumbs-up"></i> Approve
                                             </button>
                                             <button
                                                 type="submit"
                                                 className="btn btn-danger ml-1"
                                             >
-                                                <i className="bi bi-x-lg "></i> Disapprove
+                                                <i class="fa-solid fa-thumbs-down"></i> Disapprove
                                             </button>
                                         </div>
                                     </form>

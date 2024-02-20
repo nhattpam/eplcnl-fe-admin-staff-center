@@ -77,26 +77,30 @@ const EditQuiz = () => {
             <div className="row">
               <div className="col-12">
                 <div className="card-box">
-                  <h4 className="header-title">Course Information | Module {quiz.module?.name}</h4>
+                  <h4 className="header-title">QUIZ INFORMATION</h4>
 
                   <form id="demo-form" data-parsley-validate>
-                    <div className="form-group">
-                      <label htmlFor="name">Quiz Name * :</label>
-                      <input type="text" className="form-control" name="name" id="name" value={quiz.name} readOnly />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="code">Grade to pass * :</label>
-                      <input type="number" id="code" className="form-control" name="gradeToPasscode" data-parsley-trigger="change" value={quiz.gradeToPass} readOnly />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="stockPrice">Times * :</label>
-                      <input type="number" id="stockPrice" className="form-control" name="stockPrice" data-parsley-trigger="change" value={quiz.deadline} readOnly />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="tags">Created Date * :</label>
-                      <input type="text" id="createdDate" className="form-control" name="createdDate" data-parsley-trigger="change" value={quiz.createdDate} readOnly />
+                    <div className="table-responsive">
+                      <table className="table table-bordered">
+                        <tbody>
+                          <tr>
+                            <th>Quiz Name:</th>
+                            <td>{quiz.name}</td>
+                          </tr>
+                          <tr>
+                            <th>Grade to Pass:</th>
+                            <td>{quiz.gradeToPass}</td>
+                          </tr>
+                          <tr>
+                            <th>Times:</th>
+                            <td>{quiz.deadline}</td>
+                          </tr>
+                          <tr>
+                            <th>Created Date:</th>
+                            <td>{quiz.createdDate}</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
 
                     <div className="form-group">
@@ -108,10 +112,11 @@ const EditQuiz = () => {
                             {question.questionImageUrl} {question.questionAudioUrl} {question.questionText}
                             <button
                               type="button"
-                              className="btn btn-secondary btn-sm"
+                              className="btn btn-link btn-sm text-secondary"
                               onClick={() => handleEditQuestion(question.id)}
                             >
-                              View
+                              <i class="fa-regular fa-eye"></i>
+
                             </button>
                           </li>
                         ))}

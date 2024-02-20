@@ -101,7 +101,7 @@ const EditCenter = () => {
             centerService
                 .updateCenter(center.id, center)
                 .then((res) => {
-                    if(center.isActive){
+                    if (center.isActive) {
                         centerService.sendEmail(center.id);
                     }
                     navigate("/list-center/");
@@ -126,7 +126,7 @@ const EditCenter = () => {
                         <div className="row">
                             <div className="col-12">
                                 <div className="card-box">
-                                    <h4 className="header-title">Center Information</h4>
+                                    <h4 className="header-title">CENTER INFORMATION</h4>
 
                                     <div className="alert alert-warning d-none fade show">
                                         <h4 className="mt-0 text-warning">Oh snap!</h4>
@@ -137,19 +137,26 @@ const EditCenter = () => {
                                         <p className="mb-0">Everything seems to be ok :)</p>
                                     </div>
                                     <form id="demo-form" data-parsley-validate onSubmit={(e) => submitCenter(e)}>
-                                        <div className="form-group">
-                                            <label htmlFor="fullname">Center Name * :</label>
-                                            <input type="text" className="form-control" name="fullname" id="fullname" value={center.name} readOnly />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="email">Email * :</label>
-                                            <input type="email" id="email" className="form-control" name="email" data-parsley-trigger="change" value={center.email} readOnly />
-                                        </div>
+                                        <div className="table-responsive">
+                                            <table className="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <th>Center Name:</th>
+                                                        <td>{center.name}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Email:</th>
+                                                        <td>{center.email}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Description:</th>
+                                                        <td>{center.description}</td>
+                                                    </tr>
 
-                                        <div className="form-group">
-                                            <label htmlFor="description">Description * :</label>
-                                            <textarea type="text" id="description" className="form-control" name="description" data-parsley-trigger="change" value={center.description} readOnly />
+                                                </tbody>
+                                            </table>
                                         </div>
+                                        
                                         <div className="form-group">
                                             <label htmlFor="staffId">Is Managed By *:</label>
                                             <select
@@ -177,14 +184,14 @@ const EditCenter = () => {
                                                 className="btn btn-success mr-2"
                                                 onClick={() => setCenter({ ...center, isActive: true })}
                                             >
-                                                <i className="bi bi-check-lg"></i> Approve
+                                               <i class="fa-solid fa-thumbs-up"></i> Approve
                                             </button>
                                             <button
                                                 type="submit"
                                                 className="btn btn-danger"
                                                 onClick={() => setCenter({ ...center, isActive: false })}
                                             >
-                                                <i className="bi bi-x-lg"></i> Disapprove
+                                                <i class="fa-solid fa-thumbs-down"></i> Disapprove
                                             </button>
 
 

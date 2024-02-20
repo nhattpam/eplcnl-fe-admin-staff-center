@@ -81,7 +81,7 @@ const ListCenter = () => {
                                             <ol className="breadcrumb m-0">
                                             </ol>
                                         </div>
-                                        <h4 className="page-title">List center</h4>
+                                        <h4 className="page-title">LIST OF CENTERS</h4>
                                     </div>
                                 </div>
                             </div>
@@ -92,14 +92,7 @@ const ListCenter = () => {
                                         <div className="mb-2">
                                             <div className="row">
                                                 <div className="col-12 text-sm-center form-inline">
-                                                    <div className="form-group mr-2">
-                                                        <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
-                                                            <option value>Show all</option>
-                                                            <option value="active">Active</option>
-                                                            <option value="disabled">Disabled</option>
-                                                            <option value="suspended">Suspended</option>
-                                                        </select>
-                                                    </div>
+                                                    
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on"
                                                             value={searchTerm}
@@ -137,7 +130,7 @@ const ListCenter = () => {
                                                                 )}
                                                             </td>
                                                             <td>
-                                                                <Link to={`/edit-center/${cus.id}`}>
+                                                                <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
                                                                     <i className="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>

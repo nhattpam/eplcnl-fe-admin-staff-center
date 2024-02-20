@@ -83,7 +83,7 @@ const EditTutor = () => {
         const { name, value } = e.target;
         setTutor({ ...tutor, [name]: value });
     };
-    
+
 
 
 
@@ -119,36 +119,40 @@ const EditTutor = () => {
                         <div className="row">
                             <div className="col-12">
                                 <div className="card-box">
-                                    <h4 className="header-title">Tutor Information</h4>
+                                    <h4 className="header-title">TUTOR INFORMATION</h4>
 
-                                    <form id="demo-form" data-parsley-validate onSubmit={(e) => submitAccount(e)}> 
-                                        <div className="form-group">
-                                            <label htmlFor="fullname">Tutor Name * :</label>
-                                            <input type="text" className="form-control" name="fullname" id="fullname" value={account.fullName} readOnly />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="email">Email * :</label>
-                                            <input type="email" id="email" className="form-control" name="email" data-parsley-trigger="change" value={account.email} readOnly />
-                                        </div>
-
-                                        <div className="form-group">
-                                            <label htmlFor="phoneNumber">Phone Number * :</label>
-                                            <input type="text" id="phoneNumber" className="form-control" name="phoneNumber" data-parsley-trigger="change" value={account.phoneNumber} readOnly />
-                                        </div>
-
-                                        <div className="form-group">
-                                            <label htmlFor="dateOfBirth">DOB * :</label>
-                                            <input type="text" id="dateOfBirth" className="form-control" name="dateOfBirth" data-parsley-trigger="change" value={account.dateOfBirth} readOnly />
-                                        </div>
-
-                                        <div className="form-group">
-                                            <label htmlFor="dateOfBirth">Gender * :</label>
-
-                                            {account.gender ? (
-                                                <input type="text" id="dateOfBirth" className="form-control" name="dateOfBirth" data-parsley-trigger="change" value={"Male"} readOnly />
-                                            ) : (
-                                                <input type="text" id="dateOfBirth" className="form-control" name="dateOfBirth" data-parsley-trigger="change" value={"Female"} readOnly />
-                                            )}
+                                    <form id="demo-form" data-parsley-validate onSubmit={(e) => submitAccount(e)}>
+                                        <div className="table-responsive">
+                                            <table className="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <th>Tutor Name:</th>
+                                                        <td>{account.fullName}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Email:</th>
+                                                        <td>{account.email}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Phone Number:</th>
+                                                        <td>{account.phoneNumber}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Date Of Birth:</th>
+                                                        <td>{account.dateOfBirth}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Gender:</th>
+                                                        <td>
+                                                            {account.gender ? (
+                                                                <span className="badge label-table badge-success">Male</span>
+                                                            ) : (
+                                                                <span className="badge label-table badge-danger">Female</span>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
 
                                         <div className="form-group">
@@ -177,7 +181,7 @@ const EditTutor = () => {
                                                 className="btn btn-success mr-2"
                                                 onClick={() => setAccount({ ...account, isActive: true })}
                                             >
-                                                <i className="bi bi-x-lg"></i> Approve
+                                                <i class="fa-solid fa-thumbs-up"></i> Approve
                                             </button>
                                         )}
                                         {isAdmin && (
@@ -187,7 +191,7 @@ const EditTutor = () => {
                                                 className="btn btn-danger mr-2"
                                                 onClick={() => setAccount({ ...account, isActive: false })}
                                             >
-                                                <i className="bi bi-x-lg"></i> Disapprove
+                                                <i class="fa-solid fa-thumbs-down"></i> Disapprove
                                             </button>
                                         )}
                                         {isStaff && (
@@ -196,7 +200,7 @@ const EditTutor = () => {
                                                 type="submit"
                                                 className="btn btn-danger ml-1"
                                             >
-                                                <i className="bi bi-x-lg"></i> Request to delete
+                                                <i class="fa-solid fa-user-xmark"></i> Request To Delete
                                             </button>
                                         )}
                                         {isAdmin && (
@@ -204,7 +208,7 @@ const EditTutor = () => {
                                                 type="submit"
                                                 className="btn btn-danger"
                                             >
-                                                <i className="bi bi-x-lg"></i> Delete
+                                                <i class="fa-solid fa-user-xmark"></i> Delete
                                             </button>
                                         )}
                                     </form>

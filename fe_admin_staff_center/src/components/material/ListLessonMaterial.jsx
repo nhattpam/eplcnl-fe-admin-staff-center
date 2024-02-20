@@ -97,14 +97,7 @@ const ListLessonMaterial = () => {
                           {/* <Link to={`/tutor/courses/create-lesson-material/${storedLessonId}`} className="btn btn-primary">
                             Add Material
                           </Link> */}
-                          <div className="form-group mr-2">
-                            <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
-                              <option value>Show all</option>
-                              <option value="active">Active</option>
-                              <option value="disabled">Disabled</option>
-                              <option value="suspended">Suspended</option>
-                            </select>
-                          </div>
+                          
                           <div className="form-group">
                             <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" />
                           </div>
@@ -119,7 +112,7 @@ const ListLessonMaterial = () => {
                             <th>Url</th>
                             <th data-hide="phone">Created Date</th>
                             <th data-hide="phone, tablet">Updated Date</th>
-                            <th>Action</th>
+                            {/* <th>Action</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -129,11 +122,11 @@ const ListLessonMaterial = () => {
                               <td>{material.materialUrl}</td>
                               <td>{material.createdDate}</td>
                               <td>{material.updatedDate}</td>
-                              <td>
+                              {/* <td>
                                 <Link to={`/tutor/courses/edit-class-material/${material.id}`}>
                                   <i class="fas fa-trash-alt"></i>
                                 </Link>
-                              </td>
+                              </td> */}
                             </tr>
                           ))}
 
