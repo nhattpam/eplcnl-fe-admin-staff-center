@@ -33,10 +33,14 @@ const EditStaff = () => {
   const [msg, setMsg] = useState('');
   const navigate = useNavigate();
   const [centerList, setCenterList] = useState([]);
+  const [tutorList, setTutorList] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm2, setSearchTerm2] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage2, setCurrentPage2] = useState(0);
   const [centersPerPage] = useState(2);
+  const [tutorsPerPage] = useState(2);
 
 
   const { id } = useParams();
@@ -71,6 +75,16 @@ const EditStaff = () => {
             .catch((error) => {
               console.log(error);
             });
+          staffService
+            .getAllTutorsByStaff(res.data.id)
+            .then((res) => {
+              // console.log(res.data);
+              setTutorList(res.data);
+
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         })
         .catch((error) => {
           console.log(error);
@@ -79,7 +93,7 @@ const EditStaff = () => {
   }, [id]);
 
 
-
+  //list centers
   const filteredCenters = centerList
     .filter((center) => {
       return (
@@ -103,6 +117,23 @@ const EditStaff = () => {
   const currentCenters = filteredCenters.slice(offset, offset + centersPerPage);
 
 
+  //list tutors
+  const filteredTutors = tutorList
+    .filter((tutor) => {
+      return (
+        tutor.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+
+      );
+    });
+
+  const pageCount2 = Math.ceil(filteredTutors.length / tutorsPerPage);
+
+  const handlePageClick2 = (data) => {
+    setCurrentPage2(data.selected);
+  };
+
+  const offset2 = currentPage2 * tutorsPerPage;
+  const currentTutors = filteredTutors.slice(offset2, offset2 + tutorsPerPage);
   return (
     <>
       <div id="wrapper">
@@ -218,46 +249,132 @@ const EditStaff = () => {
                         </table>
                       </div> {/* end .table-responsive*/}
                     </div>
+                    {/* Pagination */}
+                    <div className='container-fluid'>
+                      {/* Pagination */}
+                      <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <ReactPaginate
+                          previousLabel={
+                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                              <AiFillCaretLeft />
+                            </IconContext.Provider>
+                          }
+                          nextLabel={
+                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                              <AiFillCaretRight />
+                            </IconContext.Provider>
+                          } breakLabel={'...'}
+                          breakClassName={'page-item'}
+                          breakLinkClassName={'page-link'}
+                          pageCount={pageCount}
+                          marginPagesDisplayed={2}
+                          pageRangeDisplayed={5}
+                          onPageChange={handlePageClick}
+                          containerClassName={'pagination'}
+                          activeClassName={'active'}
+                          previousClassName={'page-item'}
+                          nextClassName={'page-item'}
+                          pageClassName={'page-item'}
+                          previousLinkClassName={'page-link'}
+                          nextLinkClassName={'page-link'}
+                          pageLinkClassName={'page-link'}
+                        />
+                      </div>
 
+                    </div>
+
+                    <div className="form-group">
+                      <label>Is Managing Tutors:</label>
+
+                      <div className="table-responsive">
+                        <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
+                          <thead>
+                            <tr>
+                              <th data-toggle="true">Image</th>
+                              <th data-toggle="true">Full Name</th>
+                              <th data-toggle="true">Phone</th>
+                              <th data-hide="phone">Gender</th>
+                              <th data-hide="phone, tablet">DOB</th>
+                              <th data-hide="phone, tablet">Status</th>
+                              <th>Action</th>
+                              <th>Courses</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {currentTutors.map((tutor) => (
+                              <tr key={tutor.id}>
+                                <td>
+                                  <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+
+                                  </img>
+                                </td>
+                                <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
+                                <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
+                                <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
+                                <td>
+                                  {tutor.account.isActive ? (
+                                    <span className="badge label-table badge-success">Active</span>
+                                  ) : (
+                                    <span className="badge label-table badge-danger">Inactive</span>
+                                  )}
+                                </td>
+                                <td>
+                                  <Link to={`/edit-tutor/${tutor.account.id}`} className='text-secondary'>
+                                    <i className="fa-regular fa-eye"></i>
+                                  </Link>
+                                </td>
+                                <td>
+                                  <Link to={`/list-course-by-tutor/${tutor.id}`} className='text-dark'>
+                                    <i class="ti-more-alt"></i>
+
+                                  </Link>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    {/* Pagination */}
+                    <div className='container-fluid'>
+                      {/* Pagination */}
+                      <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <ReactPaginate
+                          previousLabel={
+                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                              <AiFillCaretLeft />
+                            </IconContext.Provider>
+                          }
+                          nextLabel={
+                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                              <AiFillCaretRight />
+                            </IconContext.Provider>
+                          } breakLabel={'...'}
+                          breakClassName={'page-item'}
+                          breakLinkClassName={'page-link'}
+                          pageCount={pageCount2}
+                          marginPagesDisplayed={2}
+                          pageRangeDisplayed={5}
+                          onPageChange={handlePageClick2}
+                          containerClassName={'pagination'}
+                          activeClassName={'active'}
+                          previousClassName={'page-item'}
+                          nextClassName={'page-item'}
+                          pageClassName={'page-item'}
+                          previousLinkClassName={'page-link'}
+                          nextLinkClassName={'page-link'}
+                          pageLinkClassName={'page-link'}
+                        />
+                      </div>
+
+                    </div>
                   </form>
                 </div> {/* end card-box*/}
               </div> {/* end col*/}
             </div>
             {/* end row*/}
 
-            {/* Pagination */}
-            <div className='container-fluid'>
-              {/* Pagination */}
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <ReactPaginate
-                  previousLabel={
-                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
-                      <AiFillCaretLeft />
-                    </IconContext.Provider>
-                  }
-                  nextLabel={
-                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
-                      <AiFillCaretRight />
-                    </IconContext.Provider>
-                  } breakLabel={'...'}
-                  breakClassName={'page-item'}
-                  breakLinkClassName={'page-link'}
-                  pageCount={pageCount}
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={5}
-                  onPageChange={handlePageClick}
-                  containerClassName={'pagination'}
-                  activeClassName={'active'}
-                  previousClassName={'page-item'}
-                  nextClassName={'page-item'}
-                  pageClassName={'page-item'}
-                  previousLinkClassName={'page-link'}
-                  nextLinkClassName={'page-link'}
-                  pageLinkClassName={'page-link'}
-                />
-              </div>
 
-            </div>
 
           </div> {/* container */}
         </div>
