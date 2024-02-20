@@ -22,18 +22,18 @@ const ListCourseActive = () => {
 
     useEffect(() => {
         staffService
-          .getAllCoursesByStaff(staffId)
-          .then((res) => {
-            // Filter the courses where isActive is true
-            const activeCourses = res.data.filter(course => course.isActive === true);
-            console.log(activeCourses);
-            setCourseList(activeCourses);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }, []);
-      
+            .getAllCoursesByStaff(staffId)
+            .then((res) => {
+                // Filter the courses where isActive is true
+                const activeCourses = res.data.filter(course => course.isActive === true);
+                console.log(activeCourses);
+                setCourseList(activeCourses);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
 
 
     const handleSearch = (event) => {
@@ -79,7 +79,7 @@ const ListCourseActive = () => {
                                             <ol className="breadcrumb m-0">
                                             </ol>
                                         </div>
-                                        <h4 className="page-title">List Course</h4>
+                                        <h4 className="page-title">LIST OF ACTIVE COURSES</h4>
                                     </div>
                                 </div>
                             </div>
@@ -90,14 +90,6 @@ const ListCourseActive = () => {
                                         <div className="mb-2">
                                             <div className="row">
                                                 <div className="col-12 text-sm-center form-inline">
-                                                    <div className="form-group mr-2">
-                                                        <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
-                                                            <option value>Show all</option>
-                                                            <option value="active">Active</option>
-                                                            <option value="disabled">Disabled</option>
-                                                            <option value="suspended">Suspended</option>
-                                                        </select>
-                                                    </div>
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm}
                                                             onChange={handleSearch} />
@@ -143,7 +135,7 @@ const ListCourseActive = () => {
                                                                 )}
                                                             </td>
                                                             <td>
-                                                                <Link to={`/edit-course/${cus.id}`}>
+                                                                <Link to={`/edit-course/${cus.id}`} className='text-secondary'>
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
@@ -163,12 +155,12 @@ const ListCourseActive = () => {
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <ReactPaginate
                                         previousLabel={
-                                            <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
                                                 <AiFillCaretLeft />
                                             </IconContext.Provider>
                                         }
                                         nextLabel={
-                                            <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
                                                 <AiFillCaretRight />
                                             </IconContext.Provider>
                                         } breakLabel={'...'}
@@ -199,8 +191,15 @@ const ListCourseActive = () => {
                 {/* End Page content */}
                 {/* ============================================================== */}
 
-                <Footer />
             </div>
+            <style>
+                {`
+                .page-item.active .page-link{
+                    background-color: #20c997;
+                    border-color: #20c997;
+                }
+            `}
+            </style>
         </>
     )
 }

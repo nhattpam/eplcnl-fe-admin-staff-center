@@ -184,7 +184,6 @@ const EditQuestion = () => {
 
                     </div> {/* container */}
                 </div>
-                <Footer />
             </div>
             <style>
                 {`

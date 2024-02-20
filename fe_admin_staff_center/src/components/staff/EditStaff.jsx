@@ -118,7 +118,6 @@ const EditStaff = () => {
 
           </div> {/* container */}
         </div>
-        <Footer />
       </div>
       <style>
         {`

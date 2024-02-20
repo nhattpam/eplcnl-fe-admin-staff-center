@@ -73,8 +73,8 @@ const ListTopic = () => {
       <div id="wrapper">
         <Header />
         <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
-                    isStaff={sessionStorage.getItem('isStaff') === 'true'}
-                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />
+          isStaff={sessionStorage.getItem('isStaff') === 'true'}
+          isCenter={sessionStorage.getItem('isCenter') === 'true'} />
         {/* ============================================================== */}
         {/* Start Page Content here */}
         {/* ============================================================== */}
@@ -148,7 +148,39 @@ const ListTopic = () => {
                 </div> {/* end col */}
               </div>
               {/* end row */}
+              {/* Pagination */}
+              <div className='container-fluid'>
+                {/* Pagination */}
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <ReactPaginate
+                    previousLabel={
+                      <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                        <AiFillCaretLeft />
+                      </IconContext.Provider>
+                    }
+                    nextLabel={
+                      <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                        <AiFillCaretRight />
+                      </IconContext.Provider>
+                    } breakLabel={'...'}
+                    breakClassName={'page-item'}
+                    breakLinkClassName={'page-link'}
+                    pageCount={pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={handlePageClick}
+                    containerClassName={'pagination'}
+                    activeClassName={'active'}
+                    previousClassName={'page-item'}
+                    nextClassName={'page-item'}
+                    pageClassName={'page-item'}
+                    previousLinkClassName={'page-link'}
+                    nextLinkClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                  />
+                </div>
 
+              </div>
 
 
             </div> {/* container */}
@@ -158,8 +190,16 @@ const ListTopic = () => {
         {/* End Page content */}
         {/* ============================================================== */}
 
-        <Footer />
       </div>
+
+      <style>
+        {`
+                .page-item.active .page-link{
+                    background-color: #20c997;
+                    border-color: #20c997;
+                }
+            `}
+      </style>
     </>
   )
 }

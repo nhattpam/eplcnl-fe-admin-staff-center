@@ -161,7 +161,6 @@ const EditQuiz = () => {
 
           </div> {/* container */}
         </div>
-        <Footer />
       </div>
       <style>
         {`

@@ -174,12 +174,12 @@ const ListTutorByCenter = () => {
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <ReactPaginate
                                         previousLabel={
-                                            <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
                                                 <AiFillCaretLeft />
                                             </IconContext.Provider>
                                         }
                                         nextLabel={
-                                            <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
                                                 <AiFillCaretRight />
                                             </IconContext.Provider>
                                         } breakLabel={'...'}
@@ -208,8 +208,16 @@ const ListTutorByCenter = () => {
                 {/* End Page content */}
                 {/* ============================================================== */}
 
-                <Footer />
+
             </div>
+            <style>
+                {`
+                .page-item.active .page-link{
+                    background-color: #20c997;
+                    border-color: #20c997;
+                }
+            `}
+            </style>
         </>
     )
 }

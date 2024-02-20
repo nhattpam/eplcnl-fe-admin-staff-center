@@ -259,7 +259,7 @@ const EditCenter = () => {
                                         <div className="form-group">
                                             <label>Tutors:</label>
 
-                                            <div className="table-responsive">
+                                            <div className="table-responsive text-center">
                                                 <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                                                     <thead>
                                                         <tr>
@@ -323,12 +323,12 @@ const EditCenter = () => {
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <ReactPaginate
                                     previousLabel={
-                                        <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
                                             <AiFillCaretLeft />
                                         </IconContext.Provider>
                                     }
                                     nextLabel={
-                                        <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
                                             <AiFillCaretRight />
                                         </IconContext.Provider>
                                     } breakLabel={'...'}
@@ -370,6 +370,11 @@ const EditCenter = () => {
                         flex: 1;
                         width: 85%;
                         text-align: left;
+                    }
+
+                    .page-item.active .page-link{
+                        background-color: #20c997;
+                        border-color: #20c997;
                     }
                 `}
             </style>

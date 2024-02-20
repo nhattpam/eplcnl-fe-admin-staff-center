@@ -162,7 +162,6 @@ const EditLesson = () => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
 
       <style>

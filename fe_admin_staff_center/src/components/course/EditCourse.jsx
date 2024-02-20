@@ -294,7 +294,6 @@ const EditCourse = () => {
 
                     </div> {/* container */}
                 </div>
-                <Footer />
             </div>
             <style>
                 {`

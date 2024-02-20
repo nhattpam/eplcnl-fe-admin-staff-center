@@ -89,7 +89,7 @@ const ListReportByStaff = () => {
                                         <div className="mb-2">
                                             <div className="row">
                                                 <div className="col-12 text-sm-Report form-inline">
-                                                    
+
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on"
                                                             value={searchTerm}
@@ -144,12 +144,12 @@ const ListReportByStaff = () => {
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <ReactPaginate
                                         previousLabel={
-                                            <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
                                                 <AiFillCaretLeft />
                                             </IconContext.Provider>
                                         }
                                         nextLabel={
-                                            <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
                                                 <AiFillCaretRight />
                                             </IconContext.Provider>
                                         } breakLabel={'...'}
@@ -181,8 +181,16 @@ const ListReportByStaff = () => {
                 {/* End Page content */}
                 {/* ============================================================== */}
 
-                <Footer />
             </div>
+
+            <style>
+                {`
+                .page-item.active .page-link{
+                    background-color: #20c997;
+                    border-color: #20c997;
+                }
+            `}
+            </style>
         </>
     )
 }

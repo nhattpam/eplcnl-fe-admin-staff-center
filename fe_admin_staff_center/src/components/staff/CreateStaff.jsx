@@ -155,7 +155,6 @@ const CreateStaff = () => {
 
                     </div> {/* container */}
                 </div>
-                <Footer />
             </div>
             <style>
                 {`

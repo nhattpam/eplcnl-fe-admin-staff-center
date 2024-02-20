@@ -116,7 +116,6 @@ const EditLearner = () => {
 
           </div> {/* container */}
         </div>
-        <Footer />
       </div>
       <style>
         {`

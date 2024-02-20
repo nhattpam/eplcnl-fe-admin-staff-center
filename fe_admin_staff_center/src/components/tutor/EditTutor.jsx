@@ -295,7 +295,7 @@ const EditTutor = () => {
                                                                 <td>{cus.name}</td>
                                                                 <td>{cus.stockPrice}</td>
                                                                 <td>{cus.rating}</td>
-                                                                <td>{cus.tags}</td>
+                                                                <td>#{cus.tags}</td>
                                                                 <td>{cus.category.name}</td>
                                                                 <td>
                                                                     {cus.isActive ? (
@@ -329,12 +329,12 @@ const EditTutor = () => {
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <ReactPaginate
                                     previousLabel={
-                                        <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
                                             <AiFillCaretLeft />
                                         </IconContext.Provider>
                                     }
                                     nextLabel={
-                                        <IconContext.Provider value={{ color: "#000", size: "23px" }}>
+                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
                                             <AiFillCaretRight />
                                         </IconContext.Provider>
                                     } breakLabel={'...'}
@@ -376,6 +376,11 @@ const EditTutor = () => {
                         flex: 1;
                         width: 85%;
                         text-align: left;
+                    }
+
+                    .page-item.active .page-link{
+                        background-color: #20c997;
+                        border-color: #20c997;
                     }
                 `}
             </style>

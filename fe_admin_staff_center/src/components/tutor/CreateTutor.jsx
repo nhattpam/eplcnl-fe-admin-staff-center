@@ -157,7 +157,6 @@ const CreateTutor = () => {
 
                     </div> {/* container */}
                 </div>
-                <Footer />
             </div>
             <style>
                 {`
