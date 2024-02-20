@@ -50,5 +50,13 @@ class AccountService {
       }
     });
   }
+
+  getStaffByAccountId(id) {
+    return axios.get(API_URL + `/accounts/${id}/staffs`, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
 }
 export default new AccountService;

@@ -101,8 +101,10 @@ const ListTutorByCenter = () => {
                                                     {/* Create Tutor Button */}
                                                     {isCenter && (
 
-                                                        <Link to="/create-tutor" className="btn btn-primary">
-                                                            Create Tutor
+                                                        <Link to="/create-tutor">
+                                                            <button className="btn btn-success mr-2">
+                                                                <i className="fas fa-plus-circle"></i> Create
+                                                            </button>
                                                         </Link>
                                                     )}
 

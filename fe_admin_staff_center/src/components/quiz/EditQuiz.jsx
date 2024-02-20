@@ -89,7 +89,7 @@ const EditQuiz = () => {
                           </tr>
                           <tr>
                             <th>Grade to Pass:</th>
-                            <td>{quiz.gradeToPass}</td>
+                            <td><span className="badge label-table badge-success">{quiz.gradeToPass}</span></td>
                           </tr>
                           <tr>
                             <th>Times:</th>
