@@ -78,7 +78,7 @@ const ListReportByStaff = () => {
                                             <ol className="breadcrumb m-0">
                                             </ol>
                                         </div>
-                                        <h4 className="page-title">List Report</h4>
+                                        <h4 className="page-title">LIST OF REPORTS</h4>
                                     </div>
                                 </div>
                             </div>
@@ -89,14 +89,7 @@ const ListReportByStaff = () => {
                                         <div className="mb-2">
                                             <div className="row">
                                                 <div className="col-12 text-sm-Report form-inline">
-                                                    <div className="form-group mr-2">
-                                                        <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
-                                                            <option value>Show all</option>
-                                                            <option value="active">Active</option>
-                                                            <option value="disabled">Disabled</option>
-                                                            <option value="suspended">Suspended</option>
-                                                        </select>
-                                                    </div>
+                                                    
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on"
                                                             value={searchTerm}
@@ -125,7 +118,7 @@ const ListReportByStaff = () => {
                                                             <td>{cus.reason}</td>
                                                             <td>{cus.reportedDate}</td>
                                                             <td>
-                                                                <Link to={`/edit-course/${cus.course.id}`}>
+                                                                <Link to={`/edit-course/${cus.course.id}`} className='text-success'>
                                                                     {cus.course && cus.course.name ? cus.course.name : 'Unknown Name'}
                                                                 </Link>
                                                             </td>
@@ -148,7 +141,7 @@ const ListReportByStaff = () => {
                             {/* Pagination */}
                             <div className='container-fluid'>
                                 {/* Pagination */}
-                                <div style={{ display: 'flex', justifyContent: 'Report' }}>
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <ReactPaginate
                                         previousLabel={
                                             <IconContext.Provider value={{ color: "#000", size: "23px" }}>

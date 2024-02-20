@@ -140,7 +140,7 @@ const EditCourse = () => {
                                                     </tr>
                                                     <tr>
                                                         <th>Price:</th>
-                                                        <td>{course.stockPrice}</td>
+                                                        <td><span className="badge label-table badge-success">{course.stockPrice}</span></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Tags:</th>
@@ -206,7 +206,7 @@ const EditCourse = () => {
                                                             type="submit"
                                                             className="btn btn-success"
                                                         >
-                                                            <i className="bi bi-x-lg"></i> Approve
+                                                            <i class="fa-solid fa-thumbs-up"></i> 
                                                         </button>
                                                     )}
                                                     {isStaff && (
@@ -215,7 +215,7 @@ const EditCourse = () => {
                                                             type="submit"
                                                             className="btn btn-danger ml-1"
                                                         >
-                                                            <i className="bi bi-x-lg"></i> Disapprove
+                                                            <i class="fa-solid fa-thumbs-down"></i> 
                                                         </button>
                                                     )}
                                                     {isAdmin && (
@@ -223,7 +223,7 @@ const EditCourse = () => {
                                                             type="submit"
                                                             className="btn btn-danger"
                                                         >
-                                                            <i class="fa-solid fa-trash-can"></i> Delete
+                                                            <i class="fa-solid fa-trash-can"></i> 
                                                         </button>
                                                     )}
                                                 </>
@@ -255,7 +255,7 @@ const EditCourse = () => {
                                                             onClick={() => setCourse({ ...course, isActive: true })}
 
                                                         >
-                                                            <i className="bi bi-x-lg"></i> Approve
+                                                            <i class="fa-solid fa-thumbs-up"></i>
                                                         </button>
                                                     )}
                                                     {isStaff && (
@@ -265,7 +265,7 @@ const EditCourse = () => {
                                                             className="btn btn-danger ml-1"
                                                             onClick={() => setCourse({ ...course, isActive: false })}
                                                         >
-                                                            <i className="bi bi-x-lg"></i> Disappove
+                                                            <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
                                                     )}
                                                     {/* {isAdmin && (

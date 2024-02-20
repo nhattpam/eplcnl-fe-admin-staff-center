@@ -95,14 +95,7 @@ const ListClassTopicMaterial = () => {
                           {/* <Link to={`/tutor/courses/create-class-material/${storedClassTopicId}`} className="btn btn-primary">
                             Add Material
                           </Link> */}
-                          <div className="form-group mr-2">
-                            <select id="demo-foo-filter-status" className="custom-select custom-select-sm">
-                              <option value>Show all</option>
-                              <option value="active">Active</option>
-                              <option value="disabled">Disabled</option>
-                              <option value="suspended">Suspended</option>
-                            </select>
-                          </div>
+                          
                           <div className="form-group">
                             <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" />
                           </div>

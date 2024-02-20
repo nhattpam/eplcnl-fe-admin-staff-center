@@ -123,8 +123,9 @@ const EditTopic = () => {
     <>
       <div id="wrapper">
         <Header />
-        <Sidebar />
-        <div className="content-page">
+        <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
+                    isStaff={sessionStorage.getItem('isStaff') === 'true'}
+                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />        <div className="content-page">
           <div className="content">
             <div className="container-fluid">
               <div className="row">
@@ -132,7 +133,7 @@ const EditTopic = () => {
                   <div className="card">
                     <div className="card-body">
                       <h4 className="header-title">
-                         Date {classModule.startDate}
+                         DATE - <span className='text-success'>{classModule.startDate}</span> 
                       </h4>
                       <form
                         method="post"
@@ -145,6 +146,7 @@ const EditTopic = () => {
                         onSubmit={(e) => submitClassTopic(e)}
                       >
                         <div className="form-group">
+                        <label htmlFor="roomLink">Class Hours * :</label>
                           <input
                             type="text"
                             className="form-control"
@@ -186,22 +188,22 @@ const EditTopic = () => {
                         <div className="form-group mb-0">
                           <button
                             type="submit"
-                            className="btn btn-primary mr-2"
+                            className="btn btn-warning mr-2"
                           >
-                            Update Topic
+                            <i class="fas fa-check-double"></i> Update
                           </button>
                           <button
                             type="button"
                             className="btn btn-secondary mr-2"
                             onClick={handleListTopics}
                           >
-                            List Topics
+                            <i class="fas fa-microchip"></i> List Topics
                           </button>
                           <Link
                             to={`/list-material-by-topic/${classTopic.id}`}
-                            className="btn btn-warning"
+                            className="btn btn-dark"
                           >
-                            View Materials
+                            <i class="fas fa-file-alt"></i> View Materials
                           </Link>
                         </div>
                       </form>
@@ -227,7 +229,6 @@ const EditTopic = () => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
 
       <style>
