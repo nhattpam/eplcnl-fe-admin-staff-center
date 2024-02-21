@@ -1,9 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import accountService from '../services/account.service';
 
 const Header = () => {
 
+    const accountId = localStorage.getItem('accountId');
+    const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+    const isStaff = sessionStorage.getItem('isStaff') === 'true';
+    const isCenter = sessionStorage.getItem('isCenter') === 'true';
+
+
     const navigate = useNavigate();
+
+    const [account, setAccount] = useState({
+        email: "",
+        password: "",
+        fullName: "",
+        phoneNumber: "",
+        imageUrl: ""
+    });
+
+    useEffect(() => {
+        if (accountId) {
+            accountService
+                .getAccountById(accountId)
+                .then((res) => {
+                    setAccount(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [accountId]);
 
     const handleLogout = () => {
         // Clear user session or perform any necessary logout actions
@@ -63,12 +91,32 @@ const Header = () => {
 
                         <li className="dropdown notification-list topbar-dropdown">
                             <a className="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                <img src={`https://static.thenounproject.com/png/3324336-200.png`} alt="user-image" className="rounded-circle" />
+                                {isAdmin && (
+                                    <img src={`https://static.thenounproject.com/png/3324336-200.png`} alt="user-image" className="rounded-circle" />
+                                )}
+                                {isStaff && (
+                                    <img src={account.imageUrl} alt="user-image" className="rounded-circle" />
+                                )}
+
+                                {isCenter && (
+                                    <img src={account.imageUrl} alt="user-image" className="rounded-circle" />
+
+                                )}
                             </a>
                             <div className="dropdown-menu dropdown-menu-right profile-dropdown ">
                                 {/* item*/}
                                 <div className="dropdown-header noti-title">
-                                    <h6 className="text-overflow m-0">Welcome !</h6>
+                                    {isAdmin && (
+                                        <h6 className="text-overflow m-0">Welcome Admin!</h6>
+                                    )}
+
+                                    {isStaff && (
+                                        <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
+                                    )}
+
+                                    {isCenter && (
+                                        <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
+                                    )}
                                 </div>
                                 {/* item*/}
                                 <a href="javascript:void(0);" className="dropdown-item notify-item">
@@ -93,22 +141,22 @@ const Header = () => {
                                 </a>
                             </div>
                         </li>
-                        <li className="dropdown notification-list">
+                        {/* <li className="dropdown notification-list">
                             <a href="javascript:void(0);" className="nav-link right-bar-toggle waves-effect waves-light">
                                 <i className="fe-settings noti-icon" />
                             </a>
-                        </li>
+                        </li> */}
                     </ul>
                     {/* LOGO */}
                     <div className="logo-box">
-                        <Link  className="logo logo-light text-center">
+                        <Link className="logo logo-light text-center">
                             <span style={{ fontFamily: 'Comic Sans MS', fontSize: '24px', fontWeight: 'bold', color: '#fff' }}>
                                 MEOWLISH
                             </span>
                         </Link>
                     </div>
 
-                    
+
                     <div className="clearfix" />
                 </div>
             </div>

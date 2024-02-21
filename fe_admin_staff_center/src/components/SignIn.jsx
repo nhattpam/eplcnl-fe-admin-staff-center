@@ -41,6 +41,8 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                 const decodedToken = JSON.parse(atob(response.data.data.split('.')[1])); // Decoding the JWT token
 
                 console.log('this is role: ' + decodedToken.role);
+                localStorage.setItem('accountId', decodedToken.Id);
+
                 if (decodedToken.role.toString() === "5f9a0e31-e7b2-417b-917d-111468a18a53"
                     || decodedToken.role.toString() === "887428d0-9ded-449c-94ee-7c8a489ab763"
                     || decodedToken.role.toString() === "14191b0a-2ec2-48e3-9ede-c34d5de0ba32") {
