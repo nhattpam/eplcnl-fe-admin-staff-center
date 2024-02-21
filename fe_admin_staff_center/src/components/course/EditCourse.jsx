@@ -205,8 +205,10 @@ const EditCourse = () => {
                                                         <button
                                                             type="submit"
                                                             className="btn btn-success"
+                                                            onClick={() => setCourse({ ...course, isActive: true })}
+
                                                         >
-                                                            <i class="fa-solid fa-thumbs-up"></i> 
+                                                            <i class="fa-solid fa-thumbs-up"></i>
                                                         </button>
                                                     )}
                                                     {isStaff && (
@@ -214,8 +216,9 @@ const EditCourse = () => {
                                                         <button
                                                             type="submit"
                                                             className="btn btn-danger ml-1"
+                                                            onClick={() => setCourse({ ...course, isActive: false })}
                                                         >
-                                                            <i class="fa-solid fa-thumbs-down"></i> 
+                                                            <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
                                                     )}
                                                     {isAdmin && (
@@ -223,7 +226,7 @@ const EditCourse = () => {
                                                             type="submit"
                                                             className="btn btn-danger"
                                                         >
-                                                            <i class="fa-solid fa-trash-can"></i> 
+                                                            <i class="fa-solid fa-trash-can"></i>
                                                         </button>
                                                     )}
                                                 </>
