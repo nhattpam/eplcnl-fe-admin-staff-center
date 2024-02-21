@@ -186,12 +186,12 @@ const EditTopic = () => {
                           <input type="text" className="form-control" name="materialUrl" id="materialUrl" value={classTopic.materialUrl} onChange={(e) => handleChange(e)} />
                         </div> */}
                         <div className="form-group mb-0">
-                          <button
+                          {/* <button
                             type="submit"
                             className="btn btn-warning mr-2"
                           >
                             <i class="fas fa-check-double"></i> Update
-                          </button>
+                          </button> */}
                           <button
                             type="button"
                             className="btn btn-secondary mr-2"

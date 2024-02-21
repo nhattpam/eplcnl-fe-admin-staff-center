@@ -25,6 +25,7 @@ import EditModule from './components/module/EditModule';
 import EditClassModule from './components/module/EditClassModule';
 import ListLesson from './components/lesson/ListLesson';
 import EditTopic from './components/topic/EditTopic';
+import ListTopic from './components/topic/ListTopic';
 import ListCenterByStaff from './components/center/ListCenterByStaff';
 import ListCourseByTutor from './components/course/ListCourseByTutor';
 import ListRefundRequest from './components/refund-request/ListRefundRequest';
@@ -94,7 +95,7 @@ function App() {
         <Route path="/edit-assignment/:assignmentId" element={<EditAssignment />} />
         {/* topic */}
         <Route path="/edit-topic/:storedClassTopicId" element={<EditTopic />} />
-        <Route path="/list-topic/:storedClassLessonId" element={<EditTopic />} />
+        <Route path="/list-topic/:storedClassLessonId" element={<ListTopic />} />
         {/* refund request  */}
         <Route path="/list-refund" element={<ListRefundRequest />} />
         <Route path="/edit-refund/:refundId" element={<EditRefundRequest />} />
