@@ -133,7 +133,7 @@ const EditTopic = () => {
                   <div className="card">
                     <div className="card-body">
                       <h4 className="header-title">
-                         DATE - <span className='text-success'>{classModule.startDate}</span> 
+                         DATE - <span className='text-success'>{classModule.startDate.substring(0, 10)}</span> 
                       </h4>
                       <form
                         method="post"

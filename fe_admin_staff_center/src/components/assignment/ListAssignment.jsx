@@ -75,7 +75,7 @@ const ListAssignment = () => {
                 <Header />
                 <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
                     isStaff={sessionStorage.getItem('isStaff') === 'true'}
-                    isCenter={sessionStorage.getItem('isCenter') === 'true'} /> 
+                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />
                 {/* ============================================================== */}
                 {/* Start Page Content here */}
                 {/* ============================================================== */}
@@ -102,7 +102,11 @@ const ListAssignment = () => {
                                         <div className="mb-2">
                                             <div className="row">
                                                 <div className="col-12 text-sm-center form-inline">
-                                                    
+                                                    <div className="form-group mr-2">
+                                                        <Link to={`/edit-module/${storedModuleId}`} className='text-warning'>
+                                                            <i class="fas fa-info-circle"></i>                                                        </Link>
+
+                                                    </div>
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" />
                                                     </div>

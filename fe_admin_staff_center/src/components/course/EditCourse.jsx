@@ -172,7 +172,7 @@ const EditCourse = () => {
 
                                                 {classModuleList.map((module) => (
                                                     <li key={module.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                                        {module.startDate !== null ? module.startDate : "No start date"}
+                                                        {module.startDate !== null ? module.startDate.substring(0, 10) : "No start date"}
                                                         <button
                                                             type="button"
                                                             className="btn btn-link text-dark"

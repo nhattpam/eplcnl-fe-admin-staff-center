@@ -67,7 +67,7 @@ const EditClassModule = () => {
                                         <div className="form-group">
                                             <label htmlFor="name">Start Time </label>
                                             <input type="text" className="form-control" 
-                                            name="startDate" id="startDate" value={module.startDate} readOnly style={{width: '20%'}}/>
+                                            name="startDate" id="startDate" value={module.startDate.substring(0, 10)} readOnly style={{width: '20%'}}/>
                                         </div>
 
                                         <div className="form-group">

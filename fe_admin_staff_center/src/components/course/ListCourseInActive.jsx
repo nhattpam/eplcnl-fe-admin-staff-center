@@ -110,6 +110,7 @@ const ListCourseInActive = () => {
                                                         <th data-hide="phone, tablet">Tags</th>
                                                         <th data-hide="phone, tablet">Category</th>
                                                         <th data-hide="phone, tablet">Status</th>
+                                                        <th data-hide="phone, tablet">Type</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -134,6 +135,9 @@ const ListCourseInActive = () => {
                                                                 ) : (
                                                                     <span className="badge label-table badge-danger">Inactive</span>
                                                                 )}
+                                                            </td>
+                                                            <td>
+                                                                <span className={`badge ${cus.isOnlineClass ? 'badge-success' : 'badge-danger'}`}>{cus.isOnlineClass ? 'Class' : 'Video'}</span>
                                                             </td>
                                                             <td>
                                                                 <Link to={`/edit-course/${cus.id}`} className='text-secondary'>
