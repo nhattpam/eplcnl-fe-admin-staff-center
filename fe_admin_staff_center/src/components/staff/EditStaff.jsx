@@ -8,6 +8,7 @@ import staffService from '../../services/staff.service';
 import { IconContext } from 'react-icons';
 import ReactPaginate from 'react-paginate';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
+import ReactQuill from 'react-quill';
 
 const EditStaff = () => {
 
@@ -22,6 +23,7 @@ const EditStaff = () => {
     address: "",
     isActive: "",
     createdDate: "",
+    note: ""
   });
 
   const [staff, setStaff] = useState({
@@ -32,6 +34,7 @@ const EditStaff = () => {
   const [errors, setErrors] = useState({});
   const [msg, setMsg] = useState('');
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false); // State variable for modal visibility
   const [centerList, setCenterList] = useState([]);
   const [tutorList, setTutorList] = useState([]);
 
@@ -134,6 +137,38 @@ const EditStaff = () => {
 
   const offset2 = currentPage2 * tutorsPerPage;
   const currentTutors = filteredTutors.slice(offset2, offset2 + tutorsPerPage);
+
+
+
+  //ban account
+  const handleNoteChange = (value) => {
+    setAccount({ ...account, note: value });
+  };
+
+
+  const handleBanClick = () => {
+    setShowModal(true); // Show modal when thumb-down button is clicked
+    setAccount({ ...account, isActive: false }); // Set isActive to false
+  };
+
+  const handleActiveClick = () => {
+    setAccount({ ...account, isActive: true }); // Set isActive to false
+  };
+
+
+  const submitAccount = (e) => {
+    e.preventDefault();
+    // If the note is not empty, proceed with the form submission
+    accountService
+      .updateAccount(account.id, account)
+      .then((res) => {
+        navigate(`/list-staff`);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
   return (
     <>
       <div id="wrapper">
@@ -149,7 +184,7 @@ const EditStaff = () => {
                 <div className="card-box">
                   <h4 className="header-title">STAFF INFORMATION</h4>
 
-                  <form id="demo-form" data-parsley-validate>
+                  <form id="demo-form" data-parsley-validate onSubmit={(e) => submitAccount(e)}>
                     <div className="row">
                       <div className="col-md-8">
                         <div className="table-responsive">
@@ -190,13 +225,69 @@ const EditStaff = () => {
                         <div className="form-group mb-0">
                           <button
                             type="submit"
-                            className="btn btn-danger"
+                            className="btn btn-success " onClick={handleActiveClick}
                           >
-                            <i class="fa-solid fa-user-xmark"></i> Delete
+                            <i class="fas fa-thumbs-up"></i>
+                          </button>
+
+                          <button
+                            type="button"
+                            className="btn btn-warning ml-1" onClick={handleBanClick}
+                          >
+                            <i class="fas fa-ban"></i>
+                          </button>
+
+                          <button
+                            type="button"
+                            className="btn btn-danger ml-1"
+                          >
+                            <i class="fa-solid fa-user-xmark"></i>
                           </button>
                         </div>
                       </div>
+
+
                     </div>
+
+                    {showModal && (
+                      <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <div className="modal-dialog">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h5 className="modal-title">Provide Note</h5>
+                              <button type="button" className="close" onClick={() => setShowModal(false)}>
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div className="modal-body">
+                              <ReactQuill
+                                value={account.note}
+                                onChange={handleNoteChange}
+                                modules={{
+                                  toolbar: [
+                                    [{ header: [1, 2, false] }],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                    [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                    [{ 'direction': 'rtl' }],
+                                    [{ 'align': [] }],
+                                    ['link', 'image', 'video'],
+                                    ['code-block'],
+                                    [{ 'color': [] }, { 'background': [] }],
+                                    ['clean']
+                                  ]
+                                }}
+                                theme="snow"
+                              />
+                            </div>
+                            <div className="modal-footer">
+                              <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                              <button type="button" className="btn btn-primary" onClick={(e) => submitAccount(e)}>Submit</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
 
                     <div className="form-group">
