@@ -5,6 +5,7 @@ import Footer from '../Footer';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import courseService from '../../services/course.service';
 import moduleService from '../../services/module.service';
+import ReactQuill from 'react-quill';
 
 const EditCourse = () => {
 
@@ -26,6 +27,7 @@ const EditCourse = () => {
         tags: "",
         createdDate: "",
         updatedDate: "",
+        note: "",
         modules: [],
         classModules: []
     });
@@ -34,6 +36,7 @@ const EditCourse = () => {
     const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false); // State variable for modal visibility
 
     const [moduleList, setModuleList] = useState([]);
     const [classModuleList, setClassModuleList] = useState([]);
@@ -80,6 +83,15 @@ const EditCourse = () => {
             });
     }, [id]);
 
+    const handleNoteChange = (value) => {
+        setCourse({ ...course, note: value });
+    };
+
+
+    const handleThumbDownClick = () => {
+        setShowModal(true); // Show modal when thumb-down button is clicked
+        setCourse({ ...course, isActive: false }); // Set isActive to false
+    };
 
 
     const handleEditModule = (moduleId) => {
@@ -95,7 +107,6 @@ const EditCourse = () => {
 
     const submitCourse = (e) => {
         e.preventDefault();
-
         courseService
             .updateCourse(course.id, course)
             .then((res) => {
@@ -213,18 +224,15 @@ const EditCourse = () => {
                                                     )}
                                                     {isStaff && (
 
-                                                        <button
-                                                            type="submit"
-                                                            className="btn btn-danger ml-1"
-                                                            onClick={() => setCourse({ ...course, isActive: false })}
-                                                        >
+
+                                                        <button type="button" className="btn btn-danger ml-1" onClick={handleThumbDownClick}>
                                                             <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
                                                     )}
-                                                    {isAdmin && (
+                                                    {isStaff && (
                                                         <button
                                                             type="submit"
-                                                            className="btn btn-danger"
+                                                            className="btn btn-danger ml-1"
                                                         >
                                                             <i class="fa-solid fa-trash-can"></i>
                                                         </button>
@@ -263,22 +271,18 @@ const EditCourse = () => {
                                                     )}
                                                     {isStaff && (
 
-                                                        <button
-                                                            type="submit"
-                                                            className="btn btn-danger ml-1"
-                                                            onClick={() => setCourse({ ...course, isActive: false })}
-                                                        >
+                                                        <button type="button" className="btn btn-danger ml-1" onClick={handleThumbDownClick}>
                                                             <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
                                                     )}
-                                                    {/* {isAdmin && (
+                                                    {isStaff && (
                                                         <button
                                                             type="submit"
-                                                            className="btn btn-danger"
+                                                            className="btn btn-danger ml-1"
                                                         >
-                                                            <i className="bi bi-x-lg"></i> Delete
+                                                            <i class="fa-solid fa-trash-can"></i>
                                                         </button>
-                                                    )} */}
+                                                    )}
                                                 </>
 
 
@@ -290,6 +294,45 @@ const EditCourse = () => {
 
 
                                     </form>
+                                    {showModal && (
+                                        <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                                            <div className="modal-dialog">
+                                                <div className="modal-content">
+                                                    <div className="modal-header">
+                                                        <h5 className="modal-title">Provide Note</h5>
+                                                        <button type="button" className="close" onClick={() => setShowModal(false)}>
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div className="modal-body">
+                                                        <ReactQuill
+                                                            value={course.note}
+                                                            onChange={handleNoteChange}
+                                                            modules={{
+                                                                toolbar: [
+                                                                    [{ header: [1, 2, false] }],
+                                                                    ['bold', 'italic', 'underline', 'strike'],
+                                                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                                                    [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                                                    [{ 'direction': 'rtl' }],
+                                                                    [{ 'align': [] }],
+                                                                    ['link', 'image', 'video'],
+                                                                    ['code-block'],
+                                                                    [{ 'color': [] }, { 'background': [] }],
+                                                                    ['clean']
+                                                                ]
+                                                            }}
+                                                            theme="snow"
+                                                        />
+                                                    </div>
+                                                    <div className="modal-footer">
+                                                        <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                                                        <button type="button" className="btn btn-primary" onClick={(e) => submitCourse(e)}>Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div> {/* end card-box*/}
                             </div> {/* end col*/}
                         </div>
