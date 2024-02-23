@@ -113,7 +113,7 @@ const ListCenterByStaff = () => {
                                                         <th>Is Managed By</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
-                                                        <th>Tutors</th>
+                                                        {/* <th>Tutors</th> */}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -136,11 +136,11 @@ const ListCenterByStaff = () => {
                                                                     <i className="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
-                                                            <td>
+                                                            {/* <td>
                                                                 <Link to={`/list-tutor-by-center/${cus.id}`} className='text-dark'>
                                                                     <i class="ti-more-alt"></i>
                                                                 </Link>
-                                                            </td>
+                                                            </td> */}
                                                         </tr>
                                                     ))}
                                                 </tbody>

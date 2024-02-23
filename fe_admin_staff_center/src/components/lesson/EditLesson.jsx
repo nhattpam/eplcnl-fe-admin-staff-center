@@ -108,7 +108,7 @@ const EditLesson = () => {
                 <div className="col-12">
                   <div className="card">
                     <div className="card-body">
-                      <h4 className="header-title">EDITING LESSON - <span className='text-success'>{lesson.name}</span></h4>
+                      <h4 className="header-title">LESSON - <span className='text-success'>{lesson.name}</span></h4>
 
                       <form
                         method="post"
