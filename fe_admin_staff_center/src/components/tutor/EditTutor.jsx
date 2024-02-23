@@ -9,6 +9,7 @@ import tutorService from '../../services/tutor.service';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
+import ReactQuill from 'react-quill';
 
 const EditTutor = () => {
 
@@ -30,6 +31,8 @@ const EditTutor = () => {
         address: "",
         isActive: "",
         createdDate: "",
+        isDelete: "",
+        note: ""
     });
 
     const [tutor, setTutor] = useState({
@@ -40,7 +43,7 @@ const EditTutor = () => {
     const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
     const navigate = useNavigate();
-
+    const [showModal, setShowModal] = useState(false); // State variable for modal visibility
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [coursesPerPage] = useState(2);
@@ -145,6 +148,26 @@ const EditTutor = () => {
     const currentCourses = filteredCourses.slice(offset, offset + coursesPerPage);
 
 
+    //ban account
+    const handleNoteChange = (value) => {
+        setAccount({ ...account, note: value });
+    };
+
+
+    const handleBanClick = () => {
+        setShowModal(true); // Show modal when thumb-down button is clicked
+        setAccount({ ...account, isActive: false }); // Set isActive to false
+    };
+
+    const handleDeleteClick = () => {
+        setShowModal(true); // Show modal when thumb-down button is clicked
+        setAccount({ ...account, isActive: false, isDeleted: true }); // Set isActive to false
+    };
+
+    const handleActiveClick = () => {
+        setAccount({ ...account, isActive: true, isDeleted: false }); // Set isActive to false
+    };
+
 
     return (
         <>
@@ -156,6 +179,7 @@ const EditTutor = () => {
                 <div className="content-page">
                     {/* Start Content*/}
                     <div className="container-fluid">
+
                         <div className="row">
                             <div className="col-12">
                                 <div className="card-box">
@@ -177,11 +201,11 @@ const EditTutor = () => {
                                                             </tr>
                                                             <tr>
                                                                 <th>Phone Number:</th>
-                                                                <td>{account.phoneNumber}</td>
+                                                                <td>{account && account.phoneNumber ? account.phoneNumber : 'Unknown Phone Number'}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Date Of Birth:</th>
-                                                                <td>{account.dateOfBirth}</td>
+                                                                <td>{account && account.dateOfBirth ? account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Gender:</th>
@@ -193,54 +217,91 @@ const EditTutor = () => {
                                                                     )}
                                                                 </td>
                                                             </tr>
+                                                            <tr>
+                                                                <th>Status:</th>
+                                                                <td>
+                                                                    {account.isActive ? (
+                                                                        <span className="badge label-table badge-success">Active</span>
+                                                                    ) : (
+                                                                        <span className="badge label-table badge-danger">Inactive</span>
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Note:</th>
+                                                                <td dangerouslySetInnerHTML={{ __html: account.note }} />
+                                                            </tr>
                                                         </tbody>
 
                                                     </table>
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
-                                                {isAdmin && (
-
+                                                <div className="form-group mb-0">
                                                     <button
                                                         type="submit"
-                                                        className="btn btn-success mr-2"
-                                                        onClick={() => setAccount({ ...account, isActive: true })}
+                                                        className="btn btn-success " onClick={handleActiveClick}
                                                     >
-                                                        <i class="fa-solid fa-thumbs-up"></i> 
+                                                        <i class="fas fa-thumbs-up"></i>
                                                     </button>
-                                                )}
-                                                {isAdmin && (
 
                                                     <button
-                                                        type="submit"
-                                                        className="btn btn-danger mr-2"
-                                                        onClick={() => setAccount({ ...account, isActive: false })}
+                                                        type="button"
+                                                        className="btn btn-warning ml-1" onClick={handleBanClick}
                                                     >
-                                                        <i class="fa-solid fa-thumbs-down"></i> 
+                                                        <i class="fas fa-ban"></i>
                                                     </button>
-                                                )}
-
-                                                {isStaff && (
 
                                                     <button
-                                                        type="submit"
-                                                        className="btn btn-danger ml-1"
+                                                        type="button"
+                                                        className="btn btn-danger ml-1" onClick={handleDeleteClick}
                                                     >
                                                         <i class="fa-solid fa-user-xmark"></i>
                                                     </button>
-                                                )}
-
-                                                {isAdmin && (
-                                                    <button
-                                                        type="submit"
-                                                        className="btn btn-danger"
-                                                    >
-                                                        <i class="fa-solid fa-user-xmark"></i> 
-                                                    </button>
-                                                )}
+                                                </div>
                                             </div>
 
+
                                         </div>
+                                        {showModal && (
+                                            <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                                                <div className="modal-dialog">
+                                                    <div className="modal-content">
+                                                        <div className="modal-header">
+                                                            <h5 className="modal-title">Provide Note</h5>
+                                                            <button type="button" className="close" onClick={() => setShowModal(false)}>
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div className="modal-body">
+                                                            <ReactQuill
+                                                                value={account.note}
+                                                                onChange={handleNoteChange}
+                                                                modules={{
+                                                                    toolbar: [
+                                                                        [{ header: [1, 2, false] }],
+                                                                        ['bold', 'italic', 'underline', 'strike'],
+                                                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                                                        [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                                                        [{ 'direction': 'rtl' }],
+                                                                        [{ 'align': [] }],
+                                                                        ['link', 'image', 'video'],
+                                                                        ['code-block'],
+                                                                        [{ 'color': [] }, { 'background': [] }],
+                                                                        ['clean']
+                                                                    ]
+                                                                }}
+                                                                theme="snow"
+                                                            />
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                                                            <button type="button" className="btn btn-primary" onClick={(e) => submitAccount(e)}>Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
 
                                         {isAdmin && (
                                             <div className="form-group">

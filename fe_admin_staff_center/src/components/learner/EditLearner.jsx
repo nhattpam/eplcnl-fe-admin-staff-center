@@ -8,6 +8,9 @@ import enrollmentService from '../../services/enrollment.service';
 import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
+import ReactQuill from 'react-quill';
+import learnerService from '../../services/learner.service';
+
 
 const EditLearner = () => {
 
@@ -35,6 +38,7 @@ const EditLearner = () => {
   const [errors, setErrors] = useState({});
   const [msg, setMsg] = useState('');
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false); // State variable for modal visibility
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [enrollmentsPerPage] = useState(5);
@@ -85,6 +89,38 @@ const EditLearner = () => {
   const offset = currentPage * enrollmentsPerPage;
   const currentEnrollments = filteredEnrollments.slice(offset, offset + enrollmentsPerPage);
 
+  const submitAccount = (e) => {
+    e.preventDefault();
+
+    accountService
+      .updateAccount(account.id, account)
+      .then((res) => {
+        navigate("/list-learner/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  //ban account
+  const handleNoteChange = (value) => {
+    setAccount({ ...account, note: value });
+  };
+
+
+  const handleBanClick = () => {
+    setShowModal(true); // Show modal when thumb-down button is clicked
+    setAccount({ ...account, isActive: false }); // Set isActive to false
+  };
+
+  const handleDeleteClick = () => {
+    setShowModal(true); // Show modal when thumb-down button is clicked
+    setAccount({ ...account, isActive: false, isDeleted: true }); // Set isActive to false
+  };
+
+  const handleActiveClick = () => {
+    setAccount({ ...account, isActive: true, isDeleted: false }); // Set isActive to false
+  };
+
 
   return (
     <>
@@ -101,7 +137,7 @@ const EditLearner = () => {
                 <div className="card-box">
                   <h4 className="header-title">LEARNER INFORMATION</h4>
 
-                  <form id="demo-form" data-parsley-validate>
+                  <form id="demo-form" data-parsley-validate onSubmit={(e) => submitAccount(e)}>
                     <div className="row">
                       <div className="col-md-8">
                         <div className="table-responsive">
@@ -117,11 +153,11 @@ const EditLearner = () => {
                               </tr>
                               <tr>
                                 <th>Phone Number:</th>
-                                <td>{account.phoneNumber}</td>
+                                <td>{account && account.phoneNumber ? account.phoneNumber : 'Unknown Phone Number'}</td>
                               </tr>
                               <tr>
                                 <th>Date Of Birth:</th>
-                                <td>{account.dateOfBirth}</td>
+                                <td>{account && account.dateOfBirth ? account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
                               </tr>
                               <tr>
                                 <th>Gender:</th>
@@ -133,6 +169,20 @@ const EditLearner = () => {
                                   )}
                                 </td>
                               </tr>
+                              <tr>
+                                <th>Status:</th>
+                                <td>
+                                  {account.isActive ? (
+                                    <span className="badge label-table badge-success">Active</span>
+                                  ) : (
+                                    <span className="badge label-table badge-danger">Inactive</span>
+                                  )}
+                                </td>
+                              </tr>
+                              <tr>
+                                <th>Note:</th>
+                                <td dangerouslySetInnerHTML={{ __html: account.note }} />
+                              </tr>
                             </tbody>
                           </table>
                         </div>
@@ -141,14 +191,67 @@ const EditLearner = () => {
                         <div className="form-group mb-0">
                           <button
                             type="submit"
-                            className="btn btn-danger"
+                            className="btn btn-success " onClick={handleActiveClick}
                           >
-                            <i class="fa-solid fa-user-xmark"></i> Delete
+                            <i class="fas fa-thumbs-up"></i>
                           </button>
 
+                          <button
+                            type="button"
+                            className="btn btn-warning ml-1" onClick={handleBanClick}
+                          >
+                            <i class="fas fa-ban"></i>
+                          </button>
+
+                          <button
+                            type="button"
+                            className="btn btn-danger ml-1" onClick={handleDeleteClick}
+                          >
+                            <i class="fa-solid fa-user-xmark"></i>
+                          </button>
                         </div>
                       </div>
                     </div>
+
+                    {showModal && (
+                      <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <div className="modal-dialog">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h5 className="modal-title">Provide Note</h5>
+                              <button type="button" className="close" onClick={() => setShowModal(false)}>
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div className="modal-body">
+                              <ReactQuill
+                                value={account.note}
+                                onChange={handleNoteChange}
+                                modules={{
+                                  toolbar: [
+                                    [{ header: [1, 2, false] }],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                    [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                    [{ 'direction': 'rtl' }],
+                                    [{ 'align': [] }],
+                                    ['link', 'image', 'video'],
+                                    ['code-block'],
+                                    [{ 'color': [] }, { 'background': [] }],
+                                    ['clean']
+                                  ]
+                                }}
+                                theme="snow"
+                              />
+                            </div>
+                            <div className="modal-footer">
+                              <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+                              <button type="button" className="btn btn-primary" onClick={(e) => submitAccount(e)}>Submit</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="form-group">
                       <label>Is Enrolling Courses:</label>

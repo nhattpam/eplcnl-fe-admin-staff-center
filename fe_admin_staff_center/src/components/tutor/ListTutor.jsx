@@ -123,7 +123,14 @@ const ListTutor = () => {
                                                             </td>
                                                             <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
                                                             <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
-                                                            <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
+                                                            <td>
+                                                                {tutor.account.gender ? (
+                                                                    <span className="badge label-table badge-success">Male</span>
+                                                                ) : (
+                                                                    <span className="badge label-table badge-danger">Female</span>
+                                                                )}
+                                                            </td>
+                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
                                                             <td>
                                                                 {tutor.isFreelancer ? (
                                                                     <span className="badge label-table badge-success">Yes</span>

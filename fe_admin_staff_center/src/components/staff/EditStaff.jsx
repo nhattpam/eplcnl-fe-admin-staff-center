@@ -23,7 +23,8 @@ const EditStaff = () => {
     address: "",
     isActive: "",
     createdDate: "",
-    note: ""
+    note: "",
+    isDeleted: ""
   });
 
   const [staff, setStaff] = useState({
@@ -151,8 +152,13 @@ const EditStaff = () => {
     setAccount({ ...account, isActive: false }); // Set isActive to false
   };
 
+  const handleDeleteClick = () => {
+    setShowModal(true); // Show modal when thumb-down button is clicked
+    setAccount({ ...account, isActive: false , isDeleted: true}); // Set isActive to false
+  };
+
   const handleActiveClick = () => {
-    setAccount({ ...account, isActive: true }); // Set isActive to false
+    setAccount({ ...account, isActive: true, isDeleted: false }); // Set isActive to false
   };
 
 
@@ -168,7 +174,7 @@ const EditStaff = () => {
         console.log(error);
       });
   };
-  
+
   return (
     <>
       <div id="wrapper">
@@ -200,11 +206,11 @@ const EditStaff = () => {
                               </tr>
                               <tr>
                                 <th>Phone Number:</th>
-                                <td>{account.phoneNumber}</td>
+                                <td>{account && account.phoneNumber ? account.phoneNumber : 'Unknown Phone Number'}</td>
                               </tr>
                               <tr>
                                 <th>Date Of Birth:</th>
-                                <td>{account.dateOfBirth}</td>
+                                <td>{account && account.dateOfBirth ? account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
                               </tr>
                               <tr>
                                 <th>Gender:</th>
@@ -215,6 +221,20 @@ const EditStaff = () => {
                                     <span className="badge label-table badge-danger">Female</span>
                                   )}
                                 </td>
+                              </tr>
+                              <tr>
+                              <th>Status:</th>
+                                <td>
+                                  {account.isActive ? (
+                                    <span className="badge label-table badge-success">Active</span>
+                                  ) : (
+                                    <span className="badge label-table badge-danger">Inactive</span>
+                                  )}
+                                </td>
+                              </tr>
+                              <tr>
+                                <th>Note:</th>
+                                <td dangerouslySetInnerHTML={{ __html: account.note }} />
                               </tr>
                             </tbody>
                           </table>
@@ -239,7 +259,7 @@ const EditStaff = () => {
 
                           <button
                             type="button"
-                            className="btn btn-danger ml-1"
+                            className="btn btn-danger ml-1" onClick={handleDeleteClick}
                           >
                             <i class="fa-solid fa-user-xmark"></i>
                           </button>

@@ -229,6 +229,7 @@ const EditCourse = () => {
                                                             <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
                                                     )}
+                                                    
                                                     {isStaff && (
                                                         <button
                                                             type="submit"

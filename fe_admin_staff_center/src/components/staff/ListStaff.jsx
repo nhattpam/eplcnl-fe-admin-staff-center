@@ -123,7 +123,7 @@ const ListStaff = () => {
                                                             </td>
                                                             <td>{cus.account.fullName}</td>
                                                             <td>{cus.account.email}</td>
-                                                            <td>{cus.account.dateOfBirth}</td>
+                                                            <td>{cus.account && cus.account.dateOfBirth ? cus.account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
                                                             <td>
                                                                 {cus.account.gender ? (
                                                                     <span className="badge label-table badge-success">Male</span>
@@ -131,7 +131,7 @@ const ListStaff = () => {
                                                                     <span className="badge label-table badge-danger">Female</span>
                                                                 )}
                                                             </td>
-                                                            <td>{cus.account.phoneNumber}</td>
+                                                            <td>{cus.account && cus.account.phoneNumber ? cus.account.phoneNumber : 'Unknown Phone Number'}</td>
                                                             <td>
                                                                 {cus.account.isActive ? (
                                                                     <span className="badge label-table badge-success">Active</span>
