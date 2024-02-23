@@ -102,6 +102,7 @@ const ListStaff = () => {
                                             <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                                                 <thead>
                                                     <tr>
+                                                        <th data-toggle="true">No.</th>
                                                         <th data-toggle="true">Image</th>
                                                         <th data-toggle="true">Full Name</th>
                                                         <th data-hide="phone">Email</th>
@@ -113,9 +114,10 @@ const ListStaff = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentStaffs.map((cus) => (
+                                                    {currentStaffs.map((cus, index) => (
 
                                                         <tr>
+                                                            <td>{index+1}</td>
                                                             <td>
                                                                 <img src={cus.account.imageUrl} style={{ height: '70px', width: '50px' }}>
 

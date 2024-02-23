@@ -259,6 +259,7 @@ const EditLearner = () => {
                         <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                           <thead>
                             <tr>
+                              <th data-toggle="true">No.</th>
                               <th data-toggle="true">Course Image</th>
                               <th data-toggle="true">Course Name</th>
                               <th data-toggle="true">Enrolled Date</th>
@@ -267,9 +268,10 @@ const EditLearner = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {currentEnrollments.map((cus) => (
+                            {currentEnrollments.map((cus, index) => (
 
                               <tr>
+                                <td>{index+1}</td>
                                 <td>
                                   <img src={cus.course.imageUrl} style={{ height: '70px', width: '100px' }}>
 

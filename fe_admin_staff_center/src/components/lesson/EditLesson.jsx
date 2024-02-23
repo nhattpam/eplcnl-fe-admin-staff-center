@@ -138,11 +138,8 @@ const EditLesson = () => {
 
                           <div className='card-body'>
                             <label htmlFor="video">Reading * :</label>
-                            <ReactQuill
-                              value={lesson.reading}
-                              onChange={handleChangeLesson}
-                              style={{ height: '300px' }}
-                            />
+                            <div dangerouslySetInnerHTML={{ __html: lesson.reading }}>
+                            </div>
                           </div>
                         </div>
 

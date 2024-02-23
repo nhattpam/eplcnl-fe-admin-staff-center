@@ -98,7 +98,7 @@ const ListRefundRequest = () => {
                                             <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                                                 <thead>
                                                     <tr>
-                                                        <th data-toggle="true">Transaction Id</th>
+                                                        <th data-toggle="true">No.</th>
                                                         <th data-toggle="true">Requested Date</th>
                                                         <th data-toggle="true">Approved Date</th>
                                                         <th data-hide="phone, tablet">Reason</th>
@@ -107,10 +107,10 @@ const ListRefundRequest = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentRefunds.map((cus) => (
+                                                    {currentRefunds.map((cus, index) => (
 
                                                         <tr>
-                                                            <td>{cus.transactionId}</td>
+                                                            <td>{index+1}</td>
                                                             <td>{cus.requestedDate}</td>
                                                             <td>{cus.approvedDate}</td>
                                                             <td>{cus.reason}</td>

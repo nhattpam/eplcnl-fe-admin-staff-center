@@ -154,7 +154,7 @@ const EditStaff = () => {
 
   const handleDeleteClick = () => {
     setShowModal(true); // Show modal when thumb-down button is clicked
-    setAccount({ ...account, isActive: false , isDeleted: true}); // Set isActive to false
+    setAccount({ ...account, isActive: false, isDeleted: true }); // Set isActive to false
   };
 
   const handleActiveClick = () => {
@@ -223,7 +223,7 @@ const EditStaff = () => {
                                 </td>
                               </tr>
                               <tr>
-                              <th>Status:</th>
+                                <th>Status:</th>
                                 <td>
                                   {account.isActive ? (
                                     <span className="badge label-table badge-success">Active</span>
@@ -317,6 +317,7 @@ const EditStaff = () => {
                         <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                           <thead>
                             <tr>
+                              <th data-toggle="true">No.</th>
                               <th data-toggle="true">Center Name</th>
                               <th>Email</th>
                               <th data-hide="phone">Description</th>
@@ -328,8 +329,9 @@ const EditStaff = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {currentCenters.map((cus) => (
+                            {currentCenters.map((cus, index) => (
                               <tr key={cus.id}>
+                                <td>{index + 1}</td>
                                 <td>{cus.name}</td>
                                 <td>{cus.email}</td>
                                 <td>{cus.description}</td>
@@ -401,6 +403,7 @@ const EditStaff = () => {
                         <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                           <thead>
                             <tr>
+                              <th data-toggle="true">No.</th>
                               <th data-toggle="true">Image</th>
                               <th data-toggle="true">Full Name</th>
                               <th data-toggle="true">Phone</th>
@@ -412,8 +415,9 @@ const EditStaff = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {currentTutors.map((tutor) => (
+                            {currentTutors.map((tutor, index) => (
                               <tr key={tutor.id}>
+                                <td>{index + 1}</td>
                                 <td>
                                   <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
 

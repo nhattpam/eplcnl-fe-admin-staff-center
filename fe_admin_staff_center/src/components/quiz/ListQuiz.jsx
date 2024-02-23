@@ -119,6 +119,7 @@ const ListQuiz = () => {
                                             <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                                                 <thead>
                                                     <tr>
+                                                        <th data-toggle="true">No.</th>
                                                         <th data-toggle="true">Quiz Name</th>
                                                         <th>Grade to pass</th>
                                                         <th>Times</th>
@@ -128,8 +129,9 @@ const ListQuiz = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentQuizs.map((quiz) => (
+                                                    {currentQuizs.map((quiz, index) => (
                                                         <tr key={quiz.id}>
+                                                            <td>{index+1}</td>
                                                             <td>{quiz.name}</td>
                                                             <td>{quiz.gradeToPass}</td>
                                                             <td>{quiz.deadline}</td>

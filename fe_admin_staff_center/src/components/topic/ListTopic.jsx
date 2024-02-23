@@ -122,6 +122,7 @@ const ListTopic = () => {
                       <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                         <thead>
                           <tr>
+                            <th data-toggle="true">No.</th>
                             <th data-toggle="true">Topic Name</th>
                             <th>Description</th>
                             <th data-hide="phone">Created Date</th>
@@ -130,8 +131,9 @@ const ListTopic = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {currentClassTopics.map((classTopic) => (
+                          {currentClassTopics.map((classTopic, index) => (
                             <tr key={classTopic.id}>
+                              <td>{index+1}</td>
                               <td>{classTopic.name}</td>
                               <td>{classTopic.description}</td>
                               <td>{classTopic.createdDate}</td>

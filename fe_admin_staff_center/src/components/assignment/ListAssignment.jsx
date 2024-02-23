@@ -117,6 +117,7 @@ const ListAssignment = () => {
                                             <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                                                 <thead>
                                                     <tr>
+                                                        <th>No.</th>
                                                         <th>Time</th>
                                                         <th>Question</th>
                                                         <th data-hide="phone">Created Date</th>
@@ -125,8 +126,9 @@ const ListAssignment = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentAssignments.map((assignment) => (
+                                                    {currentAssignments.map((assignment, index) => (
                                                         <tr key={assignment.id}>
+                                                            <td>{index+1}</td>
                                                             <td>{assignment.deadline}</td>
                                                             <td>{assignment.questionText}</td>
                                                             <td>{assignment.createdDate}</td>

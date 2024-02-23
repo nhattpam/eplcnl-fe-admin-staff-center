@@ -100,6 +100,7 @@ const ListCourseByTutor = () => {
                                             <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
                                                 <thead>
                                                     <tr>
+                                                        <th data-toggle="true">No.</th>
                                                         <th data-toggle="true">Image</th>
                                                         <th data-toggle="true">Code</th>
                                                         <th data-toggle="true">Name</th>
@@ -112,9 +113,10 @@ const ListCourseByTutor = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentCourses.map((cus) => (
+                                                    {currentCourses.map((cus, index) => (
 
                                                         <tr>
+                                                            <td>{index+1}</td>
                                                             <td>
                                                                 <img src={cus.imageUrl} style={{ height: '70px', width: '100px' }}>
 

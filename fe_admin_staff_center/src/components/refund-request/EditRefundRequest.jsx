@@ -107,9 +107,10 @@ const EditRefundRequest = () => {
 
                                     <form id="demo-form" data-parsley-validate>
                                         <div className="form-group">
-                                            <label htmlFor="transactionId">Transaction Id * :</label>
+                                            <label htmlFor="transactionId">Transaction Id:</label>
                                             <input type="text" className="form-control" name="transactionId" id="transactionId" value={refund.transactionId} readOnly />
                                         </div>
+                                        <label htmlFor="transactionId">Course Information:</label>
 
                                         <div className="table-responsive">
                                             <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
@@ -158,12 +159,12 @@ const EditRefundRequest = () => {
                                             </table>
                                         </div> {/* end .table-responsive*/}
 
-                                        <div className="form-group mb-0" style={{marginTop: '15px'}}>
+                                        <div className="form-group mb-0" style={{ marginTop: '15px' }}>
                                             <button
                                                 type="submit"
                                                 className="btn btn-success"
                                             >
-                                               <i class="fa-solid fa-thumbs-up"></i> Approve
+                                                <i class="fa-solid fa-thumbs-up"></i> Approve
                                             </button>
                                             <button
                                                 type="submit"
