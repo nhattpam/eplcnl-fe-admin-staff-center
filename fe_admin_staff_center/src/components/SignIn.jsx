@@ -24,6 +24,10 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
     //get staffId by accountId
     const staffsResponse = staffService.getAllStaff();
 
+    //get adminId by accountId
+    const accountsResponse = accountService.getAllAccount();
+
+
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
@@ -66,6 +70,13 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                         sessionStorage.setItem('isAdmin', true);
                         sessionStorage.setItem('isStaff', false);
                         sessionStorage.setItem('isCenter', false);
+
+                        // Access adminId from localStorage
+                        localStorage.setItem('adminId', decodedToken.Id);
+                        const storedAdminId = localStorage.getItem('centerId');
+                        console.log("This is adminId from localStorage:", storedAdminId);
+
+
                     }
                     // Navigate to the home page
                     navigate('/admin-home');

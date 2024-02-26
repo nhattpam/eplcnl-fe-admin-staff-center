@@ -39,6 +39,8 @@ import ListLessonMaterial from './components/material/ListLessonMaterial';
 import ListClassTopicMaterial from './components/material/ListClassTopicMaterial';
 import EditQuestion from './components/question/EditQuestion';
 import ListReportByStaff from './components/report/ListReportByStaff';
+import ListTransaction from './components/transaction/ListTransaction';
+import MyWallet from './components/wallet/MyWallet';
 
 function App() {
 
@@ -106,6 +108,10 @@ function App() {
         <Route path="/list-material-by-topic/:storedClassTopicId" element={<ListClassTopicMaterial />} />
         {/* report */}
         <Route path="/list-report/:staffId" element={<ListReportByStaff />} />
+        {/* transaction */}
+        <Route path="/list-transaction" element={<ListTransaction />} />
+         {/* wallet */}
+         <Route path="/my-wallet/:accountId" element={<MyWallet />} />
       </Routes>
     </div>
   );

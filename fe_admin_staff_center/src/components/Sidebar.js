@@ -5,6 +5,7 @@ const Sidebar = ({ isAdmin, isStaff, isCenter }) => {
 
     const centerId = localStorage.getItem('centerId');
     const staffId = localStorage.getItem('staffId');
+    const adminId = localStorage.getItem('adminId');
 
     return (
         <>
@@ -172,9 +173,17 @@ const Sidebar = ({ isAdmin, isStaff, isCenter }) => {
                             )}
                             {isAdmin && (
                                 <li>
-                                    <Link to={`/list-transaction/${centerId}`}>
+                                    <Link to={`/list-transaction/`}>
                                         <i class="ti-money"></i>
                                         <span> Transactions </span>
+                                    </Link>
+                                </li>
+                            )}
+                            {isAdmin && (
+                                <li>
+                                    <Link to={`/my-wallet/${adminId}`}>
+                                        <i class="dripicons-wallet"></i>
+                                        <span> Wallet </span>
                                     </Link>
                                 </li>
                             )}
