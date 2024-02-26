@@ -170,6 +170,14 @@ const Sidebar = ({ isAdmin, isStaff, isCenter }) => {
                                     </Link>
                                 </li>
                             )}
+                            {isAdmin && (
+                                <li>
+                                    <Link to={`/list-transaction/${centerId}`}>
+                                        <i class="ti-money"></i>
+                                        <span> Transactions </span>
+                                    </Link>
+                                </li>
+                            )}
                         </ul>
                     </div>
                     {/* End Sidebar */}
