@@ -91,7 +91,7 @@ const CreateTutor = () => {
 
     const submitAccount = async (e) => {
         e.preventDefault();
-    
+
         try {
             if (fileData.length > 0) {
                 const promises = fileData.map(async (rowData, index) => {
@@ -101,20 +101,20 @@ const CreateTutor = () => {
                     newAccount.password = rowData[2];
                     newAccount.gender = false; // Assuming gender is always false
                     console.log('Account Data:', newAccount);
-    
+
                     // Save account
                     const accountResponse = await accountService.saveAccount(newAccount);
                     console.log('Account Response:', accountResponse.data);
-    
+
                     // Update tutor with accountId and save tutor
                     const updatedTutor = { ...tutor, accountId: accountResponse.data.id };
                     console.log('Updated Tutor:', updatedTutor);
                     const tutorResponse = await tutorService.saveTutor(updatedTutor);
                     console.log('Tutor Response:', tutorResponse.data);
-    
+
                     return { account: accountResponse.data, tutor: tutorResponse.data };
                 });
-    
+
                 const results = await Promise.all(promises);
                 console.log('Results:', results);
                 setMsg('Account and Tutor Added Successfully');
@@ -124,13 +124,13 @@ const CreateTutor = () => {
                     // Save account
                     const accountResponse = await accountService.saveAccount(account);
                     console.log('Account Response:', accountResponse.data);
-    
+
                     // Update tutor with accountId and save tutor
                     const updatedTutor = { ...tutor, accountId: accountResponse.data.id };
                     console.log('Updated Tutor:', updatedTutor);
                     const tutorResponse = await tutorService.saveTutor(updatedTutor);
                     console.log('Tutor Response:', tutorResponse.data);
-    
+
                     setMsg('Account and Tutor Added Successfully');
                     navigate(`/list-tutor-by-center/${centerId}`);
                 }
@@ -139,7 +139,7 @@ const CreateTutor = () => {
             console.log('Error:', error);
         }
     };
-    
+
 
     return (
         <>
@@ -154,7 +154,7 @@ const CreateTutor = () => {
                         <div className="row">
                             <div className="col-12">
                                 <div className="card-box">
-                                    <h4 className="header-title">Create new tutor</h4>
+                                    <h4 className="header-title">CREATE NEW TUTOR</h4>
                                     <form id="demo-form" data-parsley-validate onSubmit={(e) => submitAccount(e)}>
                                         <div className="form-group">
                                             <label htmlFor="fullName">Full Name * :</label>
@@ -190,7 +190,7 @@ const CreateTutor = () => {
                                         </div>
                                         {/* File upload input */}
                                         <div className="form-group">
-                                            <label htmlFor="file">Upload Excel file:</label>
+                                            <label htmlFor="file">Upload Excel file: </label>&nbsp;
                                             <input type="file" id="file" accept=".xlsx,.xls" onChange={handleFileChange} />
                                         </div>
                                         <div className="form-group mb-0">
