@@ -11,13 +11,24 @@ const Header = () => {
 
 
     const navigate = useNavigate();
+    // Modal state
+    const [showModal, setShowModal] = useState(false);
+
+    const [editMode, setEditMode] = useState(false); // State to manage edit mode
+    const [editedAccount, setEditedAccount] = useState({
+        email: "",
+        fullName: "",
+        phoneNumber: "",
+        gender: ""
+    });
 
     const [account, setAccount] = useState({
         email: "",
         password: "",
         fullName: "",
         phoneNumber: "",
-        imageUrl: ""
+        imageUrl: "",
+        gender: ""
     });
 
     useEffect(() => {
@@ -55,6 +66,33 @@ const Header = () => {
         };
     }, [navigate]);
 
+    const openModal = () => {
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
+    //edit account
+    // Toggle edit mode
+    const toggleEditMode = () => {
+        setEditMode(!editMode);
+    };
+
+    // Handle editing account data
+    const handleEdit = () => {
+        // Perform editing logic here, e.g., send edited data to the server
+        console.log("Editing account data:", editedAccount);
+        // Close the modal after editing
+        closeModal();
+    };
+
+    // Update edited account state when input values change
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setEditedAccount({ ...editedAccount, [name]: value });
+    };
     return (
         <>
             {/* Topbar Start */}
@@ -119,7 +157,7 @@ const Header = () => {
                                     )}
                                 </div>
                                 {/* item*/}
-                                <a href="javascript:void(0);" className="dropdown-item notify-item">
+                                <a href="javascript:void(0);" className="dropdown-item notify-item" onClick={openModal}>
                                     <i className="fe-user" />
                                     <span>My Account</span>
                                 </a>
@@ -161,6 +199,110 @@ const Header = () => {
                 </div>
             </div>
             {/* end Topbar */}
+            {/* My Account Modal */}
+            {showModal && (
+                <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">My Account</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}>
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                {/* Conditional rendering based on edit mode */}
+                                {editMode ? (
+                                    <div>
+                                        {/* Input fields for editing */}
+                                        <form>
+                                            <img src={account.imageUrl} alt="avatar" className="rounded-circle" style={{ width: '30%' }} />
+
+                                            <div className="table-responsive mt-3">
+                                                <table className="table table-bordered">
+                                                    <tbody>
+
+                                                        <tr>
+                                                            <th style={{ width: '30%' }}>Full Name:</th>
+                                                            <td>  <input type="text" className="form-control" id="fullName" name="fullName" value={account.fullName} onChange={handleInputChange} />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Email:</th>
+                                                            <td>  <input type="email" className="form-control" id="email" name="email" value={account.email} onChange={handleInputChange} />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Phone Number:</th>
+                                                            <td>
+                                                                <input type="text" className="form-control" id="phoneNumber" name="phoneNumber" value={account.phoneNumber} onChange={handleInputChange} />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Gender:</th>
+                                                            <td>
+                                                                <select className="form-control" id="gender" name="gender" value={account.gender} onChange={handleInputChange}>
+                                                                    <option value="male">Male</option>
+                                                                    <option value="female">Female</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <img src={account.imageUrl} alt="avatar" className="rounded-circle" style={{ width: '30%' }} />
+
+                                        <div className="table-responsive mt-3">
+                                            <table className="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <th style={{ width: '30%' }}>Full Name:</th>
+                                                        <td>{account.fullName}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Email:</th>
+                                                        <td>{account.email}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Phone Number:</th>
+                                                        <td>{account && account.phoneNumber ? account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Gender:</th>
+                                                        <td>
+                                                            {account.gender ? (
+                                                                <span className="badge label-table badge-success">Male</span>
+                                                            ) : (
+                                                                <span className="badge label-table badge-danger">Female</span>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                )}
+                            </div>
+                            <div className="modal-footer">
+                                {/* Conditional rendering of buttons based on edit mode */}
+                                {editMode ? (
+                                    <button type="button" className="btn btn-success" onClick={handleEdit}>Save Changes</button>
+                                ) : (
+                                    <button type="button" className="btn btn-warning" onClick={toggleEditMode}>Edit</button>
+                                )}
+                                <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
 
         </>
     )

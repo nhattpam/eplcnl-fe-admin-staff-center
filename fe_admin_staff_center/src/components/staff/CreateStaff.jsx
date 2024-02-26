@@ -88,12 +88,16 @@ const CreateStaff = () => {
         e.preventDefault();
         if (fileData.length > 0) {
             const promises = fileData.map(async (rowData, index) => {
-                const newAccount = { ...account }; // Create a new account object for each row
-                newAccount.fullName = rowData[0];
-                newAccount.email = rowData[1];
-                newAccount.password = rowData[2];
-                newAccount.gender = false; // Assuming gender is always false
-                console.log('Account Data:', newAccount);
+                const newAccount = {
+                    fullName: `${rowData[0] || ""}`, // Surround with double quotes
+                    email: `${rowData[1] || ""}`, // Surround with double quotes
+                    password: `${rowData[2] || ""}`, // Surround with double quotes
+                    isActive: true, // Always true
+                    roleId: '887428d0-9ded-449c-94ee-7c8a489ab763', // Role ID
+                    gender: false // Assuming gender is always false
+                };
+                console.log('Account Data:', JSON.stringify(newAccount, null, 4));
+
 
                 // Save account
                 const accountResponse = await accountService.saveAccount(newAccount);

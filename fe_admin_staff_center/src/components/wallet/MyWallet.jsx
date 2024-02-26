@@ -183,6 +183,11 @@ const MyWallet = () => {
                                                                     <i className="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
+                                                            <td>
+                                                                <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
+                                                                    Transfer
+                                                                </Link>
+                                                            </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
@@ -276,6 +281,11 @@ const MyWallet = () => {
                                                         <td>
                                                             <Link to={`/edit-staff/${cus.account.id}`} className='text-secondary'>
                                                                 <i class="fa-regular fa-eye"></i>
+                                                            </Link>
+                                                        </td>
+                                                        <td>
+                                                            <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
+                                                                Transfer
                                                             </Link>
                                                         </td>
                                                     </tr>

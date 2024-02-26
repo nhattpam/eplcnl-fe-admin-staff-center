@@ -95,12 +95,15 @@ const CreateTutor = () => {
         try {
             if (fileData.length > 0) {
                 const promises = fileData.map(async (rowData, index) => {
-                    const newAccount = { ...account }; // Create a new account object for each row
-                    newAccount.fullName = rowData[0];
-                    newAccount.email = rowData[1];
-                    newAccount.password = rowData[2];
-                    newAccount.gender = false; // Assuming gender is always false
-                    console.log('Account Data:', newAccount);
+                    const newAccount = {
+                        fullName: `${rowData[0] || ""}`, // Surround with double quotes
+                        email: `${rowData[1] || ""}`, // Surround with double quotes
+                        password: `${rowData[2] || ""}`, // Surround with double quotes
+                        isActive: true, // Always true
+                        roleId: '1dc7ed61-a13d-4cfc-9e3e-2159f61bad3b', // Role ID
+                        gender: false // Assuming gender is always false
+                    };
+                    console.log('Account Data:', JSON.stringify(newAccount, null, 4));
 
                     // Save account
                     const accountResponse = await accountService.saveAccount(newAccount);
