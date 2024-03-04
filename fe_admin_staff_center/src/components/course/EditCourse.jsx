@@ -40,6 +40,7 @@ const EditCourse = () => {
 
     const [moduleList, setModuleList] = useState([]);
     const [classModuleList, setClassModuleList] = useState([]);
+    const [isDoneOrNot, setIsDoneOrNot] = useState(false);
 
 
     const { id } = useParams();

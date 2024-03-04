@@ -6,12 +6,16 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import refundRequestService from '../../services/refund-request.service';
 import transactionService from '../../services/transaction.service';
 import courseService from '../../services/course.service';
+import walletService from '../../services/wallet.service';
+import enrollmentService from '../../services/enrollment.service';
+import learnerService from '../../services/learner.service';
 
 const EditRefundRequest = () => {
 
     const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
     const navigate = useNavigate();
+    const [isDoneOrNot, setIsDoneOrNot] = useState(false);
 
     const { refundId } = useParams();
 
@@ -21,11 +25,12 @@ const EditRefundRequest = () => {
         requestedDate: "",
         approvedDate: "",
         status: "",
-        reason: ""
+        reason: "",
     });
 
     const [transaction, setTransaction] = useState({
         courseId: "",
+        amount: ""
     });
 
     const [course, setCourse] = useState({
@@ -54,12 +59,6 @@ const EditRefundRequest = () => {
                 });
         }
     }, [refundId]);
-
-
-
-
-
-
 
     useEffect(() => {
         if (refund.transactionId) {
@@ -90,6 +89,63 @@ const EditRefundRequest = () => {
     }, [transaction.courseId]);
 
 
+    //approve refund request
+    const handleApproveRefund = () => {
+
+        //tru tien admin
+        walletService.getWalletById("188e9df9-be4b-4531-858e-098ff8c3735c") //admin's wallet
+            .then((response) => {
+                const updatedWallet = {
+                    balance: response.data.balance - transaction.amount,
+                    accountId: "9b868733-8ab1-4191-92ab-65d1b82863c3"
+                }
+
+                //update admin wallet balance
+                walletService.updateWallet(response.data.id, updatedWallet);
+            })
+
+        //xoa enrollment chua learnerId va courseId thuoc ve transactionId
+        enrollmentService.deleteEnrollmentByLearnerIdAndCourseId(transaction.learnerId, transaction.courseId);
+
+        //update transaction refundStatus = true
+        transaction.refundStatus = true;
+        transactionService.updateTransaction(transaction.id, transaction);
+
+        //update refund status = APPROVE
+        refund.status = "APPROVED";
+        refundRequestService.updateRefundRequest(refundId, refund);
+        //update learner wallet balance
+        learnerService.getLearnerById(transaction.learnerId)
+            .then((response) => {
+                const updatedWallet = {
+                    balance: response.data.account.wallet.balance + transaction.amount,
+                    accountId: response.data.accountId
+                }
+
+                //update admin wallet balance
+                walletService.updateWallet(response.data.account.wallet.id, updatedWallet);
+            })
+
+
+        navigate(`/list-refund`);
+    };
+  
+
+
+    const handleDisApproveRefund = () => {
+        //update refund status = DISAPPROVED
+        refund.status = "DISAPPROVED";
+        refundRequestService.updateRefundRequest(refundId, refund);
+        navigate(`/list-refund`);
+    }
+
+    //check if refund has status -> disable 2 buttons
+    useEffect(() => {
+        if (refund.status === "APPROVED" || refund.status == "DISAPPROVED") {
+            setIsDoneOrNot(true);
+        }
+    })
+
     return (
         <>
             <div id="wrapper">
@@ -108,7 +164,13 @@ const EditRefundRequest = () => {
                                     <form id="demo-form" data-parsley-validate>
                                         <div className="form-group">
                                             <label htmlFor="transactionId">Transaction Id:</label>
-                                            <input type="text" className="form-control" name="transactionId" id="transactionId" value={refund.transactionId} readOnly />
+                                            <div>
+                                                <span>{refund.transactionId}</span>
+                                            </div>
+                                            <label htmlFor="transactionId" className='mt-1'>Amount:</label>
+                                            <div>
+                                                <span>{transaction.amount} Vnd</span>
+                                            </div>
                                         </div>
                                         <label htmlFor="transactionId">Course Information:</label>
 
@@ -158,21 +220,25 @@ const EditRefundRequest = () => {
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
+                                        {
+                                            !isDoneOrNot && (
+                                                <div className="form-group mb-0" style={{ marginTop: '15px' }}>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-success" onClick={() => handleApproveRefund()}
+                                                    >
+                                                        <i class="fa-solid fa-thumbs-up"></i> Approve
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-danger ml-1" onClick={() => handleDisApproveRefund()}
+                                                    >
+                                                        <i class="fa-solid fa-thumbs-down"></i> Disapprove
+                                                    </button>
+                                                </div>
+                                            )
+                                        }
 
-                                        <div className="form-group mb-0" style={{ marginTop: '15px' }}>
-                                            <button
-                                                type="submit"
-                                                className="btn btn-success"
-                                            >
-                                                <i class="fa-solid fa-thumbs-up"></i> Approve
-                                            </button>
-                                            <button
-                                                type="submit"
-                                                className="btn btn-danger ml-1"
-                                            >
-                                                <i class="fa-solid fa-thumbs-down"></i> Disapprove
-                                            </button>
-                                        </div>
                                     </form>
                                 </div> {/* end card-box*/}
                             </div> {/* end col*/}

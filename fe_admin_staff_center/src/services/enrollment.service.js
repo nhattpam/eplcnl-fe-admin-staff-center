@@ -46,5 +46,13 @@ class EnrollmentService {
     });
   }
 
+  deleteEnrollmentByLearnerIdAndCourseId(learnerId, courseId) {
+    return axios.delete(API_URL + `/enrollments/learners/${learnerId}/courses/${courseId}`, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
+
 }
 export default new EnrollmentService;

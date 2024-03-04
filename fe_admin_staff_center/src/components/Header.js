@@ -146,8 +146,12 @@ const Header = () => {
                                 {/* item*/}
                                 <div className="dropdown-header noti-title">
                                     {isAdmin && (
-                                        <h6 className="text-overflow m-0">Welcome Admin!</h6>
+                                        <>
+                                            <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
+                                            <p>Balance: {account.wallet?.balance}</p>
+                                        </>
                                     )}
+
 
                                     {isStaff && (
                                         <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
