@@ -162,7 +162,7 @@ const Header = () => {
                                     )}
                                 </div>
                                 {/* item*/}
-                                <a href="javascript:void(0);" className="dropdown-item notify-item" onClick={openModal}>
+                                <a href="javascript:void(0);" className="dropdown-item notify-item" onClick={openModal} style={{marginTop: '-30px'}}>
                                     <i className="fe-user" />
                                     <span>My Account</span>
                                 </a>

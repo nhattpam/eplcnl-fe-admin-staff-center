@@ -198,7 +198,7 @@ const EditModule = () => {
                                                                 <td>{lesson.createdDate}</td>
                                                                 <td>{lesson.updatedDate}</td>
                                                                 <td>
-                                                                    <Link to={`/tutor/courses/edit-lesson/${lesson.id}`} className='text-dark'>
+                                                                    <Link to={`/edit-lesson/${lesson.id}`} className='text-dark'>
                                                                         <i class="fa-regular fa-eye"></i>
                                                                     </Link>
                                                                 </td>

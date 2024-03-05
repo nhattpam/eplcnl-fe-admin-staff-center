@@ -1,9 +1,445 @@
-import React from 'react'
+import { React, useState, useEffect, useRef } from "react";
 import Header from '../Header'
 import Footer from '../Footer'
 import Sidebar from '../Sidebar'
+import { Chart, PieController, ArcElement, registerables } from "chart.js";
+import transactionService from "../../services/transaction.service";
 
 const AdminDashboard = () => {
+
+    Chart.register(PieController, ArcElement);
+    Chart.register(...registerables);
+    const pieChartRef = useRef(null);
+    const areaChartRef = useRef(null);
+
+    const [transactionCount, setTransactionCount] = useState(0);
+    // const [appointmentCount, setAppointmentCount] = useState(0);
+    const [sumForCurrentMonth, setSumForCurrentMonth] = useState(0);
+    const [sumForPreviousMonth, setSumForPreviousMonth] = useState(0);
+    const [sumForCurrentYear, setSumForCurrentYear] = useState(0);
+    const [sumForToday, setSumForToday] = useState(0);
+    //area chart
+    const [monthlyData, setMonthlyData] = useState([]);
+    //list transaction
+    const [transactionList, setTransactionList] = useState([]);
+    const [transactionsPerPage] = useState(2);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+
+
+    useEffect(() => {
+        countTransactions();
+        // countAppointments();
+        fetchMonthlyData();
+        fetchTransactions();
+        fetchTransactionsAndCalculateSum4();
+    }, []);
+
+    useEffect(() => {
+        if (sumForCurrentMonth !== 0 && sumForPreviousMonth !== 0) {
+            createPieChart();
+        }
+    }, [sumForCurrentMonth, sumForPreviousMonth]);
+
+    useEffect(() => {
+        if (monthlyData.length > 0) {
+            createAreaChart();
+        }
+    }, [monthlyData]);
+
+    //list transaction
+    const fetchTransactions = async () => {
+        try {
+            const res = await transactionService.getAllTransaction();
+            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+
+            const transactions = activeTransactions;
+            setTransactionList(transactions);
+
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+        }
+    }
+
+    //paginate list transaction
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredTransactions = transactionList
+        .filter((transaction) => {
+            return (
+                transaction.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+
+            );
+        });
+
+    const pageCount = Math.ceil(filteredTransactions.length / transactionsPerPage);
+
+    const handlePageClick = (data) => {
+        setCurrentPage(data.selected);
+    };
+
+    const offset = currentPage * transactionsPerPage;
+    const currentTransactions = filteredTransactions.slice(offset, offset + transactionsPerPage);
+
+    //Income by month
+    const fetchTransactionsAndCalculateSum = async () => {
+        try {
+            const res = await transactionService.getAllTransaction();
+            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+
+            const transactions = activeTransactions;
+
+            const sumForCurrentMonth = calculateSumByMonth(transactions);
+            setSumForCurrentMonth(sumForCurrentMonth);
+            console.log("Sum for current month:", sumForCurrentMonth);
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+        }
+    };
+
+    fetchTransactionsAndCalculateSum();
+
+    const calculateSumByMonth = (transactions) => {
+        // Get the current month
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+
+        // Initialize the sum for the current month
+        let sumForCurrentMonth = 0;
+
+        // Iterate over each transaction
+        transactions.forEach((transaction) => {
+            // Extract the month from the transaction date
+            const transactionDate = new Date(transaction.transactionDate);
+            const transactionMonth = transactionDate.getMonth() + 1; // Add 1 to match the format of transaction month
+
+            // Check if the transaction belongs to the current month
+            if (transactionMonth === currentMonth + 1) { // Add 1 to match the format of current month
+                sumForCurrentMonth += transaction.amount / 24000; // Use the correct property name
+            }
+        });
+
+        return sumForCurrentMonth;
+    };
+
+    //Income by year
+    const fetchTransactionsAndCalculateSum1 = async () => {
+        try {
+            const res = await transactionService.getAllTransaction();
+            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+
+            const transactions = activeTransactions;
+
+            const sumForCurrentYear = calculateSumByYear(transactions);
+            setSumForCurrentYear(sumForCurrentYear);
+            console.log("Sum for current year:", sumForCurrentYear);
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+        }
+    };
+
+    fetchTransactionsAndCalculateSum1();
+
+
+    const calculateSumByToday = (transactions) => {
+        // Get the current date
+        const currentDate = new Date();
+        const currentDay = currentDate.getDate();
+    
+        // Initialize sum for today
+        let sumForToday = 0;
+    
+        // Iterate over each transaction
+        transactions.forEach((transaction) => {
+            // Extract the day from the transaction date
+            const transactionDay = new Date(transaction.transactionDate).getDate();
+    
+            // Check if the transaction occurred today
+            if (transactionDay === currentDay) {
+                sumForToday += transaction.amount / 24000; // Assuming transaction.amount is the amount of the transaction
+            }
+        });
+    
+        return sumForToday;
+    };
+
+    const calculateSumByYear = (transactions) => {
+        // Get the current year
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+
+        // Initialize the sum for the current year
+        let sumForCurrentYear = 0;
+
+        // Iterate over each transaction
+        transactions.forEach((transaction) => {
+            // Extract the year from the transaction date
+            const transactionYear = new Date(transaction.transactionDate).getFullYear();
+
+            // Check if the transaction belongs to the current year
+            if (transactionYear === currentYear) {
+                sumForCurrentYear += transaction.amount;
+            }
+        });
+
+        return sumForCurrentYear;
+    };
+
+    const calculateSumByPreviousMonth = (transactions) => {
+        // Get the current date
+        const currentDate = new Date();
+
+        // Calculate the previous month
+        let previousMonth = currentDate.getMonth() - 1;
+
+        // Adjust the month if the previous month was in the previous year
+        if (previousMonth < 0) {
+            previousMonth = 11;
+        }
+
+        // Initialize the sum for the previous month
+        let sumForPreviousMonth = 0;
+
+        // Iterate over each transaction
+        transactions.forEach((transaction) => {
+            // Extract the month from the transaction date
+            const transactionMonth = new Date(transaction.transactionDate).getMonth();
+
+            // Check if the transaction belongs to the previous month
+            if (transactionMonth === previousMonth) {
+                sumForPreviousMonth += transaction.amount / 24000;
+            }
+        });
+
+        return sumForPreviousMonth;
+    };
+
+    const fetchTransactionsAndCalculateSum3 = async () => {
+        try {
+            const res = await transactionService.getAllTransaction();
+            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+
+            const transactions = activeTransactions;
+
+            const sumForPreviousMonth = calculateSumByPreviousMonth(transactions);
+            setSumForPreviousMonth(sumForPreviousMonth);
+            console.log("Sum for previous month:", sumForPreviousMonth);
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+        }
+    };
+
+    fetchTransactionsAndCalculateSum3();
+
+    const fetchTransactionsAndCalculateSum4 = async () => {
+        try {
+            const res = await transactionService.getAllTransaction();
+            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+
+            const transactions = activeTransactions;
+
+            const sumForToday = calculateSumByToday(transactions);
+            setSumForToday(sumForToday);
+            console.log("Sum for today:", sumForToday);
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+        }
+    };
+
+    fetchTransactionsAndCalculateSum4();
+
+    const createPieChart = () => {
+        const pieChartCanvas = pieChartRef.current.getContext("2d");
+
+        if (pieChartRef.current.chart) {
+            pieChartRef.current.chart.destroy();
+        }
+
+        const data = {
+            labels: ["Previous Month", "Current Month"],
+            datasets: [
+                {
+                    data: [sumForPreviousMonth, sumForCurrentMonth],
+                    backgroundColor: ["#088F8F", "#7CFC00"],
+                    hoverBackgroundColor: ["#0047AB", "#008000"],
+                },
+            ],
+        };
+
+        const options = {
+            plugins: {
+                legend: {
+                    display: true,
+                },
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: (context) => {
+                            const label = context.label;
+                            const value = context.formattedValue;
+                            return `${label}: $${value}`;
+                        },
+                    },
+                },
+            },
+        };
+
+        pieChartRef.current.chart = new Chart(pieChartCanvas, {
+            type: "pie",
+            data: data,
+            options: options,
+        });
+    };
+
+
+    //area chart
+    const fetchMonthlyData = async () => {
+        try {
+            const res = await transactionService.getAllTransaction();
+            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+
+            const transactions = activeTransactions;
+            const currentYear = new Date().getFullYear();
+
+            // Initialize an array to store monthly data
+            const monthlyData = Array(12).fill(0);
+
+            // Iterate over each transaction
+            transactions.forEach((transaction) => {
+                const transactionDate = new Date(transaction.transactionDate);
+                const transactionYear = transactionDate.getFullYear();
+                const transactionMonth = transactionDate.getMonth();
+
+                // Check if the transaction belongs to the current year
+                if (transactionYear === currentYear) {
+                    // Add the transaction's total price to the corresponding month's data
+                    monthlyData[transactionMonth] += transaction.amount / 24000;
+                }
+            });
+
+            setMonthlyData(monthlyData);
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+        }
+    };
+
+    const createAreaChart = () => {
+        const areaChartCanvas = areaChartRef.current.getContext("2d");
+
+        if (areaChartRef.current.chart) {
+            areaChartRef.current.chart.destroy();
+        }
+
+        const data = {
+            labels: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ],
+            datasets: [
+                {
+                    label: "Income",
+                    data: monthlyData,
+                    backgroundColor: "rgba(54, 162, 235, 0.2)",
+                    btransactionColor: "rgba(54, 162, 235, 1)",
+                    btransactionWidth: 2,
+                    pointBackgroundColor: "rgba(54, 162, 235, 1)",
+                    pointBtransactionColor: "#fff",
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                },
+            ],
+        };
+
+        const options = {
+            scales: {
+                x: {
+                    grid: {
+                        display: false,
+                    },
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        btransactionDash: [2],
+                        btransactionDashOffset: [2],
+                        drawBtransaction: false,
+                        color: "rgba(0, 0, 0, 0.05)",
+                        zeroLineColor: "rgba(0, 0, 0, 0.1)",
+                    },
+                    ticks: {
+                        callback: (value) => {
+                            if (value >= 1000) {
+                                return `$${value / 1000}k`;
+                            }
+                            return `$${value}`;
+                        },
+                    },
+                },
+            },
+            plugins: {
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: (context) => {
+                            const label = context.dataset.label;
+                            const value = context.formattedValue;
+                            return `${label}: $${value}`;
+                        },
+                    },
+                },
+            },
+        };
+
+        areaChartRef.current.chart = new Chart(areaChartCanvas, {
+            type: "line",
+            data: data,
+            options: options,
+        });
+    };
+
+
+    // Create an instance of the TransactionService class
+    // Function to count the transactions
+    async function countTransactions() {
+        try {
+            const res = await transactionService.getAllTransaction();
+            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+
+            const transactions = activeTransactions;
+            const transactionCount = transactions.length;
+
+
+            setTransactionCount(transactionCount);
+        } catch (error) {
+            console.error("Error counting transactions:", error);
+        }
+    }
+    // async function countAppointments() {
+    //     try {
+    //         const response = await appointmentService.getAllAppointment();
+    //         const appointments = response.data;
+    //         const appointmentCount = appointments.length;
+
+
+    //         setAppointmentCount(appointmentCount);
+    //     } catch (error) {
+    //         console.error("Error counting transactions:", error);
+    //     }
+    // }
+
+
     return (
         <>
             <div id="wrapper">
@@ -26,9 +462,9 @@ const AdminDashboard = () => {
                                             <form className="form-inline">
                                                 <div className="form-group">
                                                     <div className="input-group input-group-sm">
-                                                        <input type="text" className="form-control border" id="dash-daterange" />
+                                                        <input type="text" className="form-control btransaction" id="dash-daterange" />
                                                         <div className="input-group-append">
-                                                            <span className="input-group-text bg-blue border-blue text-white">
+                                                            <span className="input-group-text bg-blue btransaction-blue text-white">
                                                                 <i className="mdi mdi-calendar-range" />
                                                             </span>
                                                         </div>
@@ -52,14 +488,14 @@ const AdminDashboard = () => {
                                     <div className="widget-rounded-circle card-box">
                                         <div className="row">
                                             <div className="col-6">
-                                                <div className="avatar-lg rounded-circle bg-soft-primary border-primary border">
+                                                <div className="avatar-lg rounded-circle bg-soft-primary btransaction-primary btransaction">
                                                     <i className="fe-heart font-22 avatar-title text-primary" />
                                                 </div>
                                             </div>
                                             <div className="col-6">
                                                 <div className="text-right">
-                                                    <h3 className="mt-1">$<span data-plugin="counterup">58,947</span></h3>
-                                                    <p className="text-muted mb-1 text-truncate">Total Revenue</p>
+                                                    <h3 className="mt-1">$<span data-plugin="counterup">{sumForCurrentMonth.toFixed(2)}</span></h3>
+                                                    <p className="text-muted mb-1 text-truncate">Earnings (Monthly)</p>
                                                 </div>
                                             </div>
                                         </div> {/* end row*/}
@@ -69,14 +505,14 @@ const AdminDashboard = () => {
                                     <div className="widget-rounded-circle card-box">
                                         <div className="row">
                                             <div className="col-6">
-                                                <div className="avatar-lg rounded-circle bg-soft-success border-success border">
+                                                <div className="avatar-lg rounded-circle bg-soft-success btransaction-success btransaction">
                                                     <i className="fe-shopping-cart font-22 avatar-title text-success" />
                                                 </div>
                                             </div>
                                             <div className="col-6">
                                                 <div className="text-right">
-                                                    <h3 className="text-dark mt-1"><span data-plugin="counterup">127</span></h3>
-                                                    <p className="text-muted mb-1 text-truncate">Today's Sales</p>
+                                                    <h3 className="text-dark mt-1">$<span data-plugin="counterup">{sumForCurrentYear.toFixed(2) / 24000}</span></h3>
+                                                    <p className="text-muted mb-1 text-truncate">Earnings (Annual)</p>
                                                 </div>
                                             </div>
                                         </div> {/* end row*/}
@@ -86,14 +522,14 @@ const AdminDashboard = () => {
                                     <div className="widget-rounded-circle card-box">
                                         <div className="row">
                                             <div className="col-6">
-                                                <div className="avatar-lg rounded-circle bg-soft-info border-info border">
+                                                <div className="avatar-lg rounded-circle bg-soft-info btransaction-info btransaction">
                                                     <i className="fe-bar-chart-line- font-22 avatar-title text-info" />
                                                 </div>
                                             </div>
                                             <div className="col-6">
                                                 <div className="text-right">
-                                                    <h3 className="text-dark mt-1"><span data-plugin="counterup">0.58</span>%</h3>
-                                                    <p className="text-muted mb-1 text-truncate">Conversion</p>
+                                                    <h3 className="text-dark mt-1"><span data-plugin="counterup">{transactionCount}</span></h3>
+                                                    <p className="text-muted mb-1 text-truncate">Transactions</p>
                                                 </div>
                                             </div>
                                         </div> {/* end row*/}
@@ -103,7 +539,7 @@ const AdminDashboard = () => {
                                     <div className="widget-rounded-circle card-box">
                                         <div className="row">
                                             <div className="col-6">
-                                                <div className="avatar-lg rounded-circle bg-soft-warning border-warning border">
+                                                <div className="avatar-lg rounded-circle bg-soft-warning btransaction-warning btransaction">
                                                     <i className="fe-eye font-22 avatar-title text-warning" />
                                                 </div>
                                             </div>
@@ -122,25 +558,13 @@ const AdminDashboard = () => {
                                 <div className="col-lg-4">
                                     <div className="card-box">
                                         <div className="dropdown float-right">
-                                            <a href="#" className="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                                <i className="mdi mdi-dots-vertical" />
-                                            </a>
-                                            <div className="dropdown-menu dropdown-menu-right">
-                                                {/* item*/}
-                                                <a href="javascript:void(0);" className="dropdown-item">Sales Report</a>
-                                                {/* item*/}
-                                                <a href="javascript:void(0);" className="dropdown-item">Export Report</a>
-                                                {/* item*/}
-                                                <a href="javascript:void(0);" className="dropdown-item">Profit</a>
-                                                {/* item*/}
-                                                <a href="javascript:void(0);" className="dropdown-item">Action</a>
-                                            </div>
+
                                         </div>
                                         <h4 className="header-title mb-0">Total Revenue</h4>
                                         <div className="widget-chart text-center" dir="ltr">
                                             <div id="total-revenue" className="mt-0" data-colors="#f1556c" />
                                             <h5 className="text-muted mt-0">Total sales made today</h5>
-                                            <h2>$178</h2>
+                                            <h2>${sumForToday}</h2>
                                             <p className="text-muted w-75 mx-auto sp-line-2">Traditional heading elements are designed to work best in the meat of your page content.</p>
                                             <div className="row mt-3">
                                                 <div className="col-4">
@@ -162,294 +586,73 @@ const AdminDashboard = () => {
                                 <div className="col-lg-8">
                                     <div className="card-box pb-2">
                                         <div className="float-right d-none d-md-inline-block">
-                                            <div className="btn-group mb-2">
-                                                <button type="button" className="btn btn-xs btn-light">Today</button>
-                                                <button type="button" className="btn btn-xs btn-light">Weekly</button>
-                                                <button type="button" className="btn btn-xs btn-secondary">Monthly</button>
-                                            </div>
+                                            
                                         </div>
                                         <h4 className="header-title mb-3">Sales Analytics</h4>
                                         <div dir="ltr">
-                                            <div id="sales-analytics" className="mt-4" data-colors="#1abc9c,#4a81d4" />
+                                            <div className="card-body">
+                                                <div className="chart-area">
+                                                    <canvas ref={areaChartRef} id="myAreaChart" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div> {/* end card-box */}
                                 </div> {/* end col*/}
                             </div>
                             {/* end row */}
                             <div className="row">
-                                <div className="col-xl-6">
+                                <div className="col-xl-5">
                                     <div className="card-box">
                                         <div className="dropdown float-right">
-                                            <a href="#" className="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                                <i className="mdi mdi-dots-vertical" />
-                                            </a>
-                                            <div className="dropdown-menu dropdown-menu-right">
-                                                {/* item*/}
-                                                <a href="javascript:void(0);" className="dropdown-item">Edit Report</a>
-                                                {/* item*/}
-                                                <a href="javascript:void(0);" className="dropdown-item">Export Report</a>
-                                                {/* item*/}
-                                                <a href="javascript:void(0);" className="dropdown-item">Action</a>
-                                            </div>
+
                                         </div>
-                                        <h4 className="header-title mb-3">Top 5 Users Balances</h4>
-                                        <div className="table-responsive">
-                                            <table className="table table-borderless table-hover table-nowrap table-centered m-0">
-                                                <thead className="thead-light">
-                                                    <tr>
-                                                        <th colSpan={2}>Profile</th>
-                                                        <th>Currency</th>
-                                                        <th>Balance</th>
-                                                        <th>Reserved in orders</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td style={{ width: 36 }}>
-                                                            <img src="../assets/images/users/user-2.jpg" alt="contact-img" title="contact-img" className="rounded-circle avatar-sm" />
-                                                        </td>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Tomaslau</h5>
-                                                            <p className="mb-0 text-muted"><small>Member Since 2017</small></p>
-                                                        </td>
-                                                        <td>
-                                                            <i className="mdi mdi-currency-btc text-primary" /> BTC
-                                                        </td>
-                                                        <td>
-                                                            0.00816117 BTC
-                                                        </td>
-                                                        <td>
-                                                            0.00097036 BTC
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-plus" /></a>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-danger"><i className="mdi mdi-minus" /></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style={{ width: 36 }}>
-                                                            <img src="../assets/images/users/user-3.jpg" alt="contact-img" title="contact-img" className="rounded-circle avatar-sm" />
-                                                        </td>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Erwin E. Brown</h5>
-                                                            <p className="mb-0 text-muted"><small>Member Since 2017</small></p>
-                                                        </td>
-                                                        <td>
-                                                            <i className="mdi mdi-currency-eth text-primary" /> ETH
-                                                        </td>
-                                                        <td>
-                                                            3.16117008 ETH
-                                                        </td>
-                                                        <td>
-                                                            1.70360009 ETH
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-plus" /></a>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-danger"><i className="mdi mdi-minus" /></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style={{ width: 36 }}>
-                                                            <img src="../assets/images/users/user-4.jpg" alt="contact-img" title="contact-img" className="rounded-circle avatar-sm" />
-                                                        </td>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Margeret V. Ligon</h5>
-                                                            <p className="mb-0 text-muted"><small>Member Since 2017</small></p>
-                                                        </td>
-                                                        <td>
-                                                            <i className="mdi mdi-currency-eur text-primary" /> EUR
-                                                        </td>
-                                                        <td>
-                                                            25.08 EUR
-                                                        </td>
-                                                        <td>
-                                                            12.58 EUR
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-plus" /></a>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-danger"><i className="mdi mdi-minus" /></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style={{ width: 36 }}>
-                                                            <img src="../assets/images/users/user-5.jpg" alt="contact-img" title="contact-img" className="rounded-circle avatar-sm" />
-                                                        </td>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Jose D. Delacruz</h5>
-                                                            <p className="mb-0 text-muted"><small>Member Since 2017</small></p>
-                                                        </td>
-                                                        <td>
-                                                            <i className="mdi mdi-currency-cny text-primary" /> CNY
-                                                        </td>
-                                                        <td>
-                                                            82.00 CNY
-                                                        </td>
-                                                        <td>
-                                                            30.83 CNY
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-plus" /></a>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-danger"><i className="mdi mdi-minus" /></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style={{ width: 36 }}>
-                                                            <img src="../assets/images/users/user-6.jpg" alt="contact-img" title="contact-img" className="rounded-circle avatar-sm" />
-                                                        </td>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Luke J. Sain</h5>
-                                                            <p className="mb-0 text-muted"><small>Member Since 2017</small></p>
-                                                        </td>
-                                                        <td>
-                                                            <i className="mdi mdi-currency-btc text-primary" /> BTC
-                                                        </td>
-                                                        <td>
-                                                            2.00816117 BTC
-                                                        </td>
-                                                        <td>
-                                                            1.00097036 BTC
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-plus" /></a>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-danger"><i className="mdi mdi-minus" /></a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <h4 className="header-title mb-3">Income Comparison</h4>
+                                        <div class="card shadow mb-4">
+
+                                            <div class="card-body">
+                                                <div className="chart-pie pt-4 pb-2">
+                                                    <canvas ref={pieChartRef} id="myPieChart3"></canvas>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div> {/* end col */}
                                 <div className="col-xl-6">
                                     <div className="card-box">
                                         <div className="dropdown float-right">
-                                            <a href="#" className="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                                <i className="mdi mdi-dots-vertical" />
-                                            </a>
-                                            <div className="dropdown-menu dropdown-menu-right">
-                                                {/* item*/}
-                                                <a href="javascript:void(0);" className="dropdown-item">Edit Report</a>
-                                                {/* item*/}
-                                                <a href="javascript:void(0);" className="dropdown-item">Export Report</a>
-                                                {/* item*/}
-                                                <a href="javascript:void(0);" className="dropdown-item">Action</a>
-                                            </div>
+
                                         </div>
                                         <h4 className="header-title mb-3">Revenue History</h4>
                                         <div className="table-responsive">
-                                            <table className="table table-borderless table-nowrap table-hover table-centered m-0">
+                                            <table className="table table-btransactionless table-nowrap table-hover table-centered m-0">
                                                 <thead className="thead-light">
                                                     <tr>
-                                                        <th>Marketplaces</th>
+                                                        <th>Learner</th>
                                                         <th>Date</th>
                                                         <th>Payouts</th>
                                                         <th>Status</th>
-                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Themes Market</h5>
-                                                        </td>
-                                                        <td>
-                                                            Oct 15, 2018
-                                                        </td>
-                                                        <td>
-                                                            $5848.68
-                                                        </td>
-                                                        <td>
-                                                            <span className="badge bg-soft-warning text-warning">Upcoming</span>
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-pencil" /></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Freelance</h5>
-                                                        </td>
-                                                        <td>
-                                                            Oct 12, 2018
-                                                        </td>
-                                                        <td>
-                                                            $1247.25
-                                                        </td>
-                                                        <td>
-                                                            <span className="badge bg-soft-success text-success">Paid</span>
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-pencil" /></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Share Holding</h5>
-                                                        </td>
-                                                        <td>
-                                                            Oct 10, 2018
-                                                        </td>
-                                                        <td>
-                                                            $815.89
-                                                        </td>
-                                                        <td>
-                                                            <span className="badge bg-soft-success text-success">Paid</span>
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-pencil" /></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Envato's Affiliates</h5>
-                                                        </td>
-                                                        <td>
-                                                            Oct 03, 2018
-                                                        </td>
-                                                        <td>
-                                                            $248.75
-                                                        </td>
-                                                        <td>
-                                                            <span className="badge bg-soft-danger text-danger">Overdue</span>
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-pencil" /></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Marketing Revenue</h5>
-                                                        </td>
-                                                        <td>
-                                                            Sep 21, 2018
-                                                        </td>
-                                                        <td>
-                                                            $978.21
-                                                        </td>
-                                                        <td>
-                                                            <span className="badge bg-soft-warning text-warning">Upcoming</span>
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-pencil" /></a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <h5 className="m-0 font-weight-normal">Advertise Revenue</h5>
-                                                        </td>
-                                                        <td>
-                                                            Sep 15, 2018
-                                                        </td>
-                                                        <td>
-                                                            $358.10
-                                                        </td>
-                                                        <td>
-                                                            <span className="badge bg-soft-success text-success">Paid</span>
-                                                        </td>
-                                                        <td>
-                                                            <a href="javascript: void(0);" className="btn btn-xs btn-light"><i className="mdi mdi-pencil" /></a>
-                                                        </td>
-                                                    </tr>
+                                                    {currentTransactions.map((cus) => (
+                                                        <>
+                                                            <tr>
+                                                                <td>
+                                                                    <h5 className="m-0 font-weight-normal">{cus.learner.account.fullName}</h5>
+                                                                </td>
+                                                                <td>{cus.transactionDate}</td>
+                                                                <td>
+                                                                    ${cus.amount  / 24000}
+                                                                </td>
+                                                                <td>
+                                                                    <span className="badge bg-soft-warning text-warning">{cus.status}</span>
+                                                                </td>
+                                                                
+                                                            </tr>
+                                                            
+                                                        </>
+
+                                                    ))}
                                                 </tbody>
                                             </table>
                                         </div> {/* end .table-responsive*/}
@@ -460,22 +663,6 @@ const AdminDashboard = () => {
                         </div> {/* container */}
                     </div> {/* content */}
                     {/* Footer Start */}
-                    <footer className="footer">
-                        <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    2015 -  © UBold theme by <a href="#">Coderthemes</a>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="text-md-right footer-links d-none d-sm-block">
-                                        <a href="javascript:void(0);">About Us</a>
-                                        <a href="javascript:void(0);">Help</a>
-                                        <a href="javascript:void(0);">Contact Us</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </footer>
                     {/* end Footer */}
                 </div>
                 {/* ============================================================== */}

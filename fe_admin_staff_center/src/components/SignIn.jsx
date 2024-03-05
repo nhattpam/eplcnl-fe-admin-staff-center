@@ -202,7 +202,7 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                                     </div>
                                 </div>
                                 <div className="form-group mb-0 text-center">
-                                    <button className="btn btn-primary btn-block" type="submit">Log In </button>
+                                    <button className="btn btn-dark btn-block" type="submit">Log In </button>
                                 </div>
                             </form>
                             {/* Footer*/}
@@ -211,14 +211,15 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                 </div>
                 {/* end auth-fluid-form-box*/}
                 {/* Auth fluid right content */}
-                <div className="auth-fluid-right text-center">
+                <div className="auth-fluid-right text-center" style={{ backgroundImage: `url(/admin_login.jpg)`, backgroundSize: 'cover', height: '100vh' }}>
                     <div className="auth-user-testimonial">
-                        <h2 className="mb-3 text-white">I love the color!</h2>
+
+                        {/* <h2 className="mb-3 text-white">I love the color!</h2>
                         <p className="lead"><i className="mdi mdi-format-quote-open" /> I've been using your theme from the previous developer for our web app, once I knew new version is out, I immediately bought with no hesitation. Great themes, good documentation with lots of customization available and sample app that really fit our need. <i className="mdi mdi-format-quote-close" />
                         </p>
                         <h5 className="text-white">
                             - MeowLish developer
-                        </h5>
+                        </h5> */}
                     </div> {/* end auth-user-testimonial*/}
                 </div>
                 {/* end Auth fluid right content */}
