@@ -22,7 +22,7 @@ const AdminDashboard = () => {
     const [monthlyData, setMonthlyData] = useState([]);
     //list transaction
     const [transactionList, setTransactionList] = useState([]);
-    const [transactionsPerPage] = useState(2);
+    const [transactionsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
 
@@ -669,7 +669,6 @@ const AdminDashboard = () => {
                 {/* End Page content */}
                 {/* ============================================================== */}
 
-                <Footer />
             </div>
 
         </>
