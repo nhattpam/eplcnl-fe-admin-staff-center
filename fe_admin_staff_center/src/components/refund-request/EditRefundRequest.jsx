@@ -129,7 +129,7 @@ const EditRefundRequest = () => {
 
         navigate(`/list-refund`);
     };
-  
+
 
 
     const handleDisApproveRefund = () => {
@@ -175,8 +175,8 @@ const EditRefundRequest = () => {
                                         <label htmlFor="transactionId">Course Information:</label>
 
                                         <div className="table-responsive">
-                                            <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
-                                                <thead>
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                <thead className="thead-light">
                                                     <tr>
                                                         <th data-toggle="true">Image</th>
                                                         <th data-toggle="true">Code</th>

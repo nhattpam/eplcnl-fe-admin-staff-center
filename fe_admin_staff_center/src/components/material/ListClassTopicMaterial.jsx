@@ -64,8 +64,8 @@ const ListClassTopicMaterial = () => {
       <div id="wrapper">
         <Header />
         <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
-                    isStaff={sessionStorage.getItem('isStaff') === 'true'}
-                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />         {/* ============================================================== */}
+          isStaff={sessionStorage.getItem('isStaff') === 'true'}
+          isCenter={sessionStorage.getItem('isCenter') === 'true'} />         {/* ============================================================== */}
         {/* Start Page Content here */}
         {/* ============================================================== */}
         <div className="content-page">
@@ -95,7 +95,7 @@ const ListClassTopicMaterial = () => {
                           {/* <Link to={`/tutor/courses/create-class-material/${storedClassTopicId}`} className="btn btn-primary">
                             Add Material
                           </Link> */}
-                          
+
                           <div className="form-group">
                             <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" />
                           </div>
@@ -103,8 +103,8 @@ const ListClassTopicMaterial = () => {
                       </div>
                     </div>
                     <div className="table-responsive">
-                      <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
-                        <thead>
+                      <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                        <thead className="thead-light">
                           <tr>
                             <th data-toggle="true">No.</th>
                             <th data-toggle="true">Material Name</th>
@@ -117,7 +117,7 @@ const ListClassTopicMaterial = () => {
                         <tbody>
                           {currentLessonMaterials.map((material, index) => (
                             <tr key={material.id}>
-                              <td>{index+1}</td>
+                              <td>{index + 1}</td>
                               <td>{material.name}</td>
                               {/* <td>{material.materialUrl}</td> */}
                               <td>{material.createdDate}</td>
@@ -131,30 +131,30 @@ const ListClassTopicMaterial = () => {
                           ))}
 
 
-                      </tbody>
+                        </tbody>
 
-                    </table>
+                      </table>
 
-                  </div> {/* end .table-responsive*/}
+                    </div> {/* end .table-responsive*/}
 
-                </div> {/* end card-box */}
-                {currentLessonMaterials.length === 0 && (
-                  <p>No materials yet</p>
-                )}
-              </div> {/* end col */}
-            </div>
-            {/* end row */}
+                  </div> {/* end card-box */}
+                  {currentLessonMaterials.length === 0 && (
+                    <p>No materials yet</p>
+                  )}
+                </div> {/* end col */}
+              </div>
+              {/* end row */}
 
 
 
-          </div> {/* container */}
-        </div> {/* content */}
-      </div>
-      {/* ============================================================== */}
-      {/* End Page content */}
-      {/* ============================================================== */}
+            </div> {/* container */}
+          </div> {/* content */}
+        </div>
+        {/* ============================================================== */}
+        {/* End Page content */}
+        {/* ============================================================== */}
 
-    </div >
+      </div >
     </>
   )
 }

@@ -114,8 +114,8 @@ const ListAssignment = () => {
                                             </div>
                                         </div>
                                         <div className="table-responsive">
-                                            <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
-                                                <thead>
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                <thead className="thead-light">
                                                     <tr>
                                                         <th>No.</th>
                                                         <th>Time</th>
@@ -128,7 +128,7 @@ const ListAssignment = () => {
                                                 <tbody>
                                                     {currentAssignments.map((assignment, index) => (
                                                         <tr key={assignment.id}>
-                                                            <td>{index+1}</td>
+                                                            <td>{index + 1}</td>
                                                             <td>{assignment.deadline}</td>
                                                             <td>{assignment.questionText}</td>
                                                             <td>{assignment.createdDate}</td>

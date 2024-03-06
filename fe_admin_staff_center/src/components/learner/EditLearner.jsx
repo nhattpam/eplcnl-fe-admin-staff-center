@@ -141,7 +141,7 @@ const EditLearner = () => {
                     <div className="row">
                       <div className="col-md-8">
                         <div className="table-responsive">
-                          <table className="table table-bordered">
+                          <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-2" data-page-size={7}>
                             <tbody>
                               <tr>
                                 <th>Tutor Name:</th>
@@ -256,8 +256,8 @@ const EditLearner = () => {
                     <div className="form-group">
                       <label>Is Enrolling Courses:</label>
                       <div className="table-responsive">
-                        <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
-                          <thead>
+                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                          <thead className="thead-light">
                             <tr>
                               <th data-toggle="true">No.</th>
                               <th data-toggle="true">Course Image</th>
@@ -271,7 +271,7 @@ const EditLearner = () => {
                             {currentEnrollments.map((cus, index) => (
 
                               <tr>
-                                <td>{index+1}</td>
+                                <td>{index + 1}</td>
                                 <td>
                                   <img src={cus.course.imageUrl} style={{ height: '70px', width: '100px' }}>
 

@@ -88,7 +88,7 @@ const EditQuestion = () => {
 
                                     <form id="demo-form" data-parsley-validate>
                                         <div className="table-responsive">
-                                            <table className="table table-bordered">
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-2" data-page-size={7}>
                                                 <tbody>
                                                     {question.questionText !== "" && (
                                                         <tr>

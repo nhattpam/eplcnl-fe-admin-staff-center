@@ -183,7 +183,7 @@ const EditCenter = () => {
                                         <div className="row">
                                             <div className="col-md-8">
                                                 <div className="table-responsive">
-                                                    <table className="table table-bordered">
+                                                    <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-2" data-page-size={7}>
                                                         <tbody>
                                                             <tr>
                                                                 <th>Center Name:</th>
@@ -260,8 +260,8 @@ const EditCenter = () => {
                                             <label>Tutors:</label>
 
                                             <div className="table-responsive text-center">
-                                                <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
-                                                    <thead>
+                                                <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                    <thead className="thead-light">
                                                         <tr>
                                                             <th data-toggle="true">No.</th>
                                                             <th data-toggle="true">Image</th>
@@ -277,7 +277,7 @@ const EditCenter = () => {
                                                     <tbody>
                                                         {currentTutors.map((tutor, index) => (
                                                             <tr key={tutor.id}>
-                                                                <td>{index+1}</td>
+                                                                <td>{index + 1}</td>
                                                                 <td>
                                                                     <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
 

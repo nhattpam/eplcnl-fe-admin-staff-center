@@ -140,7 +140,7 @@ const EditCourse = () => {
 
                                     <form id="demo-form" data-parsley-validate onSubmit={(e) => submitCourse(e)}>
                                         <div className="table-responsive">
-                                            <table className="table table-bordered">
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-2" data-page-size={7}>
                                                 <tbody>
                                                     <tr>
                                                         <th>Course Name:</th>
@@ -169,7 +169,7 @@ const EditCourse = () => {
 
                                             <ul className="list-group">
                                                 {moduleList.map((module) => (
-                                                    <li key={module.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                    <li key={module.id} className="list-group-item d-flex justify-content-between align-items-center" style={{ border: 'none', borderBottom: '1px solid #dee2e6' }}>
                                                         {module.name}
                                                         <button
                                                             type="button"
@@ -183,7 +183,7 @@ const EditCourse = () => {
                                                 ))}
 
                                                 {classModuleList.map((module) => (
-                                                    <li key={module.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                    <li key={module.id} className="list-group-item d-flex justify-content-between align-items-center" style={{ border: 'none', borderBottom: '1px solid #dee2e6' }}>
                                                         {module.startDate !== null ? module.startDate.substring(0, 10) : "No start date"}
                                                         <button
                                                             type="button"
@@ -230,7 +230,7 @@ const EditCourse = () => {
                                                             <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
                                                     )}
-                                                    
+
                                                     {isStaff && (
                                                         <button
                                                             type="submit"

@@ -149,8 +149,8 @@ const MyWallet = () => {
                                         <label htmlFor="transactionId">Center Information:</label>
 
                                         <div className="table-responsive">
-                                            <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
-                                                <thead>
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                <thead className="thead-light">
                                                     <tr>
                                                         <th data-toggle="true">No.</th>
                                                         <th data-toggle="true">Center Name</th>
@@ -160,6 +160,7 @@ const MyWallet = () => {
                                                         <th>Is Managed By</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -236,8 +237,8 @@ const MyWallet = () => {
 
                                     <label htmlFor="transactionId" >Staff Information:</label>
                                     <div className="table-responsive">
-                                        <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
-                                            <thead>
+                                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                            <thead className="thead-light">
                                                 <tr>
                                                     <th data-toggle="true">No.</th>
                                                     <th data-toggle="true">Image</th>
@@ -248,6 +249,7 @@ const MyWallet = () => {
                                                     <th data-hide="phone, tablet">Phone Number</th>
                                                     <th data-hide="phone, tablet">Status</th>
                                                     <th>Action</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>

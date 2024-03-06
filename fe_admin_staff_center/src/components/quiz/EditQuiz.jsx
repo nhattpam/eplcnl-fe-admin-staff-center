@@ -81,7 +81,7 @@ const EditQuiz = () => {
 
                   <form id="demo-form" data-parsley-validate>
                     <div className="table-responsive">
-                      <table className="table table-bordered">
+                    <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
                         <tbody>
                           <tr>
                             <th>Quiz Name:</th>
@@ -108,7 +108,7 @@ const EditQuiz = () => {
 
                       <ul className="list-group">
                         {questionList.map((question) => (
-                          <li key={question.id} className="list-group-item d-flex justify-content-between align-items-center">
+                          <li key={question.id} className="list-group-item d-flex justify-content-between align-items-center" style={{ border: 'none', borderBottom: '1px solid #dee2e6' }}>
                             {question.questionImageUrl} {question.questionAudioUrl} {question.questionText}
                             <button
                               type="button"

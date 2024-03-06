@@ -117,8 +117,8 @@ const ListTutorByCenter = () => {
                                             </div>
                                         </div>
                                         <div className="table-responsive">
-                                            <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
-                                                <thead>
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                <thead className="thead-light">
                                                     <tr>
                                                         <th data-toggle="true">No.</th>
                                                         <th data-toggle="true">Image</th>
@@ -134,7 +134,7 @@ const ListTutorByCenter = () => {
                                                 <tbody>
                                                     {currentTutors.map((tutor, index) => (
                                                         <tr key={tutor.id}>
-                                                            <td>{index+1}</td>
+                                                            <td>{index + 1}</td>
                                                             <td>
                                                                 <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
 

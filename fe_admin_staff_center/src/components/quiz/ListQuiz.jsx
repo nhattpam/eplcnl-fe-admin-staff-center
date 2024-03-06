@@ -116,8 +116,8 @@ const ListQuiz = () => {
                                             </div>
                                         </div>
                                         <div className="table-responsive">
-                                            <table id="demo-foo-filtering" className="table table-bordered toggle-circle mb-0" data-page-size={7}>
-                                                <thead>
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                <thead className="thead-light">
                                                     <tr>
                                                         <th data-toggle="true">No.</th>
                                                         <th data-toggle="true">Quiz Name</th>
@@ -131,7 +131,7 @@ const ListQuiz = () => {
                                                 <tbody>
                                                     {currentQuizs.map((quiz, index) => (
                                                         <tr key={quiz.id}>
-                                                            <td>{index+1}</td>
+                                                            <td>{index + 1}</td>
                                                             <td>{quiz.name}</td>
                                                             <td>{quiz.gradeToPass}</td>
                                                             <td>{quiz.deadline}</td>
