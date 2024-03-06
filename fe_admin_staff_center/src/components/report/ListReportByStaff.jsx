@@ -56,6 +56,29 @@ const ListReportByStaff = () => {
     const offset = currentPage * ReportsPerPage;
     const currentReports = filteredReports.slice(offset, offset + ReportsPerPage);
 
+
+
+    //open reason
+    const [showReason, setShowReason] = useState(false);
+    const [expandedReasons, setExpandedReasons] = useState({});
+
+    //qualification
+    const openReasonModal = () => {
+        setExpandedReasons(true);
+
+    };
+
+    const closeReasonModal = () => {
+        setExpandedReasons(false);
+    };
+
+    const toggleReason = (id) => {
+        setExpandedReasons(prevState => ({
+            ...prevState,
+            [id]: !prevState[id]
+        }));
+    };
+
     return (
         <>
             <div id="wrapper">
@@ -102,41 +125,77 @@ const ListReportByStaff = () => {
                                             <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
                                                 <thead className="thead-light">
                                                     <tr>
-                                                        <th data-toggle="true">Report Id</th>
-                                                        <th>Learner</th>
-                                                        <th data-hide="phone, tablet">Reason</th>
-                                                        <th>Report Date</th>
+                                                        <th data-toggle="true">No.</th>
                                                         <th data-hide="phone">Course</th>
+                                                        <th>Learner</th>
+                                                        <th>Report Date</th>
                                                         {/* <th>Action</th> */}
+                                                        <th data-hide="phone, tablet">Reason</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentReports.map((cus) => (
-                                                        <tr key={cus.id}>
-                                                            <td>{cus.id}</td>
-                                                            <td>{cus.learner && cus.learner.account.fullName ? cus.learner.account.fullName : 'Unknown Name'}</td>
-                                                            <td>{cus.reason}</td>
-                                                            <td>{cus.reportedDate}</td>
-                                                            <td>
-                                                                <Link to={`/edit-course/${cus.course.id}`} className='text-success'>
-                                                                    {cus.course && cus.course.name ? cus.course.name : 'Unknown Name'}
-                                                                </Link>
-                                                            </td>
-                                                            {/* <td>
-                                                                <Link to={`/edit-report/${cus.id}`}>
-                                                                    <i className="fas fa-ban"></i>                                                                </Link>
-                                                            </td> */}
+                                                    {currentReports.map((cus, index) => (
+                                                        <>
+                                                            <tr key={cus.id}>
+                                                                <td>{index + 1}</td>
+                                                                <td>
+                                                                    <Link to={`/edit-course/${cus.course.id}`} className='text-success'>
+                                                                        {cus.course && cus.course.name ? cus.course.name : 'Unknown Name'}
+                                                                    </Link>
+                                                                </td>
+                                                                <td>{cus.learner && cus.learner.account.fullName ? cus.learner.account.fullName : 'Unknown Name'}</td>
+                                                                <td>{cus.reportedDate}</td>
 
-                                                        </tr>
+                                                                <td onClick={() => toggleReason(cus.id)}>
+                                                                    <i className="far fa-eye"></i>
+                                                                </td>
+
+                                                            </tr>
+                                                            {expandedReasons[cus.id] && (
+                                                                <>
+                                                                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+                                                                        <div className="modal-dialog modal-lg modal-dialog-centered" role="document"> {/* Added modal-dialog-centered class */}
+
+                                                                            <div className="modal-content">
+
+
+                                                                                <div className="modal-header">
+                                                                                    <h5 className="modal-title">Reason</h5>
+                                                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeReasonModal}>
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
+                                                                                    <div dangerouslySetInnerHTML={{ __html: cus.reason }}>
+
+                                                                                    </div>
+                                                                                    <div className="modal-footer">
+                                                                                        {/* Conditional rendering of buttons based on edit mode */}
+                                                                                        <button type="button" className="btn btn-secondary" onClick={closeReasonModal}>Close</button>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </>
+
+                                                            )}
+                                                        </>
+
+
                                                     ))}
                                                 </tbody>
 
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
+
                                     </div> {/* end card-box */}
                                 </div> {/* end col */}
                             </div>
+
                             {/* end row */}
                             {/* Pagination */}
                             <div className='container-fluid'>
@@ -189,6 +248,8 @@ const ListReportByStaff = () => {
                     background-color: #20c997;
                     border-color: #20c997;
                 }
+
+                
             `}
             </style>
         </>
