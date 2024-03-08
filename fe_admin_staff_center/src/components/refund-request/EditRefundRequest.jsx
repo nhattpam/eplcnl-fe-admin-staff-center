@@ -5,7 +5,6 @@ import Footer from '../Footer';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import refundRequestService from '../../services/refund-request.service';
 import transactionService from '../../services/transaction.service';
-import courseService from '../../services/course.service';
 import walletService from '../../services/wallet.service';
 import enrollmentService from '../../services/enrollment.service';
 import learnerService from '../../services/learner.service';
@@ -21,30 +20,19 @@ const EditRefundRequest = () => {
 
     const [refund, setRefund] = useState({
         id: "",
-        transactionId: "",
+        enrollmentId: "",
         requestedDate: "",
         approvedDate: "",
         status: "",
         reason: "",
+        enrollment: []
     });
 
-    const [transaction, setTransaction] = useState({
-        courseId: "",
-        amount: ""
+    const [enrollment, setEnrollment] = useState({
+        transactionId: "",
+        refundStatus: ""
     });
 
-    const [course, setCourse] = useState({
-        name: "",
-        description: "",
-        code: "",
-        imageUrl: "",
-        stockPrice: "",
-        rating: "",
-        category: "",
-        tags: "",
-        createdDate: "",
-        updatedDate: "",
-    });
 
 
     useEffect(() => {
@@ -53,6 +41,14 @@ const EditRefundRequest = () => {
                 .getRefundRequestById(refundId)
                 .then((res) => {
                     setRefund(res.data);
+                    enrollmentService
+                        .getEnrollmentById(res.data.enrollmentId)
+                        .then((res) => {
+                            setEnrollment(res.data);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
                 })
                 .catch((error) => {
                     console.log(error);
@@ -60,75 +56,48 @@ const EditRefundRequest = () => {
         }
     }, [refundId]);
 
-    useEffect(() => {
-        if (refund.transactionId) {
-            transactionService
-                .getTransactionById(refund.transactionId)
-                .then((res) => {
-                    setTransaction(res.data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    }, [refund.transactionId]);
-
-
-
-    useEffect(() => {
-        if (transaction.courseId) {
-            courseService
-                .getCourseById(transaction.courseId)
-                .then((res) => {
-                    setCourse(res.data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    }, [transaction.courseId]);
 
 
     //approve refund request
-    const handleApproveRefund = () => {
-
-        //tru tien admin
-        walletService.getWalletById("188e9df9-be4b-4531-858e-098ff8c3735c") //admin's wallet
-            .then((response) => {
-                const updatedWallet = {
-                    balance: response.data.balance - transaction.amount,
-                    accountId: "9b868733-8ab1-4191-92ab-65d1b82863c3"
-                }
-
-                //update admin wallet balance
-                walletService.updateWallet(response.data.id, updatedWallet);
-            })
-
-        //xoa enrollment chua learnerId va courseId thuoc ve transactionId
-        enrollmentService.deleteEnrollmentByLearnerIdAndCourseId(transaction.learnerId, transaction.courseId);
-
-        //update transaction refundStatus = true
-        transaction.refundStatus = true;
-        transactionService.updateTransaction(transaction.id, transaction);
-
-        //update refund status = APPROVE
-        refund.status = "APPROVED";
-        refundRequestService.updateRefundRequest(refundId, refund);
-        //update learner wallet balance
-        learnerService.getLearnerById(transaction.learnerId)
-            .then((response) => {
-                const updatedWallet = {
-                    balance: response.data.account.wallet.balance + transaction.amount,
-                    accountId: response.data.accountId
-                }
-
-                //update admin wallet balance
-                walletService.updateWallet(response.data.account.wallet.id, updatedWallet);
-            })
-
-
-        navigate(`/list-refund`);
+    const handleApproveRefund = async () => {
+        try {
+            // Get admin's wallet
+            const adminWalletResponse = await walletService.getWalletById("188e9df9-be4b-4531-858e-098ff8c3735c"); //admin's wallet
+            const adminWallet = adminWalletResponse.data;
+    
+            // Calculate updated admin wallet balance
+            const updatedAdminWallet = {
+                balance: adminWallet.balance - refund.enrollment.transaction.amount,
+                accountId: "9b868733-8ab1-4191-92ab-65d1b82863c3",
+            };
+    
+            // Update admin wallet balance
+            await walletService.updateWallet(adminWallet.id, updatedAdminWallet);
+    
+            // Update enrollment with refundStatus
+            const updatedEnrollment = { ...enrollment, refundStatus: true };
+            await enrollmentService.updateEnrollment(refund.enrollmentId, updatedEnrollment);
+    
+            // Set refund status to approved
+            const updatedRefund = { ...refund, status: "APPROVED" };
+            await refundRequestService.updateRefundRequest(refundId, updatedRefund);
+    
+            // Update learner wallet balance
+            const learnerResponse = await learnerService.getLearnerById(refund.enrollment.transaction.learnerId);
+            const learner = learnerResponse.data;
+            const updatedLearnerWallet = {
+                balance: learner.account.wallet.balance + refund.enrollment.transaction.amount,
+                accountId: learner.accountId,
+            };
+            await walletService.updateWallet(learner.account.wallet.id, updatedLearnerWallet);
+    
+            // Navigate to the list of refunds
+            navigate(`/list-refund`);
+        } catch (error) {
+            console.error("Error while approving refund:", error);
+        }
     };
+    
 
 
 
@@ -159,17 +128,21 @@ const EditRefundRequest = () => {
                         <div className="row">
                             <div className="col-12">
                                 <div className="card-box">
-                                    <h4 className="header-title">TRANSACTION INFORMATION</h4>
+                                    <h4 className="header-title">REFUND INFORMATION</h4>
 
                                     <form id="demo-form" data-parsley-validate>
                                         <div className="form-group">
-                                            <label htmlFor="transactionId">Transaction Id:</label>
+                                            <label htmlFor="transactionId">Enrollment Id:</label>
                                             <div>
-                                                <span>{refund.transactionId}</span>
+                                                <span>{refund.enrollmentId}</span>
                                             </div>
                                             <label htmlFor="transactionId" className='mt-1'>Amount:</label>
                                             <div>
-                                                <span>{transaction.amount} Vnd</span>
+                                                <span>{refund.enrollment?.transaction?.amount} Vnd</span>
+                                            </div>
+                                            <label htmlFor="transactionId" className='mt-1'>Requested Date:</label>
+                                            <div>
+                                                <span>{refund.requestedDate} </span>
                                             </div>
                                         </div>
                                         <label htmlFor="transactionId">Course Information:</label>
@@ -184,39 +157,39 @@ const EditRefundRequest = () => {
                                                         <th data-hide="phone">Price</th>
                                                         <th data-hide="phone, tablet">Rating</th>
                                                         <th data-hide="phone, tablet">Tags</th>
-                                                        <th data-hide="phone, tablet">Category</th>
                                                         <th data-hide="phone, tablet">Status</th>
-                                                        <th>Action</th>
+                                                        <th data-hide="phone, tablet"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
                                                     <tr>
                                                         <td>
-                                                            <img src={course.imageUrl} style={{ height: '70px', width: '100px' }}>
-
-                                                            </img>
+                                                            {refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && (
+                                                                <img src={refund.enrollment.transaction.course.imageUrl} style={{ height: '70px', width: '100px' }} alt="Course Image" />
+                                                            )}
                                                         </td>
-                                                        <td>{course.code}</td>
-                                                        <td>{course.name}</td>
-                                                        <td>{course.stockPrice}</td>
-                                                        <td>{course.rating}</td>
-                                                        <td>{course.tags}</td>
-                                                        <td>{course.category.name}</td>
+                                                        <td>{refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.code}</td>
+                                                        <td>{refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.name}</td>
+                                                        <td>{refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.stockPrice}$</td>
+                                                        <td>{refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.rating}</td>
+                                                        <td>{refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.tags}</td>
                                                         <td>
-                                                            {course.isActive ? (
+                                                            {refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.isActive ? (
                                                                 <span className="badge label-table badge-success">Active</span>
                                                             ) : (
                                                                 <span className="badge label-table badge-danger">Inactive</span>
                                                             )}
                                                         </td>
                                                         <td>
-                                                            <Link to={`/edit-course/${course.id}`} className='text-secondary'>
-                                                                <i class="fa-regular fa-eye"></i>
-                                                            </Link>
+                                                            {refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && (
+                                                                <Link to={`/edit-course/${refund.enrollment.transaction.course.id}`} className='text-secondary'>
+                                                                    <i className="fa-regular fa-eye"></i>
+                                                                </Link>
+                                                            )}
                                                         </td>
                                                     </tr>
                                                 </tbody>
+
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
@@ -247,7 +220,6 @@ const EditRefundRequest = () => {
 
                     </div> {/* container */}
                 </div>
-                <Footer />
             </div>
             <style>
                 {`

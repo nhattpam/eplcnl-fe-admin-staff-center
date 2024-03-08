@@ -4,6 +4,7 @@ import Footer from '../Footer'
 import Sidebar from '../Sidebar'
 import { Chart, PieController, ArcElement, registerables } from "chart.js";
 import transactionService from "../../services/transaction.service";
+import enrollmentService from "../../services/enrollment.service";
 
 const AdminDashboard = () => {
 
@@ -22,6 +23,7 @@ const AdminDashboard = () => {
     const [monthlyData, setMonthlyData] = useState([]);
     //list transaction
     const [transactionList, setTransactionList] = useState([]);
+    const [enrollmentList, setEnrollmentList] = useState([]);
     const [transactionsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
@@ -32,7 +34,7 @@ const AdminDashboard = () => {
         // countAppointments();
         fetchMonthlyData();
         fetchTransactions();
-        fetchTransactionsAndCalculateSum4();
+        fetchEnrollmentsAndCalculateSum4();
     }, []);
 
     useEffect(() => {
@@ -51,9 +53,8 @@ const AdminDashboard = () => {
     const fetchTransactions = async () => {
         try {
             const res = await transactionService.getAllTransaction();
-            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
 
-            const transactions = activeTransactions;
+            const transactions = res.data;
             setTransactionList(transactions);
 
         } catch (error) {
@@ -84,24 +85,24 @@ const AdminDashboard = () => {
     const currentTransactions = filteredTransactions.slice(offset, offset + transactionsPerPage);
 
     //Income by month
-    const fetchTransactionsAndCalculateSum = async () => {
+    const fetchEnrollmentsAndCalculateSum = async () => {
         try {
-            const res = await transactionService.getAllTransaction();
-            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+            const res = await enrollmentService.getAllEnrollment();
+            const activeEnrollments = res.data.filter((enrollment) => enrollment.refundStatus === false);
 
-            const transactions = activeTransactions;
+            const enrollments = activeEnrollments;
 
-            const sumForCurrentMonth = calculateSumByMonth(transactions);
+            const sumForCurrentMonth = calculateSumByMonth(enrollments);
             setSumForCurrentMonth(sumForCurrentMonth);
             console.log("Sum for current month:", sumForCurrentMonth);
         } catch (error) {
-            console.error("Error fetching transactions:", error);
+            console.error("Error fetching enrollments:", error);
         }
     };
 
-    fetchTransactionsAndCalculateSum();
+    fetchEnrollmentsAndCalculateSum();
 
-    const calculateSumByMonth = (transactions) => {
+    const calculateSumByMonth = (enrollments) => {
         // Get the current month
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth();
@@ -110,14 +111,14 @@ const AdminDashboard = () => {
         let sumForCurrentMonth = 0;
 
         // Iterate over each transaction
-        transactions.forEach((transaction) => {
+        enrollments.forEach((enrollment) => {
             // Extract the month from the transaction date
-            const transactionDate = new Date(transaction.transactionDate);
-            const transactionMonth = transactionDate.getMonth() + 1; // Add 1 to match the format of transaction month
+            const enrollmentDate = new Date(enrollment.enrolledDate);
+            const enrollmentMonth = enrollmentDate.getMonth() + 1; // Add 1 to match the format of transaction month
 
             // Check if the transaction belongs to the current month
-            if (transactionMonth === currentMonth + 1) { // Add 1 to match the format of current month
-                sumForCurrentMonth += transaction.amount / 24000; // Use the correct property name
+            if (enrollmentMonth === currentMonth + 1) { // Add 1 to match the format of current month
+                sumForCurrentMonth += enrollment.transaction.amount / 24000; // Use the correct property name
             }
         });
 
@@ -125,25 +126,26 @@ const AdminDashboard = () => {
     };
 
     //Income by year
-    const fetchTransactionsAndCalculateSum1 = async () => {
+    const fetchEnrollmentsAndCalculateSum1 = async () => {
         try {
-            const res = await transactionService.getAllTransaction();
-            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+            const res = await enrollmentService.getAllEnrollment();
+            const activeEnrollments = res.data.filter((enrollment) => enrollment.refundStatus === false);
 
-            const transactions = activeTransactions;
+            const enrollments = activeEnrollments;
 
-            const sumForCurrentYear = calculateSumByYear(transactions);
+
+            const sumForCurrentYear = calculateSumByYear(enrollments);
             setSumForCurrentYear(sumForCurrentYear);
             console.log("Sum for current year:", sumForCurrentYear);
         } catch (error) {
-            console.error("Error fetching transactions:", error);
+            console.error("Error fetching enrollments:", error);
         }
     };
 
-    fetchTransactionsAndCalculateSum1();
+    fetchEnrollmentsAndCalculateSum1();
 
 
-    const calculateSumByToday = (transactions) => {
+    const calculateSumByToday = (enrollments) => {
         // Get the current date
         const currentDate = new Date();
         const currentDay = currentDate.getDate();
@@ -152,20 +154,20 @@ const AdminDashboard = () => {
         let sumForToday = 0;
     
         // Iterate over each transaction
-        transactions.forEach((transaction) => {
+        enrollments.forEach((enrollment) => {
             // Extract the day from the transaction date
-            const transactionDay = new Date(transaction.transactionDate).getDate();
+            const transactionDay = new Date(enrollment.enrolledDate).getDate();
     
             // Check if the transaction occurred today
             if (transactionDay === currentDay) {
-                sumForToday += transaction.amount / 24000; // Assuming transaction.amount is the amount of the transaction
+                sumForToday += enrollment.transaction.amount / 24000; // Assuming transaction.amount is the amount of the transaction
             }
         });
     
         return sumForToday;
     };
 
-    const calculateSumByYear = (transactions) => {
+    const calculateSumByYear = (enrollments) => {
         // Get the current year
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
@@ -174,20 +176,20 @@ const AdminDashboard = () => {
         let sumForCurrentYear = 0;
 
         // Iterate over each transaction
-        transactions.forEach((transaction) => {
+        enrollments.forEach((enrollment) => {
             // Extract the year from the transaction date
-            const transactionYear = new Date(transaction.transactionDate).getFullYear();
+            const transactionYear = new Date(enrollment.enrolledDate).getFullYear();
 
             // Check if the transaction belongs to the current year
             if (transactionYear === currentYear) {
-                sumForCurrentYear += transaction.amount;
+                sumForCurrentYear += enrollment.transaction.amount;
             }
         });
 
         return sumForCurrentYear;
     };
 
-    const calculateSumByPreviousMonth = (transactions) => {
+    const calculateSumByPreviousMonth = (enrollments) => {
         // Get the current date
         const currentDate = new Date();
 
@@ -203,52 +205,53 @@ const AdminDashboard = () => {
         let sumForPreviousMonth = 0;
 
         // Iterate over each transaction
-        transactions.forEach((transaction) => {
+        enrollments.forEach((enrollment) => {
             // Extract the month from the transaction date
-            const transactionMonth = new Date(transaction.transactionDate).getMonth();
+            const transactionMonth = new Date(enrollment.enrolledDate).getMonth();
 
             // Check if the transaction belongs to the previous month
             if (transactionMonth === previousMonth) {
-                sumForPreviousMonth += transaction.amount / 24000;
+                sumForPreviousMonth += enrollment.transaction.amount / 24000;
             }
         });
 
         return sumForPreviousMonth;
     };
 
-    const fetchTransactionsAndCalculateSum3 = async () => {
+    const fetchEnrollmentsAndCalculateSum3 = async () => {
         try {
-            const res = await transactionService.getAllTransaction();
-            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+            const res = await enrollmentService.getAllEnrollment();
+            const activeEnrollments = res.data.filter((enrollment) => enrollment.refundStatus === false);
 
-            const transactions = activeTransactions;
+            const enrollments = activeEnrollments;
 
-            const sumForPreviousMonth = calculateSumByPreviousMonth(transactions);
+            const sumForPreviousMonth = calculateSumByPreviousMonth(enrollments);
             setSumForPreviousMonth(sumForPreviousMonth);
             console.log("Sum for previous month:", sumForPreviousMonth);
         } catch (error) {
-            console.error("Error fetching transactions:", error);
+            console.error("Error fetching enrollments:", error);
         }
     };
 
-    fetchTransactionsAndCalculateSum3();
+    fetchEnrollmentsAndCalculateSum3();
 
-    const fetchTransactionsAndCalculateSum4 = async () => {
+    const fetchEnrollmentsAndCalculateSum4 = async () => {
         try {
-            const res = await transactionService.getAllTransaction();
-            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+            const res = await enrollmentService.getAllEnrollment();
+            const activeEnrollments = res.data.filter((enrollment) => enrollment.refundStatus === false);
 
-            const transactions = activeTransactions;
+            const enrollments = activeEnrollments;
 
-            const sumForToday = calculateSumByToday(transactions);
+
+            const sumForToday = calculateSumByToday(enrollments);
             setSumForToday(sumForToday);
             console.log("Sum for today:", sumForToday);
         } catch (error) {
-            console.error("Error fetching transactions:", error);
+            console.error("Error fetching enrollments:", error);
         }
     };
 
-    fetchTransactionsAndCalculateSum4();
+    fetchEnrollmentsAndCalculateSum4();
 
     const createPieChart = () => {
         const pieChartCanvas = pieChartRef.current.getContext("2d");
@@ -297,31 +300,32 @@ const AdminDashboard = () => {
     //area chart
     const fetchMonthlyData = async () => {
         try {
-            const res = await transactionService.getAllTransaction();
-            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+            const res = await enrollmentService.getAllEnrollment();
+            const activeEnrollments = res.data.filter((enrollment) => enrollment.refundStatus === false);
 
-            const transactions = activeTransactions;
+            const enrollments = activeEnrollments;
+
             const currentYear = new Date().getFullYear();
 
             // Initialize an array to store monthly data
             const monthlyData = Array(12).fill(0);
 
             // Iterate over each transaction
-            transactions.forEach((transaction) => {
-                const transactionDate = new Date(transaction.transactionDate);
+            enrollments.forEach((enrollment) => {
+                const transactionDate = new Date(enrollment.enrolledDate);
                 const transactionYear = transactionDate.getFullYear();
                 const transactionMonth = transactionDate.getMonth();
 
                 // Check if the transaction belongs to the current year
                 if (transactionYear === currentYear) {
                     // Add the transaction's total price to the corresponding month's data
-                    monthlyData[transactionMonth] += transaction.amount / 24000;
+                    monthlyData[transactionMonth] += enrollment.transaction.amount / 24000;
                 }
             });
 
             setMonthlyData(monthlyData);
         } catch (error) {
-            console.error("Error fetching transactions:", error);
+            console.error("Error fetching enrollments:", error);
         }
     };
 

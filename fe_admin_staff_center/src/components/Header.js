@@ -131,7 +131,7 @@ const Header = () => {
                         <li className="dropdown notification-list topbar-dropdown">
                             <a className="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                 {isAdmin && (
-                                    <img src={`https://static.thenounproject.com/png/3324336-200.png`} alt="user-image" className="rounded-circle" />
+                                    <img src={account.imageUrl} alt="user-image" className="rounded-circle" />
                                 )}
                                 {isStaff && (
                                     <img src={account.imageUrl} alt="user-image" className="rounded-circle" />
