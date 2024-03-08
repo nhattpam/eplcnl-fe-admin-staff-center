@@ -268,27 +268,34 @@ const EditLearner = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {currentEnrollments.map((cus, index) => (
 
-                              <tr>
-                                <td>{index + 1}</td>
-                                <td>
-                                  <img src={cus.course.imageUrl} style={{ height: '70px', width: '100px' }}>
+                            {
+                              currentEnrollments.length > 0 && (
+                                currentEnrollments.map((cus, index) => (
 
-                                  </img>
-                                </td>
-                                <td>
-                                  <Link to={`/edit-course/${cus.courseId}`} className='text-success'>
-                                    {cus.course.name}
-                                  </Link>
-                                </td>
-                                {/* <td>{cus.name}</td> */}
-                                <td>{cus.enrolledDate}</td>
-                                <td>{cus.status}</td>
-                                <td>{cus.totalGrade}</td>
-                              </tr>
-                            ))}
+                                  <tr>
+                                    <td>{index + 1}</td>
+                                    <td>
+                                      <img src={cus.course.imageUrl} style={{ height: '70px', width: '100px' }}>
+
+                                      </img>
+                                    </td>
+                                    <td>
+                                      <Link to={`/edit-course/${cus.courseId}`} className='text-success'>
+                                        {cus.course.name}
+                                      </Link>
+                                    </td>
+                                    {/* <td>{cus.name}</td> */}
+                                    <td>{cus.enrolledDate}</td>
+                                    <td>{cus.status}</td>
+                                    <td>{cus.totalGrade}</td>
+                                  </tr>
+                                ))
+                              )
+                            }
+
                           </tbody>
+
 
                         </table>
                       </div> {/* end .table-responsive*/}
@@ -296,9 +303,18 @@ const EditLearner = () => {
                     </div>
 
                   </form>
+                  {
+                    currentEnrollments.length === 0 && (
+                      <p className='text-center'>Learner hasn't joined any courses yet.</p>
+                    )
+                  }
                 </div> {/* end card-box*/}
+
               </div> {/* end col*/}
+
+
             </div>
+
             {/* end row*/}
             {/* Pagination */}
             <div className='container-fluid'>
@@ -335,6 +351,7 @@ const EditLearner = () => {
             </div>
 
           </div> {/* container */}
+
         </div>
       </div>
       <style>

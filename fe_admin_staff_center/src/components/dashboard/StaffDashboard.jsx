@@ -276,40 +276,51 @@ const StaffDashboard = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentTutors.map((tutor, index) => (
-                                                        <tr>
-                                                            <td style={{ width: 36 }}>
-                                                                <img src={tutor.account.imageUrl} alt="contact-img" title="contact-img" className="rounded-circle avatar-sm" />
-                                                            </td>
-                                                            <td>
-                                                                <h5 className="m-0 font-weight-normal">{tutor.account.fullName}</h5>
-                                                            </td>
-                                                            <td>
-                                                                {tutor.account.address}
-                                                            </td>
-                                                            <td>
-                                                                {tutor.account.phoneNumber}
-                                                            </td>
-                                                            <td>
-                                                                {tutor.account.isActive ? (
-                                                                    <span className="badge label-table badge-success">Active</span>
-                                                                ) : (
-                                                                    <span className="badge label-table badge-danger">Inactive</span>
-                                                                )}
-                                                            </td>
-                                                            <td>
-                                                                {tutor.account.email}
-                                                            </td>
-                                                            <td>
-                                                                <Link to={`/edit-tutor/${tutor.account.id}`} className="btn btn-xs btn-light"><i className="mdi mdi-pencil" /></Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
+                                                    {
+                                                        currentTutors.length > 0 && (
+                                                            currentTutors.map((tutor, index) => (
+                                                                <tr>
+                                                                    <td style={{ width: 36 }}>
+                                                                        <img src={tutor.account.imageUrl} alt="contact-img" title="contact-img" className="rounded-circle avatar-sm" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <h5 className="m-0 font-weight-normal">{tutor.account.fullName}</h5>
+                                                                    </td>
+                                                                    <td>
+                                                                        {tutor.account.address}
+                                                                    </td>
+                                                                    <td>
+                                                                        {tutor.account.phoneNumber}
+                                                                    </td>
+                                                                    <td>
+                                                                        {tutor.account.isActive ? (
+                                                                            <span className="badge label-table badge-success">Active</span>
+                                                                        ) : (
+                                                                            <span className="badge label-table badge-danger">Inactive</span>
+                                                                        )}
+                                                                    </td>
+                                                                    <td>
+                                                                        {tutor.account.email}
+                                                                    </td>
+                                                                    <td>
+                                                                        <Link to={`/edit-tutor/${tutor.account.id}`} className="btn btn-xs btn-light"><i className="mdi mdi-pencil" /></Link>
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        )
+                                                    }
+
 
                                                 </tbody>
                                             </table>
                                         </div>
+
                                     </div>
+                                    {
+                                        currentTutors.length === 0 && (
+                                            <p>There are no Tutors.</p>
+                                        )
+                                    }
                                 </div> {/* end col */}
                                 <div className="col-xl-6">
                                     <div className="card-box">
@@ -329,31 +340,41 @@ const StaffDashboard = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    {
+                                                        currentCenters.length > 0 && (
+                                                            currentCenters.map((cus) => (
 
-                                                    {currentCenters.map((cus) => (
+                                                                <tr>
+                                                                    <td>
+                                                                        <h5 className="m-0 ">{cus.name}</h5>
+                                                                    </td>
+                                                                    <td>
+                                                                        <i className="mdi  text-primary" /> {cus.address}
+                                                                    </td>
+                                                                    <td>
+                                                                        {cus.phoneNumber}
+                                                                    </td>
+                                                                    <td>
+                                                                        {cus.email}
+                                                                    </td>
+                                                                    <td>
+                                                                        <Link to={`/edit-center/${cus.id}`} className="btn btn-xs btn-light"><i className="mdi mdi-pencil" /></Link>
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        )
+                                                    }
 
-                                                        <tr>
-                                                            <td>
-                                                                <h5 className="m-0 ">{cus.name}</h5>
-                                                            </td>
-                                                            <td>
-                                                                <i className="mdi  text-primary" /> {cus.address}
-                                                            </td>
-                                                            <td>
-                                                                {cus.phoneNumber}
-                                                            </td>
-                                                            <td>
-                                                                {cus.email}
-                                                            </td>
-                                                            <td>
-                                                                <Link to={`/edit-center/${cus.id}`} className="btn btn-xs btn-light"><i className="mdi mdi-pencil" /></Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
+
                                                 </tbody>
                                             </table>
                                         </div> {/* end .table-responsive*/}
                                     </div> {/* end card-box*/}
+                                    {
+                                        currentCenters.length === 0 && (
+                                            <p>There are no Centers.</p>
+                                        )
+                                    }
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

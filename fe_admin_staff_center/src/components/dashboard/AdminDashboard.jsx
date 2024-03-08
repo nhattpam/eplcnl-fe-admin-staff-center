@@ -149,21 +149,21 @@ const AdminDashboard = () => {
         // Get the current date
         const currentDate = new Date();
         const currentDay = currentDate.getDate();
-    
+
         // Initialize sum for today
         let sumForToday = 0;
-    
+
         // Iterate over each transaction
         enrollments.forEach((enrollment) => {
             // Extract the day from the transaction date
             const transactionDay = new Date(enrollment.enrolledDate).getDate();
-    
+
             // Check if the transaction occurred today
             if (transactionDay === currentDay) {
                 sumForToday += enrollment.transaction.amount / 24000; // Assuming transaction.amount is the amount of the transaction
             }
         });
-    
+
         return sumForToday;
     };
 
@@ -590,7 +590,7 @@ const AdminDashboard = () => {
                                 <div className="col-lg-8">
                                     <div className="card-box pb-2">
                                         <div className="float-right d-none d-md-inline-block">
-                                            
+
                                         </div>
                                         <h4 className="header-title mb-3">Sales Analytics</h4>
                                         <div dir="ltr">
@@ -638,29 +638,39 @@ const AdminDashboard = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentTransactions.map((cus) => (
-                                                        <>
-                                                            <tr>
-                                                                <td>
-                                                                    <h5 className="m-0 font-weight-normal">{cus.learner.account.fullName}</h5>
-                                                                </td>
-                                                                <td>{cus.transactionDate}</td>
-                                                                <td>
-                                                                    ${cus.amount  / 24000}
-                                                                </td>
-                                                                <td>
-                                                                    <span className="badge bg-soft-warning text-warning">{cus.status}</span>
-                                                                </td>
-                                                                
-                                                            </tr>
-                                                            
-                                                        </>
+                                                    {
+                                                        currentTransactions.length > 0 && (
+                                                            currentTransactions.map((cus) => (
+                                                                <>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <h5 className="m-0 font-weight-normal">{cus.learner.account.fullName}</h5>
+                                                                        </td>
+                                                                        <td>{cus.transactionDate}</td>
+                                                                        <td>
+                                                                            ${cus.amount / 24000}
+                                                                        </td>
+                                                                        <td>
+                                                                            <span className="badge bg-soft-warning text-warning">{cus.status}</span>
+                                                                        </td>
 
-                                                    ))}
+                                                                    </tr>
+
+                                                                </>
+
+                                                            ))
+                                                        )
+                                                    }
+
                                                 </tbody>
                                             </table>
                                         </div> {/* end .table-responsive*/}
                                     </div> {/* end card-box*/}
+                                    {
+                                        currentTransactions.length === 0 && (
+                                            <p>There are no Transactions.</p>
+                                        )
+                                    }
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

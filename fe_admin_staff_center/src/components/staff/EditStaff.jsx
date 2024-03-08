@@ -329,39 +329,47 @@ const EditStaff = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {currentCenters.map((cus, index) => (
-                              <tr key={cus.id}>
-                                <td>{index + 1}</td>
-                                <td>{cus.name}</td>
-                                <td>{cus.email}</td>
-                                <td>{cus.description}</td>
-                                <td>{cus.address}</td>
-                                <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
-                                <td>
-                                  {cus.isActive ? (
-                                    <span className="badge label-table badge-success">Active</span>
-                                  ) : (
-                                    <span className="badge label-table badge-danger">Inactive</span>
-                                  )}
-                                </td>
-                                <td>
-                                  <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
-                                    <i className="fa-regular fa-eye"></i>
-                                  </Link>
-                                </td>
-                                <td>
-                                  <Link to={`/list-tutor-by-center/${cus.id}`} className='text-dark'>
-                                    <i class="ti-more-alt"></i>
-                                  </Link>
-                                </td>
-                              </tr>
-                            ))}
+                            {
+                              currentCenters.length > 0 && (
+                                currentCenters.map((cus, index) => (
+                                  <tr key={cus.id}>
+                                    <td>{index + 1}</td>
+                                    <td>{cus.name}</td>
+                                    <td>{cus.email}</td>
+                                    <td>{cus.description}</td>
+                                    <td>{cus.address}</td>
+                                    <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
+                                    <td>
+                                      {cus.isActive ? (
+                                        <span className="badge label-table badge-success">Active</span>
+                                      ) : (
+                                        <span className="badge label-table badge-danger">Inactive</span>
+                                      )}
+                                    </td>
+                                    <td>
+                                      <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
+                                        <i className="fa-regular fa-eye"></i>
+                                      </Link>
+                                    </td>
+                                    <td>
+                                      <Link to={`/list-tutor-by-center/${cus.id}`} className='text-dark'>
+                                        <i class="ti-more-alt"></i>
+                                      </Link>
+                                    </td>
+                                  </tr>
+                                ))
+                              )
+                            }
+
                           </tbody>
-
-
                         </table>
                       </div> {/* end .table-responsive*/}
                     </div>
+                    {
+                      currentCenters.length === 0 && (
+                        <p>There are no centers.</p>
+                      )
+                    }
                     {/* Pagination */}
                     <div className='container-fluid'>
                       {/* Pagination */}
@@ -415,41 +423,51 @@ const EditStaff = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {currentTutors.map((tutor, index) => (
-                              <tr key={tutor.id}>
-                                <td>{index + 1}</td>
-                                <td>
-                                  <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+                            {
+                              currentTutors.length > 0 && (
+                                currentTutors.map((tutor, index) => (
+                                  <tr key={tutor.id}>
+                                    <td>{index + 1}</td>
+                                    <td>
+                                      <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
 
-                                  </img>
-                                </td>
-                                <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
-                                <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
-                                <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
-                                <td>
-                                  {tutor.account.isActive ? (
-                                    <span className="badge label-table badge-success">Active</span>
-                                  ) : (
-                                    <span className="badge label-table badge-danger">Inactive</span>
-                                  )}
-                                </td>
-                                <td>
-                                  <Link to={`/edit-tutor/${tutor.account.id}`} className='text-secondary'>
-                                    <i className="fa-regular fa-eye"></i>
-                                  </Link>
-                                </td>
-                                <td>
-                                  <Link to={`/list-course-by-tutor/${tutor.id}`} className='text-dark'>
-                                    <i class="ti-more-alt"></i>
+                                      </img>
+                                    </td>
+                                    <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
+                                    <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
+                                    <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
+                                    <td>
+                                      {tutor.account.isActive ? (
+                                        <span className="badge label-table badge-success">Active</span>
+                                      ) : (
+                                        <span className="badge label-table badge-danger">Inactive</span>
+                                      )}
+                                    </td>
+                                    <td>
+                                      <Link to={`/edit-tutor/${tutor.account.id}`} className='text-secondary'>
+                                        <i className="fa-regular fa-eye"></i>
+                                      </Link>
+                                    </td>
+                                    <td>
+                                      <Link to={`/list-course-by-tutor/${tutor.id}`} className='text-dark'>
+                                        <i class="ti-more-alt"></i>
 
-                                  </Link>
-                                </td>
-                              </tr>
-                            ))}
+                                      </Link>
+                                    </td>
+                                  </tr>
+                                ))
+                              )
+                            }
+
                           </tbody>
                         </table>
                       </div>
                     </div>
+                    {
+                      currentTutors.length === 0 && (
+                        <p>There are no tutors.</p>
+                      )
+                    }
                     {/* Pagination */}
                     <div className='container-fluid'>
                       {/* Pagination */}

@@ -107,45 +107,55 @@ const ListLearner = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentLearners.map((cus, index) => (
+                                                    {
+                                                        currentLearners.length > 0 && (
+                                                            currentLearners.map((cus, index) => (
 
-                                                        <tr>
-                                                            <td>{index + 1}</td>
-                                                            <td>
-                                                                <img src={cus.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+                                                                <tr>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>
+                                                                        <img src={cus.account.imageUrl} style={{ height: '70px', width: '50px' }}>
 
-                                                                </img>
-                                                            </td>
-                                                            <td>{cus.account?.fullName}</td>
-                                                            <td>{cus.account?.email}</td>
-                                                            <td>{cus.account && cus.account.dateOfBirth ? cus.account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
-                                                            <td>
-                                                                {cus.account.gender ? (
-                                                                    <span className="badge label-table badge-success">Male</span>
-                                                                ) : (
-                                                                    <span className="badge label-table badge-danger">Female</span>
-                                                                )}
-                                                            </td>
-                                                            <td>{cus.account && cus.account.phoneNumber ? cus.account.phoneNumber : 'Unknown Phone Number'}</td>
-                                                            <td>
-                                                                {cus.account.isActive ? (
-                                                                    <span className="badge label-table badge-success">Active</span>
-                                                                ) : (
-                                                                    <span className="badge label-table badge-danger">Inactive</span>
-                                                                )}
-                                                            </td>
-                                                            <td>
-                                                                <Link to={`/edit-learner/${cus.account.id}`} className='text-secondary'>
-                                                                    <i class="fa-regular fa-eye"></i>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
+                                                                        </img>
+                                                                    </td>
+                                                                    <td>{cus.account?.fullName}</td>
+                                                                    <td>{cus.account?.email}</td>
+                                                                    <td>{cus.account && cus.account.dateOfBirth ? cus.account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
+                                                                    <td>
+                                                                        {cus.account.gender ? (
+                                                                            <span className="badge label-table badge-success">Male</span>
+                                                                        ) : (
+                                                                            <span className="badge label-table badge-danger">Female</span>
+                                                                        )}
+                                                                    </td>
+                                                                    <td>{cus.account && cus.account.phoneNumber ? cus.account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                    <td>
+                                                                        {cus.account.isActive ? (
+                                                                            <span className="badge label-table badge-success">Active</span>
+                                                                        ) : (
+                                                                            <span className="badge label-table badge-danger">Inactive</span>
+                                                                        )}
+                                                                    </td>
+                                                                    <td>
+                                                                        <Link to={`/edit-learner/${cus.account.id}`} className='text-secondary'>
+                                                                            <i class="fa-regular fa-eye"></i>
+                                                                        </Link>
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        )
+                                                    }
+
                                                 </tbody>
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
                                     </div> {/* end card-box */}
+                                    {
+                                        currentLearners.length === 0 && (
+                                            <p>There are no Learners.</p>
+                                        )
+                                    }
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

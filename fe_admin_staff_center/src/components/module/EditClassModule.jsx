@@ -66,8 +66,8 @@ const EditClassModule = () => {
                                     <form id="demo-form" data-parsley-validate>
                                         <div className="form-group">
                                             <label htmlFor="name">Start Time </label>
-                                            <input type="text" className="form-control" 
-                                            name="startDate" id="startDate" value={module.startDate.substring(0, 10)} readOnly style={{width: '20%'}}/>
+                                            <input type="text" className="form-control"
+                                                name="startDate" id="startDate" value={module.startDate.substring(0, 10)} readOnly style={{ width: '20%' }} />
                                         </div>
 
                                         <div className="form-group">
@@ -86,18 +86,27 @@ const EditClassModule = () => {
 
                                         <div className="form-group">
                                             <h5>Topics</h5>
+                                            {
+                                                classTopicList.length > 0 && (
+                                                    classTopicList.map((classTopic) => (
+                                                        <ul>
+                                                            {classTopic.name} &nbsp;
+                                                            <Link to={`/edit-topic/${classTopic.id}`} className='text-secondary'>  <i class="fa-regular fa-eye"></i></Link>
+                                                        </ul>
+                                                    ))
+                                                )
+                                            }
 
-                                            {classTopicList.map((classTopic) => (
-                                                <ul>
-                                                    {classTopic.name} &nbsp;
-                                                    <Link to={`/edit-topic/${classTopic.id}`} className='text-secondary'>  <i class="fa-regular fa-eye"></i></Link>
-                                                </ul>
-                                            ))}
 
                                         </div>
 
                                     </form>
                                 </div> {/* end card-box*/}
+                                {
+                                    classTopicList.length === 0 && (
+                                        <p>There are no topics.</p>
+                                    )
+                                }
                             </div> {/* end col*/}
                         </div>
                         {/* end row*/}

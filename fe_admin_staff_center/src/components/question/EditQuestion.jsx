@@ -133,16 +133,21 @@ const EditQuestion = () => {
                                             <label>Answers:</label>
 
                                             <ul className="list-group">
-                                                {questionAnswerList.map((questionAnswer) => (
-                                                    <li key={questionAnswer.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                                        {questionAnswer.answerText}
-                                                        {/* <Link
-                                                            onClick={() => handleDeleteQuestionAnswer(questionAnswer.id)}
-                                                        >
-                                                            <i class="far fa-trash-alt"></i>
-                                                        </Link> */}
-                                                    </li>
-                                                ))}
+                                                {
+                                                    questionAnswerList.length > 0 && (
+                                                        questionAnswerList.map((questionAnswer) => (
+                                                            <li key={questionAnswer.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                                {questionAnswer.answerText}
+                                                                {/* <Link
+                                                                    onClick={() => handleDeleteQuestionAnswer(questionAnswer.id)}
+                                                                >
+                                                                    <i class="far fa-trash-alt"></i>
+                                                                </Link> */}
+                                                            </li>
+                                                        ))
+                                                    )
+                                                }
+
 
                                             </ul>
                                         </div>

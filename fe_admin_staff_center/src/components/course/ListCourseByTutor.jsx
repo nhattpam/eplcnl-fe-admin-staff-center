@@ -113,40 +113,50 @@ const ListCourseByTutor = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentCourses.map((cus, index) => (
+                                                    {
+                                                        currentCourses.length > 0 && (
+                                                            currentCourses.map((cus, index) => (
 
-                                                        <tr>
-                                                            <td>{index + 1}</td>
-                                                            <td>
-                                                                <img src={cus.imageUrl} style={{ height: '70px', width: '100px' }}>
+                                                                <tr>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>
+                                                                        <img src={cus.imageUrl} style={{ height: '70px', width: '100px' }}>
 
-                                                                </img>
-                                                            </td>
-                                                            <td>{cus.code}</td>
-                                                            <td>{cus.name}</td>
-                                                            <td>{cus.stockPrice}</td>
-                                                            <td>{cus.rating}</td>
-                                                            <td>{cus.tags}</td>
-                                                            <td>{cus.category.name}</td>
-                                                            <td>
-                                                                {cus.isActive ? (
-                                                                    <span className="badge label-table badge-success">Active</span>
-                                                                ) : (
-                                                                    <span className="badge label-table badge-danger">Inactive</span>
-                                                                )}
-                                                            </td>
-                                                            <td>
-                                                                <Link to={`/edit-course/${cus.id}`} className='text-secondary'>
-                                                                    <i class="fa-regular fa-eye"></i>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
+                                                                        </img>
+                                                                    </td>
+                                                                    <td>{cus.code}</td>
+                                                                    <td>{cus.name}</td>
+                                                                    <td>{cus.stockPrice}</td>
+                                                                    <td>{cus.rating}</td>
+                                                                    <td>{cus.tags}</td>
+                                                                    <td>{cus.category.name}</td>
+                                                                    <td>
+                                                                        {cus.isActive ? (
+                                                                            <span className="badge label-table badge-success">Active</span>
+                                                                        ) : (
+                                                                            <span className="badge label-table badge-danger">Inactive</span>
+                                                                        )}
+                                                                    </td>
+                                                                    <td>
+                                                                        <Link to={`/edit-course/${cus.id}`} className='text-secondary'>
+                                                                            <i class="fa-regular fa-eye"></i>
+                                                                        </Link>
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        )
+                                                    }
+
                                                 </tbody>
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
                                     </div> {/* end card-box */}
+                                    {
+                                        currentCourses.length === 0 && (
+                                            <p>There are no Courses.</p>
+                                        )
+                                    }
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

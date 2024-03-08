@@ -115,21 +115,24 @@ const ListClassTopicMaterial = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {currentLessonMaterials.map((material, index) => (
-                            <tr key={material.id}>
-                              <td>{index + 1}</td>
-                              <td>{material.name}</td>
-                              {/* <td>{material.materialUrl}</td> */}
-                              <td>{material.createdDate}</td>
-                              <td>{material.updatedDate}</td>
-                              {/* <td>
-                                <Link to={`/tutor/courses/edit-class-material/${material.id}`}>
-                                  <i class="fas fa-trash-alt"></i>
-                              </Link>
-                            </td> */}
-                            </tr>
-                          ))}
-
+                          {
+                            currentLessonMaterials.length > 0 && (
+                              currentLessonMaterials.map((material, index) => (
+                                <tr key={material.id}>
+                                  <td>{index + 1}</td>
+                                  <td>{material.name}</td>
+                                  {/* <td>{material.materialUrl}</td> */}
+                                  <td>{material.createdDate}</td>
+                                  <td>{material.updatedDate}</td>
+                                  {/* <td>
+                                    <Link to={`/tutor/courses/edit-class-material/${material.id}`}>
+                                      <i class="fas fa-trash-alt"></i>
+                                  </Link>
+                                </td> */}
+                                </tr>
+                              ))
+                            )
+                          }
 
                         </tbody>
 
@@ -139,7 +142,7 @@ const ListClassTopicMaterial = () => {
 
                   </div> {/* end card-box */}
                   {currentLessonMaterials.length === 0 && (
-                    <p>No materials yet</p>
+                    <p>No materials yet.</p>
                   )}
                 </div> {/* end col */}
               </div>

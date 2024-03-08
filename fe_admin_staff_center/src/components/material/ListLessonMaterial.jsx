@@ -139,7 +139,7 @@ const ListLessonMaterial = () => {
 
                   </div> {/* end card-box */}
                   {currentLessonMaterials.length === 0 && (
-                    <p>No materials yet</p>
+                    <p>No materials yet.</p>
                   )}
                 </div> {/* end col */}
               </div>

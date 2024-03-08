@@ -129,26 +129,36 @@ const ListQuiz = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentQuizs.map((quiz, index) => (
-                                                        <tr key={quiz.id}>
-                                                            <td>{index + 1}</td>
-                                                            <td>{quiz.name}</td>
-                                                            <td>{quiz.gradeToPass}</td>
-                                                            <td>{quiz.deadline}</td>
-                                                            <td>{quiz.createdDate}</td>
-                                                            <td>{quiz.updatedDate}</td>
-                                                            <td>
-                                                                <Link to={`/edit-quiz/${quiz.id}`} className='text-secondary'>
-                                                                    <i class="fa-regular fa-eye"></i>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
+                                                    {
+                                                        currentQuizs.length > 0 && (
+                                                            currentQuizs.map((quiz, index) => (
+                                                                <tr key={quiz.id}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>{quiz.name}</td>
+                                                                    <td>{quiz.gradeToPass}</td>
+                                                                    <td>{quiz.deadline}</td>
+                                                                    <td>{quiz.createdDate}</td>
+                                                                    <td>{quiz.updatedDate}</td>
+                                                                    <td>
+                                                                        <Link to={`/edit-quiz/${quiz.id}`} className='text-secondary'>
+                                                                            <i class="fa-regular fa-eye"></i>
+                                                                        </Link>
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        )
+                                                    }
+
                                                 </tbody>
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
                                     </div> {/* end card-box */}
+                                    {
+                                        currentQuizs.length === 0 && (
+                                            <p>There are no quizzes.</p>
+                                        )
+                                    }
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

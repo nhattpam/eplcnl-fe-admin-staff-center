@@ -131,25 +131,35 @@ const ListTopic = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {currentClassTopics.map((classTopic, index) => (
-                            <tr key={classTopic.id}>
-                              <td>{index + 1}</td>
-                              <td>{classTopic.name}</td>
-                              <td>{classTopic.description}</td>
-                              <td>{classTopic.createdDate}</td>
-                              <td>{classTopic.updatedDate}</td>
-                              <td>
-                                <Link to={`/edit-topic/${classTopic.id}`} className='text-secondary'>
-                                  <i class="fa-regular fa-eye"></i>
-                                </Link>
-                              </td>
-                            </tr>
-                          ))}
+                          {
+                            currentClassTopics.length > 0 && (
+                              currentClassTopics.map((classTopic, index) => (
+                                <tr key={classTopic.id}>
+                                  <td>{index + 1}</td>
+                                  <td>{classTopic.name}</td>
+                                  <td>{classTopic.description}</td>
+                                  <td>{classTopic.createdDate}</td>
+                                  <td>{classTopic.updatedDate}</td>
+                                  <td>
+                                    <Link to={`/edit-topic/${classTopic.id}`} className='text-secondary'>
+                                      <i class="fa-regular fa-eye"></i>
+                                    </Link>
+                                  </td>
+                                </tr>
+                              ))
+                            )
+                          }
+
                         </tbody>
 
                       </table>
                     </div> {/* end .table-responsive*/}
                   </div> {/* end card-box */}
+                  {
+                    currentClassTopics.length === 0 && (
+                      <p>There are no topics.</p>
+                    )
+                  }
                 </div> {/* end col */}
               </div>
               {/* end row */}

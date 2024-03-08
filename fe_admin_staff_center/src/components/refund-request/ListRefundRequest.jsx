@@ -107,38 +107,49 @@ const ListRefundRequest = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentRefunds.map((cus, index) => (
+                                                    {
+                                                        currentRefunds.length > 0 && (
+                                                            currentRefunds.map((cus, index) => (
 
-                                                        <tr>
-                                                            <td>{index + 1}</td>
-                                                            <td>{cus.requestedDate}</td>
-                                                            <td >{cus.approvedDate}</td>
-                                                            <td dangerouslySetInnerHTML={{ __html: cus.reason }} className='text-truncate'></td>
-                                                            <td>
-                                                                {cus.status === "APPROVED" && (
-                                                                    <span className="badge label-table badge-success">APPROVED</span>
-                                                                )
-                                                                }
-                                                                {cus.status === "DISAPPROVED" && (
-                                                                    <span className="badge label-table badge-danger">DISAPPROVED</span>
-                                                                )
-                                                                }
-                                                                {cus.status === "PROCESSING" && (
-                                                                    <span className="badge label-table badge-danger">PROCESSING</span>
-                                                                )}
-                                                            </td>
-                                                            <td>
-                                                                <Link to={`/edit-refund/${cus.id}`} className='text-secondary'>
-                                                                    <i class="fa-regular fa-eye"></i>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
+                                                                <tr>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>{cus.requestedDate}</td>
+                                                                    <td >{cus.approvedDate}</td>
+                                                                    <td dangerouslySetInnerHTML={{ __html: cus.reason }} className='text-truncate'></td>
+                                                                    <td>
+                                                                        {cus.status === "APPROVED" && (
+                                                                            <span className="badge label-table badge-success">APPROVED</span>
+                                                                        )
+                                                                        }
+                                                                        {cus.status === "DISAPPROVED" && (
+                                                                            <span className="badge label-table badge-danger">DISAPPROVED</span>
+                                                                        )
+                                                                        }
+                                                                        {cus.status === "PROCESSING" && (
+                                                                            <span className="badge label-table badge-danger">PROCESSING</span>
+                                                                        )}
+                                                                    </td>
+                                                                    <td>
+                                                                        <Link to={`/edit-refund/${cus.id}`} className='text-secondary'>
+                                                                            <i class="fa-regular fa-eye"></i>
+                                                                        </Link>
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        )
+                                                    }
+
                                                 </tbody>
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
+
                                     </div> {/* end card-box */}
+                                    {
+                                        currentRefunds.length === 0 && (
+                                            <p>There are no refund requests.</p>
+                                        )
+                                    }
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}
