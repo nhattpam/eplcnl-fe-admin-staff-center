@@ -118,34 +118,32 @@ const ListCenterByStaff = () => {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        currentCenters.length > 0 && (
-                                                            currentCenters.map((cus) => (
-                                                                <tr key={cus.id}>
-                                                                    <td>{cus.name}</td>
-                                                                    <td>{cus.email}</td>
-                                                                    <td>{cus.description}</td>
-                                                                    <td>{cus.address}</td>
-                                                                    <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
-                                                                    <td>
-                                                                        {cus.isActive ? (
-                                                                            <span className="badge label-table badge-success">Active</span>
-                                                                        ) : (
-                                                                            <span className="badge label-table badge-danger">Inactive</span>
-                                                                        )}
-                                                                    </td>
-                                                                    <td>
-                                                                        <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
-                                                                            <i className="fa-regular fa-eye"></i>
-                                                                        </Link>
-                                                                    </td>
-                                                                    {/* <td>
+                                                        currentCenters.length > 0 && currentCenters.map((cus) => (
+                                                            <tr key={cus.id}>
+                                                                <td>{cus.name}</td>
+                                                                <td>{cus.email}</td>
+                                                                <td>{cus.description}</td>
+                                                                <td>{cus.address}</td>
+                                                                <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
+                                                                <td>
+                                                                    {cus.isActive ? (
+                                                                        <span className="badge label-table badge-success">Active</span>
+                                                                    ) : (
+                                                                        <span className="badge label-table badge-danger">Inactive</span>
+                                                                    )}
+                                                                </td>
+                                                                <td>
+                                                                    <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
+                                                                        <i className="fa-regular fa-eye"></i>
+                                                                    </Link>
+                                                                </td>
+                                                                {/* <td>
                                                                         <Link to={`/list-tutor-by-center/${cus.id}`} className='text-dark'>
                                                                             <i class="ti-more-alt"></i>
                                                                         </Link>
                                                                     </td> */}
-                                                                </tr>
-                                                            ))
-                                                        )
+                                                            </tr>
+                                                        ))
 
                                                     }
 

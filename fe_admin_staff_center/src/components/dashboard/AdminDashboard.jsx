@@ -639,27 +639,25 @@ const AdminDashboard = () => {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        currentTransactions.length > 0 && (
-                                                            currentTransactions.map((cus) => (
-                                                                <>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <h5 className="m-0 font-weight-normal">{cus.learner.account.fullName}</h5>
-                                                                        </td>
-                                                                        <td>{cus.transactionDate}</td>
-                                                                        <td>
-                                                                            ${cus.amount / 24000}
-                                                                        </td>
-                                                                        <td>
-                                                                            <span className="badge bg-soft-warning text-warning">{cus.status}</span>
-                                                                        </td>
+                                                        currentTransactions.length > 0 && currentTransactions.map((cus) => (
+                                                            <>
+                                                                <tr>
+                                                                    <td>
+                                                                        <h5 className="m-0 font-weight-normal">{cus.learner.account.fullName}</h5>
+                                                                    </td>
+                                                                    <td>{cus.transactionDate}</td>
+                                                                    <td>
+                                                                        ${cus.amount / 24000}
+                                                                    </td>
+                                                                    <td>
+                                                                        <span className="badge bg-soft-warning text-warning">{cus.status}</span>
+                                                                    </td>
 
-                                                                    </tr>
+                                                                </tr>
 
-                                                                </>
+                                                            </>
 
-                                                            ))
-                                                        )
+                                                        ))
                                                     }
 
                                                 </tbody>

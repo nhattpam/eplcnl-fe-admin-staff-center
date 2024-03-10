@@ -8,6 +8,8 @@ import transactionService from '../../services/transaction.service';
 import walletService from '../../services/wallet.service';
 import enrollmentService from '../../services/enrollment.service';
 import learnerService from '../../services/learner.service';
+import walletHistoryService from '../../services/wallet-history.service';
+import refundRequestHistoryService from '../../services/refund-request-history.service';
 
 const EditRefundRequest = () => {
 
@@ -56,6 +58,17 @@ const EditRefundRequest = () => {
         }
     }, [refundId]);
 
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+    useEffect(() => {
+      // Function to update currentDateTime every second
+      const interval = setInterval(() => {
+        setCurrentDateTime(new Date());
+      }, 1000);
+  
+      // Clean-up function to clear the interval when the component unmounts
+      return () => clearInterval(interval);
+    }, []); 
 
 
     //approve refund request
@@ -64,40 +77,63 @@ const EditRefundRequest = () => {
             // Get admin's wallet
             const adminWalletResponse = await walletService.getWalletById("188e9df9-be4b-4531-858e-098ff8c3735c"); //admin's wallet
             const adminWallet = adminWalletResponse.data;
-    
+
             // Calculate updated admin wallet balance
             const updatedAdminWallet = {
-                balance: adminWallet.balance - refund.enrollment.transaction.amount,
+                balance: adminWallet.balance - (refund.enrollment.transaction.amount / 24000),
                 accountId: "9b868733-8ab1-4191-92ab-65d1b82863c3",
             };
-    
+
             // Update admin wallet balance
             await walletService.updateWallet(adminWallet.id, updatedAdminWallet);
-    
+
+            const walletHistory = {
+                walletId: adminWallet.id,
+                note: `-${refund.enrollment.transaction.amount / 24000}$ for returning learner ${refund.enrollment.transaction.learner.account.fullName} by refund request ${refund.id}  at ${currentDateTime.toLocaleString()}`,
+            }
+
+            await walletHistoryService.saveWalletHistory(walletHistory);
+
             // Update enrollment with refundStatus
             const updatedEnrollment = { ...enrollment, refundStatus: true };
             await enrollmentService.updateEnrollment(refund.enrollmentId, updatedEnrollment);
-    
+
             // Set refund status to approved
             const updatedRefund = { ...refund, status: "APPROVED" };
             await refundRequestService.updateRefundRequest(refundId, updatedRefund);
-    
+
+            //create refund history
+            const refundHistory = {
+                refundRequestId: refundId,
+                amount: refund.enrollment.transaction.amount / 24000,
+                note: `MeowLish return ${refund.enrollment.transaction.amount / 24000}$ to learner ${refund.enrollment.transaction.learner.account.fullName} for course ${refund.enrollment.transaction.course.name} at ${currentDateTime.toLocaleString()}`,
+            }
+
+            await refundRequestHistoryService.saveRefundHistory(refundHistory);
+
             // Update learner wallet balance
             const learnerResponse = await learnerService.getLearnerById(refund.enrollment.transaction.learnerId);
             const learner = learnerResponse.data;
             const updatedLearnerWallet = {
-                balance: learner.account.wallet.balance + refund.enrollment.transaction.amount,
+                balance: learner.account.wallet.balance + (refund.enrollment.transaction.amount / 24000),
                 accountId: learner.accountId,
             };
             await walletService.updateWallet(learner.account.wallet.id, updatedLearnerWallet);
-    
+
+            const walletHistory2 = {
+                walletId: learner.account.wallet.id,
+                note: `+${refund.enrollment.transaction.amount / 24000}$ from MeowLish by refund request for course ${refund.enrollment.transaction.course.name} at ${currentDateTime.toLocaleString()}`,
+            }
+
+            await walletHistoryService.saveWalletHistory(walletHistory2);
+
             // Navigate to the list of refunds
             navigate(`/list-refund`);
         } catch (error) {
             console.error("Error while approving refund:", error);
         }
     };
-    
+
 
 
 
@@ -138,7 +174,7 @@ const EditRefundRequest = () => {
                                             </div>
                                             <label htmlFor="transactionId" className='mt-1'>Amount:</label>
                                             <div>
-                                                <span>{refund.enrollment?.transaction?.amount} Vnd</span>
+                                                <span>{refund.enrollment?.transaction?.amount / 24000} dollars</span>
                                             </div>
                                             <label htmlFor="transactionId" className='mt-1'>Requested Date:</label>
                                             <div>

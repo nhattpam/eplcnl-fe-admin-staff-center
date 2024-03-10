@@ -112,39 +112,37 @@ const ListTransaction = () => {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        currentTransactions.length > 0 && (
-                                                            currentTransactions.map((cus) => (
+                                                        currentTransactions.length > 0 && currentTransactions.map((cus) => (
 
-                                                                <tr>
-                                                                    <td>
-                                                                        <img src={cus.course.imageUrl} style={{ height: '70px', width: '100px' }}>
+                                                            <tr>
+                                                                <td>
+                                                                    <img src={cus.course.imageUrl} style={{ height: '70px', width: '100px' }}>
 
-                                                                        </img>
-                                                                    </td>
-                                                                    <td>
-                                                                        <Link to={`/edit-course/${cus.course.id}`} className='text-secondary'>
-                                                                            {cus.course.name}
-                                                                        </Link></td>
-                                                                    <td>{cus.course.stockPrice}</td>
-                                                                    <td>
-                                                                        <span className={`badge ${cus.course.isOnlineClass ? 'badge-success' : 'badge-danger'}`}>{cus.isOnlineClass ? 'Class' : 'Video'}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <Link to={`/edit-learner/${cus.learner.account.id}`} className='text-secondary'>
-                                                                            {cus.learner.account.fullName}
-                                                                        </Link></td>
-                                                                    <td>{cus.transactionDate}</td>
-                                                                    <td>{cus.paymentMethod.name}</td>
-                                                                    <td>{cus.status}</td>
+                                                                    </img>
+                                                                </td>
+                                                                <td>
+                                                                    <Link to={`/edit-course/${cus.course.id}`} className='text-secondary'>
+                                                                        {cus.course.name}
+                                                                    </Link></td>
+                                                                <td>{cus.course.stockPrice}</td>
+                                                                <td>
+                                                                    <span className={`badge ${cus.course.isOnlineClass ? 'badge-success' : 'badge-danger'}`}>{cus.isOnlineClass ? 'Class' : 'Video'}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <Link to={`/edit-learner/${cus.learner.account.id}`} className='text-secondary'>
+                                                                        {cus.learner.account.fullName}
+                                                                    </Link></td>
+                                                                <td>{cus.transactionDate}</td>
+                                                                <td>{cus.paymentMethod.name}</td>
+                                                                <td>{cus.status}</td>
 
-                                                                    <td>
-                                                                        <Link to={`/edit-course/${cus.course.id}`} className='text-secondary'>
-                                                                            <i class="fa-regular fa-eye"></i>
-                                                                        </Link>
-                                                                    </td>
-                                                                </tr>
-                                                            ))
-                                                        )
+                                                                <td>
+                                                                    <Link to={`/edit-course/${cus.course.id}`} className='text-secondary'>
+                                                                        <i class="fa-regular fa-eye"></i>
+                                                                    </Link>
+                                                                </td>
+                                                            </tr>
+                                                        ))
                                                     }
 
                                                 </tbody>

@@ -87,14 +87,12 @@ const EditClassModule = () => {
                                         <div className="form-group">
                                             <h5>Topics</h5>
                                             {
-                                                classTopicList.length > 0 && (
-                                                    classTopicList.map((classTopic) => (
-                                                        <ul>
-                                                            {classTopic.name} &nbsp;
-                                                            <Link to={`/edit-topic/${classTopic.id}`} className='text-secondary'>  <i class="fa-regular fa-eye"></i></Link>
-                                                        </ul>
-                                                    ))
-                                                )
+                                                classTopicList.length > 0 && classTopicList.map((classTopic) => (
+                                                    <ul>
+                                                        {classTopic.name} &nbsp;
+                                                        <Link to={`/edit-topic/${classTopic.id}`} className='text-secondary'>  <i class="fa-regular fa-eye"></i></Link>
+                                                    </ul>
+                                                ))
                                             }
 
 

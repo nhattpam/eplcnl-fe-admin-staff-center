@@ -135,60 +135,58 @@ const ListReportByStaff = () => {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        currentReports.length > 0 && (
-                                                            currentReports.map((cus, index) => (
-                                                                <>
-                                                                    <tr key={cus.id}>
-                                                                        <td>{index + 1}</td>
-                                                                        <td>
-                                                                            <Link to={`/edit-course/${cus.course.id}`} className='text-success'>
-                                                                                {cus.course && cus.course.name ? cus.course.name : 'Unknown Name'}
-                                                                            </Link>
-                                                                        </td>
-                                                                        <td>{cus.learner && cus.learner.account.fullName ? cus.learner.account.fullName : 'Unknown Name'}</td>
-                                                                        <td>{cus.reportedDate}</td>
+                                                        currentReports.length > 0 && currentReports.map((cus, index) => (
+                                                            <>
+                                                                <tr key={cus.id}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>
+                                                                        <Link to={`/edit-course/${cus.course.id}`} className='text-success'>
+                                                                            {cus.course && cus.course.name ? cus.course.name : 'Unknown Name'}
+                                                                        </Link>
+                                                                    </td>
+                                                                    <td>{cus.learner && cus.learner.account.fullName ? cus.learner.account.fullName : 'Unknown Name'}</td>
+                                                                    <td>{cus.reportedDate}</td>
 
-                                                                        <td onClick={() => toggleReason(cus.id)}>
-                                                                            <i className="far fa-eye"></i>
-                                                                        </td>
+                                                                    <td onClick={() => toggleReason(cus.id)}>
+                                                                        <i className="far fa-eye"></i>
+                                                                    </td>
 
-                                                                    </tr>
-                                                                    {expandedReasons[cus.id] && (
-                                                                        <>
-                                                                            <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
-                                                                                <div className="modal-dialog modal-lg modal-dialog-centered" role="document"> {/* Added modal-dialog-centered class */}
+                                                                </tr>
+                                                                {expandedReasons[cus.id] && (
+                                                                    <>
+                                                                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+                                                                            <div className="modal-dialog modal-lg modal-dialog-centered" role="document"> {/* Added modal-dialog-centered class */}
 
-                                                                                    <div className="modal-content">
+                                                                                <div className="modal-content">
 
 
-                                                                                        <div className="modal-header">
-                                                                                            <h5 className="modal-title">Reason</h5>
-                                                                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeReasonModal}>
-                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                            </button>
-                                                                                        </div>
-                                                                                        <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
-                                                                                            <div dangerouslySetInnerHTML={{ __html: cus.reason }}>
-
-                                                                                            </div>
-                                                                                            <div className="modal-footer">
-                                                                                                {/* Conditional rendering of buttons based on edit mode */}
-                                                                                                <button type="button" className="btn btn-secondary" onClick={closeReasonModal}>Close</button>
-                                                                                            </div>
-                                                                                        </div>
-
+                                                                                    <div className="modal-header">
+                                                                                        <h5 className="modal-title">Reason</h5>
+                                                                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeReasonModal}>
+                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                        </button>
                                                                                     </div>
+                                                                                    <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
+                                                                                        <div dangerouslySetInnerHTML={{ __html: cus.reason }}>
+
+                                                                                        </div>
+                                                                                        <div className="modal-footer">
+                                                                                            {/* Conditional rendering of buttons based on edit mode */}
+                                                                                            <button type="button" className="btn btn-secondary" onClick={closeReasonModal}>Close</button>
+                                                                                        </div>
+                                                                                    </div>
+
                                                                                 </div>
-
                                                                             </div>
-                                                                        </>
 
-                                                                    )}
-                                                                </>
+                                                                        </div>
+                                                                    </>
+
+                                                                )}
+                                                            </>
 
 
-                                                            ))
-                                                        )
+                                                        ))
                                                     }
 
                                                 </tbody>

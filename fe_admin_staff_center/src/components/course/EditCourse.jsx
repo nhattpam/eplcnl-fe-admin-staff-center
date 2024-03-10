@@ -152,7 +152,7 @@ const EditCourse = () => {
                                                     </tr>
                                                     <tr>
                                                         <th>Price:</th>
-                                                        <td><span className="badge label-table badge-success">{course.stockPrice}</span></td>
+                                                        <td><span className="badge label-table badge-success">${course.stockPrice}</span></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Tags:</th>
@@ -168,7 +168,7 @@ const EditCourse = () => {
                                             <label>Modules:</label>
 
                                             <ul className="list-group">
-                                                {moduleList.map((module) => (
+                                                {moduleList.length > 0 && moduleList.map((module) => (
                                                     <li key={module.id} className="list-group-item d-flex justify-content-between align-items-center" style={{ border: 'none', borderBottom: '1px solid #dee2e6' }}>
                                                         {module.name}
                                                         <button
@@ -182,7 +182,7 @@ const EditCourse = () => {
                                                     </li>
                                                 ))}
 
-                                                {classModuleList.map((module) => (
+                                                {classModuleList.length > 0 && classModuleList.map((module) => (
                                                     <li key={module.id} className="list-group-item d-flex justify-content-between align-items-center" style={{ border: 'none', borderBottom: '1px solid #dee2e6' }}>
                                                         {module.startDate !== null ? module.startDate.substring(0, 10) : "No start date"}
                                                         <button

@@ -270,28 +270,26 @@ const EditLearner = () => {
                           <tbody>
 
                             {
-                              currentEnrollments.length > 0 && (
-                                currentEnrollments.map((cus, index) => (
+                              currentEnrollments.length > 0 && currentEnrollments.map((cus, index) => (
 
-                                  <tr>
-                                    <td>{index + 1}</td>
-                                    <td>
-                                      <img src={cus.course.imageUrl} style={{ height: '70px', width: '100px' }}>
+                                <tr>
+                                  <td>{index + 1}</td>
+                                  <td>
+                                    <img src={cus.course.imageUrl} style={{ height: '70px', width: '100px' }}>
 
-                                      </img>
-                                    </td>
-                                    <td>
-                                      <Link to={`/edit-course/${cus.courseId}`} className='text-success'>
-                                        {cus.course.name}
-                                      </Link>
-                                    </td>
-                                    {/* <td>{cus.name}</td> */}
-                                    <td>{cus.enrolledDate}</td>
-                                    <td>{cus.status}</td>
-                                    <td>{cus.totalGrade}</td>
-                                  </tr>
-                                ))
-                              )
+                                    </img>
+                                  </td>
+                                  <td>
+                                    <Link to={`/edit-course/${cus.courseId}`} className='text-success'>
+                                      {cus.course.name}
+                                    </Link>
+                                  </td>
+                                  {/* <td>{cus.name}</td> */}
+                                  <td>{cus.enrolledDate}</td>
+                                  <td>{cus.status}</td>
+                                  <td>{cus.totalGrade}</td>
+                                </tr>
+                              ))
                             }
 
                           </tbody>

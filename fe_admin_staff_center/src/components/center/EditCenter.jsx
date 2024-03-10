@@ -276,38 +276,36 @@ const EditCenter = () => {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            currentTutors.length > 0 && (
-                                                                currentTutors.map((tutor, index) => (
-                                                                    <tr key={tutor.id}>
-                                                                        <td>{index + 1}</td>
-                                                                        <td>
-                                                                            <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+                                                            currentTutors.length > 0 && currentTutors.map((tutor, index) => (
+                                                                <tr key={tutor.id}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>
+                                                                        <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
 
-                                                                            </img>
-                                                                        </td>
-                                                                        <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
-                                                                        <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
-                                                                        <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
-                                                                        <td>
-                                                                            {tutor.account.isActive ? (
-                                                                                <span className="badge label-table badge-success">Active</span>
-                                                                            ) : (
-                                                                                <span className="badge label-table badge-danger">Inactive</span>
-                                                                            )}
-                                                                        </td>
-                                                                        <td>
-                                                                            <Link to={`/edit-tutor/${tutor.account.id}`} className='text-secondary'>
-                                                                                <i className="fa-regular fa-eye"></i>
-                                                                            </Link>
-                                                                        </td>
-                                                                        {/* <td>
+                                                                        </img>
+                                                                    </td>
+                                                                    <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
+                                                                    <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                    <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
+                                                                    <td>
+                                                                        {tutor.account.isActive ? (
+                                                                            <span className="badge label-table badge-success">Active</span>
+                                                                        ) : (
+                                                                            <span className="badge label-table badge-danger">Inactive</span>
+                                                                        )}
+                                                                    </td>
+                                                                    <td>
+                                                                        <Link to={`/edit-tutor/${tutor.account.id}`} className='text-secondary'>
+                                                                            <i className="fa-regular fa-eye"></i>
+                                                                        </Link>
+                                                                    </td>
+                                                                    {/* <td>
                                                                             <Link to={`/list-course-by-tutor/${tutor.id}`} className='text-dark'>
                                                                                 <i class="ti-more-alt"></i>
                                                                             </Link>
                                                                         </td> */}
-                                                                    </tr>
-                                                                ))
-                                                            )
+                                                                </tr>
+                                                            ))
                                                         }
 
                                                     </tbody>

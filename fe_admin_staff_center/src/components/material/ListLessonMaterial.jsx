@@ -116,7 +116,7 @@ const ListLessonMaterial = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {currentLessonMaterials.map((material) => (
+                          {currentLessonMaterials.length > 0 && currentLessonMaterials.map((material) => (
                             <tr key={material.id}>
                               <td>{material.name}</td>
                               <td>{material.materialUrl}</td>

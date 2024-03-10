@@ -126,7 +126,8 @@ const ListAssignment = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentAssignments.map((assignment, index) => (
+                                                    {
+                                                    currentAssignments.length > 0 && currentAssignments.map((assignment, index) => (
                                                         <tr key={assignment.id}>
                                                             <td>{index + 1}</td>
                                                             <td>{assignment.deadline}</td>

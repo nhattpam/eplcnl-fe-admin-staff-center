@@ -131,22 +131,20 @@ const ListLesson = () => {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        currentLessons.length > 0 && (
-                                                            currentLessons.map((lesson, index) => (
-                                                                <tr key={lesson.id}>
-                                                                    <td>{index + 1}</td>
-                                                                    <td>{lesson.name}</td>
-                                                                    <td>{lesson.description}</td>
-                                                                    <td>{lesson.createdDate}</td>
-                                                                    <td>{lesson.updatedDate}</td>
-                                                                    <td>
-                                                                        <Link to={`/edit-lesson/${lesson.id}`} className='text-secondary'>
-                                                                            <i class="fa-regular fa-eye"></i>
-                                                                        </Link>
-                                                                    </td>
-                                                                </tr>
-                                                            ))
-                                                        )
+                                                        currentLessons.length > 0 && currentLessons.map((lesson, index) => (
+                                                            <tr key={lesson.id}>
+                                                                <td>{index + 1}</td>
+                                                                <td>{lesson.name}</td>
+                                                                <td>{lesson.description}</td>
+                                                                <td>{lesson.createdDate}</td>
+                                                                <td>{lesson.updatedDate}</td>
+                                                                <td>
+                                                                    <Link to={`/edit-lesson/${lesson.id}`} className='text-secondary'>
+                                                                        <i class="fa-regular fa-eye"></i>
+                                                                    </Link>
+                                                                </td>
+                                                            </tr>
+                                                        ))
                                                     }
 
                                                 </tbody>

@@ -41,7 +41,6 @@ import EditQuestion from './components/question/EditQuestion';
 import ListReportByStaff from './components/report/ListReportByStaff';
 import ListTransaction from './components/transaction/ListTransaction';
 import MyWallet from './components/wallet/MyWallet';
-import MyAccount from './components/profile/MyAccount';
 
 function App() {
 
@@ -114,7 +113,6 @@ function App() {
          {/* wallet */}
          <Route path="/my-wallet/:accountId" element={<MyWallet />} />
          {/* profile */}
-         <Route path="/my-account/:accountId" element={<MyAccount />} />
 
       </Routes>
     </div>

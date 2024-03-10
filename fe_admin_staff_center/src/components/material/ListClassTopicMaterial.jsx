@@ -116,22 +116,20 @@ const ListClassTopicMaterial = () => {
                         </thead>
                         <tbody>
                           {
-                            currentLessonMaterials.length > 0 && (
-                              currentLessonMaterials.map((material, index) => (
-                                <tr key={material.id}>
-                                  <td>{index + 1}</td>
-                                  <td>{material.name}</td>
-                                  {/* <td>{material.materialUrl}</td> */}
-                                  <td>{material.createdDate}</td>
-                                  <td>{material.updatedDate}</td>
-                                  {/* <td>
+                            currentLessonMaterials.length > 0 && currentLessonMaterials.map((material, index) => (
+                              <tr key={material.id}>
+                                <td>{index + 1}</td>
+                                <td>{material.name}</td>
+                                {/* <td>{material.materialUrl}</td> */}
+                                <td>{material.createdDate}</td>
+                                <td>{material.updatedDate}</td>
+                                {/* <td>
                                     <Link to={`/tutor/courses/edit-class-material/${material.id}`}>
                                       <i class="fas fa-trash-alt"></i>
                                   </Link>
                                 </td> */}
-                                </tr>
-                              ))
-                            )
+                              </tr>
+                            ))
                           }
 
                         </tbody>

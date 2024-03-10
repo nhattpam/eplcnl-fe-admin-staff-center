@@ -108,21 +108,19 @@ const EditQuiz = () => {
 
                       <ul className="list-group">
                         {
-                          questionList.length > 0 && (
-                            questionList.map((question) => (
-                              <li key={question.id} className="list-group-item d-flex justify-content-between align-items-center" style={{ border: 'none', borderBottom: '1px solid #dee2e6' }}>
-                                {question.questionImageUrl} {question.questionAudioUrl} {question.questionText}
-                                <button
-                                  type="button"
-                                  className="btn btn-link btn-sm text-secondary"
-                                  onClick={() => handleEditQuestion(question.id)}
-                                >
-                                  <i class="fa-regular fa-eye"></i>
+                          questionList.length > 0 && questionList.map((question) => (
+                            <li key={question.id} className="list-group-item d-flex justify-content-between align-items-center" style={{ border: 'none', borderBottom: '1px solid #dee2e6' }}>
+                              {question.questionImageUrl} {question.questionAudioUrl} {question.questionText}
+                              <button
+                                type="button"
+                                className="btn btn-link btn-sm text-secondary"
+                                onClick={() => handleEditQuestion(question.id)}
+                              >
+                                <i class="fa-regular fa-eye"></i>
 
-                                </button>
-                              </li>
-                            ))
-                          )
+                              </button>
+                            </li>
+                          ))
                         }
 
 

@@ -132,22 +132,20 @@ const ListTopic = () => {
                         </thead>
                         <tbody>
                           {
-                            currentClassTopics.length > 0 && (
-                              currentClassTopics.map((classTopic, index) => (
-                                <tr key={classTopic.id}>
-                                  <td>{index + 1}</td>
-                                  <td>{classTopic.name}</td>
-                                  <td>{classTopic.description}</td>
-                                  <td>{classTopic.createdDate}</td>
-                                  <td>{classTopic.updatedDate}</td>
-                                  <td>
-                                    <Link to={`/edit-topic/${classTopic.id}`} className='text-secondary'>
-                                      <i class="fa-regular fa-eye"></i>
-                                    </Link>
-                                  </td>
-                                </tr>
-                              ))
-                            )
+                            currentClassTopics.length > 0 && currentClassTopics.map((classTopic, index) => (
+                              <tr key={classTopic.id}>
+                                <td>{index + 1}</td>
+                                <td>{classTopic.name}</td>
+                                <td>{classTopic.description}</td>
+                                <td>{classTopic.createdDate}</td>
+                                <td>{classTopic.updatedDate}</td>
+                                <td>
+                                  <Link to={`/edit-topic/${classTopic.id}`} className='text-secondary'>
+                                    <i class="fa-regular fa-eye"></i>
+                                  </Link>
+                                </td>
+                              </tr>
+                            ))
                           }
 
                         </tbody>

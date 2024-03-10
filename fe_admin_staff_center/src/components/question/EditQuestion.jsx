@@ -134,18 +134,16 @@ const EditQuestion = () => {
 
                                             <ul className="list-group">
                                                 {
-                                                    questionAnswerList.length > 0 && (
-                                                        questionAnswerList.map((questionAnswer) => (
-                                                            <li key={questionAnswer.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                                                {questionAnswer.answerText}
-                                                                {/* <Link
+                                                    questionAnswerList.length > 0 && questionAnswerList.map((questionAnswer) => (
+                                                        <li key={questionAnswer.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                            {questionAnswer.answerText}
+                                                            {/* <Link
                                                                     onClick={() => handleDeleteQuestionAnswer(questionAnswer.id)}
                                                                 >
                                                                     <i class="far fa-trash-alt"></i>
                                                                 </Link> */}
-                                                            </li>
-                                                        ))
-                                                    )
+                                                        </li>
+                                                    ))
                                                 }
 
 

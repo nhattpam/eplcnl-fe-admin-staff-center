@@ -165,35 +165,33 @@ const MyWallet = () => {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        currentCenters.length > 0 && (
-                                                            currentCenters.map((cus, index) => (
-                                                                <tr key={cus.id}>
-                                                                    <td>{index + 1}</td>
-                                                                    <td>{cus.name}</td>
-                                                                    <td>{cus.email}</td>
-                                                                    <td>{cus.description}</td>
-                                                                    <td>{cus.address}</td>
-                                                                    <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
-                                                                    <td>
-                                                                        {cus.isActive ? (
-                                                                            <span className="badge label-table badge-success">Active</span>
-                                                                        ) : (
-                                                                            <span className="badge label-table badge-danger">Inactive</span>
-                                                                        )}
-                                                                    </td>
-                                                                    <td>
-                                                                        <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
-                                                                            <i className="fa-regular fa-eye"></i>
-                                                                        </Link>
-                                                                    </td>
-                                                                    <td>
-                                                                        <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
-                                                                            Transfer
-                                                                        </Link>
-                                                                    </td>
-                                                                </tr>
-                                                            ))
-                                                        )
+                                                        currentCenters.length > 0 && currentCenters.map((cus, index) => (
+                                                            <tr key={cus.id}>
+                                                                <td>{index + 1}</td>
+                                                                <td>{cus.name}</td>
+                                                                <td>{cus.email}</td>
+                                                                <td>{cus.description}</td>
+                                                                <td>{cus.address}</td>
+                                                                <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
+                                                                <td>
+                                                                    {cus.isActive ? (
+                                                                        <span className="badge label-table badge-success">Active</span>
+                                                                    ) : (
+                                                                        <span className="badge label-table badge-danger">Inactive</span>
+                                                                    )}
+                                                                </td>
+                                                                <td>
+                                                                    <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
+                                                                        <i className="fa-regular fa-eye"></i>
+                                                                    </Link>
+                                                                </td>
+                                                                <td>
+                                                                    <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
+                                                                        Transfer
+                                                                    </Link>
+                                                                </td>
+                                                            </tr>
+                                                        ))
                                                     }
 
                                                 </tbody>
@@ -264,47 +262,45 @@ const MyWallet = () => {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    currentStaffs.length > 0 && (
-                                                        currentStaffs.map((cus, index) => (
+                                                    currentStaffs.length > 0 && currentStaffs.map((cus, index) => (
 
-                                                            <tr>
-                                                                <td>{index + 1}</td>
-                                                                <td>
-                                                                    <img src={cus.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+                                                        <tr>
+                                                            <td>{index + 1}</td>
+                                                            <td>
+                                                                <img src={cus.account.imageUrl} style={{ height: '70px', width: '50px' }}>
 
-                                                                    </img>
-                                                                </td>
-                                                                <td>{cus.account.fullName}</td>
-                                                                <td>{cus.account.email}</td>
-                                                                <td>{cus.account && cus.account.dateOfBirth ? cus.account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
-                                                                <td>
-                                                                    {cus.account.gender ? (
-                                                                        <span className="badge label-table badge-success">Male</span>
-                                                                    ) : (
-                                                                        <span className="badge label-table badge-danger">Female</span>
-                                                                    )}
-                                                                </td>
-                                                                <td>{cus.account && cus.account.phoneNumber ? cus.account.phoneNumber : 'Unknown Phone Number'}</td>
-                                                                <td>
-                                                                    {cus.account.isActive ? (
-                                                                        <span className="badge label-table badge-success">Active</span>
-                                                                    ) : (
-                                                                        <span className="badge label-table badge-danger">Inactive</span>
-                                                                    )}
-                                                                </td>
-                                                                <td>
-                                                                    <Link to={`/edit-staff/${cus.account.id}`} className='text-secondary'>
-                                                                        <i class="fa-regular fa-eye"></i>
-                                                                    </Link>
-                                                                </td>
-                                                                <td>
-                                                                    <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
-                                                                        Transfer
-                                                                    </Link>
-                                                                </td>
-                                                            </tr>
-                                                        ))
-                                                    )
+                                                                </img>
+                                                            </td>
+                                                            <td>{cus.account.fullName}</td>
+                                                            <td>{cus.account.email}</td>
+                                                            <td>{cus.account && cus.account.dateOfBirth ? cus.account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
+                                                            <td>
+                                                                {cus.account.gender ? (
+                                                                    <span className="badge label-table badge-success">Male</span>
+                                                                ) : (
+                                                                    <span className="badge label-table badge-danger">Female</span>
+                                                                )}
+                                                            </td>
+                                                            <td>{cus.account && cus.account.phoneNumber ? cus.account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                            <td>
+                                                                {cus.account.isActive ? (
+                                                                    <span className="badge label-table badge-success">Active</span>
+                                                                ) : (
+                                                                    <span className="badge label-table badge-danger">Inactive</span>
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                <Link to={`/edit-staff/${cus.account.id}`} className='text-secondary'>
+                                                                    <i class="fa-regular fa-eye"></i>
+                                                                </Link>
+                                                            </td>
+                                                            <td>
+                                                                <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
+                                                                    Transfer
+                                                                </Link>
+                                                            </td>
+                                                        </tr>
+                                                    ))
                                                 }
 
                                             </tbody>

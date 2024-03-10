@@ -117,30 +117,28 @@ const ListCenter = () => {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        currentCenters.length > 0 && (
-                                                            currentCenters.map((cus, index) => (
-                                                                <tr key={cus.id}>
-                                                                    <td>{index + 1}</td>
-                                                                    <td>{cus.name}</td>
-                                                                    <td>{cus.email}</td>
-                                                                    <td>{cus.description}</td>
-                                                                    <td>{cus.address}</td>
-                                                                    <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
-                                                                    <td>
-                                                                        {cus.isActive ? (
-                                                                            <span className="badge label-table badge-success">Active</span>
-                                                                        ) : (
-                                                                            <span className="badge label-table badge-danger">Inactive</span>
-                                                                        )}
-                                                                    </td>
-                                                                    <td>
-                                                                        <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
-                                                                            <i className="fa-regular fa-eye"></i>
-                                                                        </Link>
-                                                                    </td>
-                                                                </tr>
-                                                            ))
-                                                        )
+                                                        currentCenters.length > 0 && currentCenters.map((cus, index) => (
+                                                            <tr key={cus.id}>
+                                                                <td>{index + 1}</td>
+                                                                <td>{cus.name}</td>
+                                                                <td>{cus.email}</td>
+                                                                <td>{cus.description}</td>
+                                                                <td>{cus.address}</td>
+                                                                <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
+                                                                <td>
+                                                                    {cus.isActive ? (
+                                                                        <span className="badge label-table badge-success">Active</span>
+                                                                    ) : (
+                                                                        <span className="badge label-table badge-danger">Inactive</span>
+                                                                    )}
+                                                                </td>
+                                                                <td>
+                                                                    <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
+                                                                        <i className="fa-regular fa-eye"></i>
+                                                                    </Link>
+                                                                </td>
+                                                            </tr>
+                                                        ))
                                                     }
 
 
