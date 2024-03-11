@@ -103,7 +103,7 @@ const ListTutorByCenter = () => {
 
                                                         <Link to="/create-tutor">
                                                             <button className="btn btn-success mr-2">
-                                                                <i className="fas fa-plus-circle"></i> Create
+                                                                 Create
                                                             </button>
                                                         </Link>
                                                     )}

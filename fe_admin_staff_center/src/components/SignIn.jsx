@@ -163,14 +163,14 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                             {/* Logo */}
                             <div className="auth-brand text-center text-lg-left">
                                 <div className="auth-logo">
-                                    <a href="index.html" className="logo logo-dark text-center">
+                                    <a className="logo logo-dark text-center">
                                         <span style={{ fontFamily: 'Comic Sans MS', fontSize: '24px', fontWeight: 'bold', color: '#000037' }}>
                                             MEOWLISH
                                         </span>
                                     </a>
-                                    <a href="index.html" className="logo logo-light text-center">
-                                        <span className="logo-lg">
-                                            <img src="../assets/images/logo-light.png" alt height={22} />
+                                    <a className="logo logo-light text-center">
+                                        <span style={{ fontFamily: 'Comic Sans MS', fontSize: '24px', fontWeight: 'bold', color: '#000037' }}>
+                                            MEOWLISH
                                         </span>
                                     </a>
                                 </div>

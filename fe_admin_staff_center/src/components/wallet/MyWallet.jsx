@@ -202,7 +202,7 @@ const MyWallet = () => {
                                         </div> {/* end .table-responsive*/}
                                         {
                                             currentCenters.length === 0 && (
-                                                <p>There are no centers.</p>
+                                                <p className='text-center'>There are no centers.</p>
                                             )
                                         }
 
@@ -311,7 +311,7 @@ const MyWallet = () => {
                                 </div> {/* end card-box*/}
                                 {
                                     currentStaffs.length === 0 && (
-                                        <p>There are no staffs.</p>
+                                        <p className='text-center'>There are no staffs.</p>
                                     )
                                 }
 

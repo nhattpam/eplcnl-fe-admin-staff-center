@@ -236,13 +236,13 @@ const EditRefundRequest = () => {
                                                         type="button"
                                                         className="btn btn-success" onClick={() => handleApproveRefund()}
                                                     >
-                                                        <i class="fa-solid fa-thumbs-up"></i> Approve
+                                                        Approve
                                                     </button>
                                                     <button
                                                         type="button"
                                                         className="btn btn-danger ml-1" onClick={() => handleDisApproveRefund()}
                                                     >
-                                                        <i class="fa-solid fa-thumbs-down"></i> Disapprove
+                                                        Disapprove
                                                     </button>
                                                 </div>
                                             )

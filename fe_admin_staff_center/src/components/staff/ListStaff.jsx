@@ -87,7 +87,7 @@ const ListStaff = () => {
                                                 <div className="col-12 text-sm-center form-inline">
                                                     <Link to="/create-staff" >
                                                         <button className="btn btn-success mr-2">
-                                                            <i className="fas fa-plus-circle"></i> Create
+                                                           Create
                                                         </button>
                                                     </Link>
 

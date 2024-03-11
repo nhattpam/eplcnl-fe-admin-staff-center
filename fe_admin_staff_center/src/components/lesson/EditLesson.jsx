@@ -112,7 +112,7 @@ const EditLesson = () => {
 
                       <form
                         method="post"
-                        className="dropzone"
+                        className="mt-3"
                         id="myAwesomeDropzone"
                         data-plugin="dropzone"
                         data-previews-container="#file-previews"
@@ -122,7 +122,7 @@ const EditLesson = () => {
 
                         <div className="card" style={{ marginTop: '-20px' }}>
                           <div className='card-body'>
-                            <label htmlFor="video">Video Url * :</label>
+                            <label htmlFor="video">Video Url:</label>
                             <input type="text" className="form-control" name="videoUrl" id="videoUrl" value={lesson.videoUrl} readOnly />
                           </div>
 
@@ -137,8 +137,8 @@ const EditLesson = () => {
                           </div>
 
                           <div className='card-body'>
-                            <label htmlFor="video">Reading * :</label>
-                            <div dangerouslySetInnerHTML={{ __html: lesson.reading }}>
+                            <label htmlFor="video">Reading:</label>
+                            <div dangerouslySetInnerHTML={{ __html: lesson.reading }} >
                             </div>
                           </div>
                         </div>
@@ -148,7 +148,7 @@ const EditLesson = () => {
                             Edit
                           </button> */}
                           <Link to={`/list-material-by-lesson/${lesson.id}`} className="btn btn-dark " style={{ marginLeft: '20px', marginTop: '10px' }} >
-                            <i class="fas fa-file-alt"></i> View Materials
+                            View Materials
                           </Link>
                         </div>
                       </form>

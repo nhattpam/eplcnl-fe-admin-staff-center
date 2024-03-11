@@ -265,7 +265,7 @@ const EditModule = () => {
                                                                     <tr key={assignment.id}>
                                                                         <td>{index + 1}</td>
                                                                         <td>{assignment.deadline}</td>
-                                                                        <td className="truncate-text">{assignment.questionText}</td>
+                                                                        <td className='truncate-text' dangerouslySetInnerHTML={{ __html: assignment.questionText }} />
                                                                         <td>{assignment.createdDate}</td>
                                                                         <td>{assignment.updatedDate}</td>
                                                                         <td>
@@ -276,6 +276,7 @@ const EditModule = () => {
                                                                     </tr>
                                                                 ))
                                                             )
+
                                                         }
 
                                                     </tbody>
@@ -421,6 +422,12 @@ const EditModule = () => {
                     .page-item.active .page-link{
                         background-color: #20c997;
                         border-color: #20c997;
+                    }
+                    .truncate-text {
+                        max-width: 200px; /* Adjust max-width as needed */
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 `}
             </style>

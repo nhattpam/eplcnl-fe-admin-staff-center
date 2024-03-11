@@ -312,13 +312,14 @@ const EditCenter = () => {
                                                 </table>
                                             </div>
                                         </div>
+                                        {
+                                            currentTutors.length === 0 && (
+                                                <p className='text-center'>There are no tutors.</p>
+                                            )
+                                        }
                                     </form>
                                 </div> {/* end card-box*/}
-                                {
-                                    currentTutors.length === 0 && (
-                                        <p>There are no Tutors.</p>
-                                    )
-                                }
+
                             </div> {/* end col*/}
                         </div>
                         {/* end row*/}

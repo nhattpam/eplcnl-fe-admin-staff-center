@@ -231,14 +231,14 @@ const EditCourse = () => {
                                                         </button>
                                                     )}
 
-                                                    {isStaff && (
+                                                    {/* {isStaff && (
                                                         <button
                                                             type="submit"
                                                             className="btn btn-danger ml-1"
                                                         >
                                                             <i class="fa-solid fa-trash-can"></i>
                                                         </button>
-                                                    )}
+                                                    )} */}
                                                 </>
 
 

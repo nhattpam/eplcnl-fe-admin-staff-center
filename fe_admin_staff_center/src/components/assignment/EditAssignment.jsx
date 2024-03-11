@@ -133,7 +133,7 @@ const EditAssignment = () => {
 
                       <form
                         method="post"
-                        className="dropzone"
+                        className="mt-3"
                         id="myAwesomeDropzone"
                         data-plugin="dropzone"
                         data-previews-container="#file-previews"
@@ -142,26 +142,13 @@ const EditAssignment = () => {
                         onSubmit={submitAssignment} >
                         <div className="card" style={{marginTop: '-20px'}}>
                           <div className='card-body'>
-                            <label htmlFor="video">Time * :</label>
-                            <select
-                              value={assignment.deadline}
-                              onChange={handleMinutesChange}
-                              className="form-control"
-                            >
-                              {[5, 10, 15, 20, 30, 45, 60, 75, 90, 120].map((minutes) => (
-                                <option key={minutes} value={minutes}>
-                                  {minutes} minutes
-                                </option>
-                              ))}
-                            </select>
+                            <label htmlFor="video">Time:</label>
+                            <div>{assignment.deadline} minutes</div>
                           </div>
                           <div className='card-body'>
-                            <label htmlFor="video">Question * :</label>
-                            <ReactQuill
-                              value={assignment.questionText}
-                              onChange={handleChangeAssignment}
-                              style={{ height: '300px' }}
-                            />
+                            <label htmlFor="video">Question:</label>
+                            <div dangerouslySetInnerHTML={{ __html: assignment.questionText }} />
+
                           </div>
                         </div>
                         {/* <div className="form-group mb-0  ">

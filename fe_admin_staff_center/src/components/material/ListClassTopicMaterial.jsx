@@ -108,10 +108,9 @@ const ListClassTopicMaterial = () => {
                           <tr>
                             <th data-toggle="true">No.</th>
                             <th data-toggle="true">Material Name</th>
-                            {/* <th>Url</th> */}
                             <th data-hide="phone">Created Date</th>
                             <th data-hide="phone, tablet">Updated Date</th>
-                            {/* <th>Action</th> */}
+                            <th>File</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -120,14 +119,11 @@ const ListClassTopicMaterial = () => {
                               <tr key={material.id}>
                                 <td>{index + 1}</td>
                                 <td>{material.name}</td>
-                                {/* <td>{material.materialUrl}</td> */}
                                 <td>{material.createdDate}</td>
                                 <td>{material.updatedDate}</td>
-                                {/* <td>
-                                    <Link to={`/tutor/courses/edit-class-material/${material.id}`}>
-                                      <i class="fas fa-trash-alt"></i>
-                                  </Link>
-                                </td> */}
+                                <td>
+                                  <a href={material.materialUrl} target="_blank" rel="noopener noreferrer" className="btn btn-success">View</a>
+                                </td>
                               </tr>
                             ))
                           }

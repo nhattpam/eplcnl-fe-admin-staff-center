@@ -114,7 +114,6 @@ const ListTutorByStaff = () => {
                                                         <th data-hide="phone, tablet">DOB</th>
                                                         <th data-hide="phone, tablet">Status</th>
                                                         <th>Action</th>
-                                                        <th>Courses</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -142,12 +141,7 @@ const ListTutorByStaff = () => {
                                                                         <i className="fa-regular fa-eye"></i>
                                                                     </Link>
                                                                 </td>
-                                                                <td>
-                                                                    <Link to={`/list-course-by-tutor/${tutor.id}`} className='text-dark'>
-                                                                        <i class="ti-more-alt"></i>
-
-                                                                    </Link>
-                                                                </td>
+                                                               
                                                             </tr>
                                                         ))
                                                     }
