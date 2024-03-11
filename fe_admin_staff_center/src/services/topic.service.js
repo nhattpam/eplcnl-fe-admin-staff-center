@@ -13,7 +13,7 @@ class ClassTopicService {
     }
 
     saveClassTopic(classTopic) {
-        return axios.post(API_URL + "/class-topics/", classTopic, {
+        return axios.post(API_URL + "/topics/", classTopic, {
             headers: {
                 Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
             }
@@ -21,7 +21,7 @@ class ClassTopicService {
     }
 
     getAllClassTopic() {
-        return axios.get(API_URL + "/class-topics", {
+        return axios.get(API_URL + "/topics", {
             headers: {
                 Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
             }
@@ -31,7 +31,7 @@ class ClassTopicService {
 
 
     updateClassTopic(id, course) {
-        return axios.put(API_URL + "/class-topics/" + id, course, {
+        return axios.put(API_URL + "/topics/" + id, course, {
             headers: {
                 Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
             }
@@ -40,7 +40,7 @@ class ClassTopicService {
 
 
     getClassTopicById(id) {
-        return axios.get(API_URL + "/class-topics/" + id, {
+        return axios.get(API_URL + "/topics/" + id, {
             headers: {
                 Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
             }
@@ -48,7 +48,7 @@ class ClassTopicService {
     }
 
     getAllMaterialsByClassTopic(id) {
-        return axios.get(`${API_URL}/class-topics/${id}/materials`, {
+        return axios.get(`${API_URL}/topics/${id}/materials`, {
             headers: {
                 Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
             }

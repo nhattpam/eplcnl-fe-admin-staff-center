@@ -97,14 +97,14 @@ const EditClassModule = () => {
 
 
                                         </div>
-
+                                        {
+                                            classTopicList.length === 0 && (
+                                                <p className='text-center'>There are no topics.</p>
+                                            )
+                                        }
                                     </form>
                                 </div> {/* end card-box*/}
-                                {
-                                    classTopicList.length === 0 && (
-                                        <p>There are no topics.</p>
-                                    )
-                                }
+
                             </div> {/* end col*/}
                         </div>
                         {/* end row*/}

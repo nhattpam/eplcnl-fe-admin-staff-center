@@ -6,7 +6,7 @@ import Footer from '../Footer';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import classLessonService from '../../services/class-lesson.service';
-import classTopicService from '../../services/class-topic.service';
+import topicService from '../../services/topic.service';
 import classModuleService from '../../services/class-module.service'; 
 
 const EditTopic = () => {
@@ -41,7 +41,7 @@ const EditTopic = () => {
 
   useEffect(() => {
     if (storedClassTopicId) {
-      classTopicService
+      topicService
         .getClassTopicById(storedClassTopicId)
         .then((res) => {
           setClassTopic(res.data);
@@ -96,7 +96,7 @@ const EditTopic = () => {
 
     try {
       // Save account
-      const classTopicResponse = await classTopicService.saveClassTopic(classTopic);
+      const classTopicResponse = await topicService.saveClassTopic(classTopic);
 
       // console.log(JSON.stringify(courseResponse));
       // console.log(courseResponse.data);
@@ -137,7 +137,7 @@ const EditTopic = () => {
                       </h4>
                       <form
                         method="post"
-                        className="dropzone"
+                        className="mt-3"
                         id="myAwesomeDropzone"
                         data-plugin="dropzone"
                         data-previews-container="#file-previews"
@@ -146,7 +146,7 @@ const EditTopic = () => {
                         onSubmit={(e) => submitClassTopic(e)}
                       >
                         <div className="form-group">
-                        <label htmlFor="roomLink">Class Hours * :</label>
+                        <label htmlFor="roomLink">Class Hours:</label>
                           <input
                             type="text"
                             className="form-control"
@@ -158,7 +158,7 @@ const EditTopic = () => {
 
 
                         <div className="form-group">
-                          <label htmlFor="roomLink">Room Link * :</label>
+                          <label htmlFor="roomLink">Room Link:</label>
                           <input
                             type="text"
                             className="form-control"
@@ -174,11 +174,11 @@ const EditTopic = () => {
 
                         </div>
                         <div className="form-group">
-                          <label htmlFor="name">Name * :</label>
+                          <label htmlFor="name">Name:</label>
                           <input type="text" className="form-control" name="name" id="name" value={classTopic.name} onChange={(e) => handleChange(e)} />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="code">Description * :</label>
+                          <label htmlFor="code">Description:</label>
                           <input type="text" className="form-control" name="description" id="description" value={classTopic.description} onChange={(e) => handleChange(e)} />
                         </div>
                         {/* <div className="form-group">
@@ -197,13 +197,13 @@ const EditTopic = () => {
                             className="btn btn-secondary mr-2"
                             onClick={handleListTopics}
                           >
-                            <i class="fas fa-microchip"></i> List Topics
+                           List Topics
                           </button>
                           <Link
                             to={`/list-material-by-topic/${classTopic.id}`}
                             className="btn btn-dark"
                           >
-                            <i class="fas fa-file-alt"></i> View Materials
+                           View Materials
                           </Link>
                         </div>
                       </form>
