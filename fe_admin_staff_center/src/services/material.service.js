@@ -13,7 +13,7 @@ class LessonMaterialService {
   }
 
   savelessonMaterial(lessonMaterial) {
-    return axios.post(API_URL + "/lesson-materials/", lessonMaterial, {
+    return axios.post(API_URL + "/materials/", lessonMaterial, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
@@ -21,7 +21,7 @@ class LessonMaterialService {
   }
 
   getAlllessonMaterial() {
-    return axios.get(API_URL + "/lesson-materials", {
+    return axios.get(API_URL + "/materials", {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
@@ -30,7 +30,7 @@ class LessonMaterialService {
 
 
   updateLessonMaterial(id, lessonMaterial) {
-    return axios.put(API_URL + "/lesson-materials/" + id, lessonMaterial, {
+    return axios.put(API_URL + "/materials/" + id, lessonMaterial, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
@@ -39,7 +39,7 @@ class LessonMaterialService {
 
 
   getLessonMaterialById(id) {
-    return axios.get(API_URL + "/lesson-materials/" + id, {
+    return axios.get(API_URL + "/materials/" + id, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
@@ -49,7 +49,7 @@ class LessonMaterialService {
 
 
   uploadMaterial(lessonMaterial) {
-    return axios.post(API_URL + "/lesson-materials/material/", lessonMaterial, {
+    return axios.post(API_URL + "/materials/material/", lessonMaterial, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }

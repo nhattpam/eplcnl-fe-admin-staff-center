@@ -48,7 +48,7 @@ class ClassTopicService {
     }
 
     getAllMaterialsByClassTopic(id) {
-        return axios.get(`${API_URL}/class-topics/${id}/lesson-materials`, {
+        return axios.get(`${API_URL}/class-topics/${id}/materials`, {
             headers: {
                 Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
             }

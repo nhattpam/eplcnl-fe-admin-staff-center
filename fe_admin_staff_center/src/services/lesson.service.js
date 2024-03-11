@@ -64,7 +64,7 @@ class LessonService {
   }
 
   getAllMaterialsByLesson(id) {
-    return axios.get(`${API_URL}/lessons/${id}/lesson-materials`, {
+    return axios.get(`${API_URL}/lessons/${id}/materials`, {
         headers: {
             Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
         }
