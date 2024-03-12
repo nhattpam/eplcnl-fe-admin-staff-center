@@ -166,37 +166,69 @@ const EditCourse = () => {
 
                                         <div className="form-group">
                                             <label>Modules:</label>
-
-                                            <ul className="list-group">
-                                                {moduleList.length > 0 && moduleList.map((module) => (
-                                                    <li key={module.id} className="list-group-item d-flex justify-content-between align-items-center" style={{ border: 'none', borderBottom: '1px solid #dee2e6' }}>
-                                                        {module.name}
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-link text-dark"
-                                                            onClick={() => handleEditModule(module.id)}
-                                                        >
-                                                            <i className="far fa-edit"></i>
-
-                                                        </button>
-                                                    </li>
-                                                ))}
-
-                                                {classModuleList.length > 0 && classModuleList.map((module) => (
-                                                    <li key={module.id} className="list-group-item d-flex justify-content-between align-items-center" style={{ border: 'none', borderBottom: '1px solid #dee2e6' }}>
-                                                        {module.startDate !== null ? module.startDate.substring(0, 10) : "No start date"}
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-link text-dark"
-                                                            onClick={() => handleEditClassModule(module.id)}
-                                                        >
-                                                            <i className="far fa-edit"></i>
-
-                                                        </button>
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                            {!course.isOnlineClass && (
+                                                <>
+                                                    <div className="table-responsive">
+                                                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                            <thead className="thead-light">
+                                                                <tr>
+                                                                    <th data-toggle="true">No.</th>
+                                                                    <th data-hide="phone, tablet">Name</th>
+                                                                    <th data-hide="phone, tablet">Created Date</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {moduleList.length > 0 && moduleList.map((module, index) => (
+                                                                    <tr key={index}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td>{module.name}</td>
+                                                                        <td>{module.createdDate}</td>
+                                                                        <td>
+                                                                            <Link to={`/edit-module/${module.id}`} className='text-secondary'>
+                                                                                <i className="fa-regular fa-eye"></i>
+                                                                            </Link>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div> {/* end .table-responsive*/}
+                                                </>
+                                            )}
+                                            {course.isOnlineClass && (
+                                                <>
+                                                    <div className="table-responsive">
+                                                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                            <thead className="thead-light">
+                                                                <tr>
+                                                                    <th data-toggle="true">No.</th>
+                                                                    <th data-hide="phone, tablet">Class Date</th>
+                                                                    <th data-hide="phone, tablet">Created Date</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {classModuleList.length > 0 && classModuleList.map((module, index) => (
+                                                                    <tr key={index}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td>
+                                                                            {module.startDate ? new Date(module.startDate).toLocaleDateString('en-US') : "No class time"}
+                                                                        </td>                                                                        <td>{module.createdDate}</td>
+                                                                        <td>
+                                                                            <Link to={`/edit-class-module/${module.id}`} className='text-secondary'>
+                                                                                <i className="fa-regular fa-eye"></i>
+                                                                            </Link>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div> {/* end .table-responsive*/}
+                                                </>
+                                            )}
                                         </div>
+
 
                                         {(!course.isOnlineClass) && (
                                             <div className="form-group mb-2">

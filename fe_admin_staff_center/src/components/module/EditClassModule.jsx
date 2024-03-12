@@ -65,35 +65,68 @@ const EditClassModule = () => {
 
                                     <form id="demo-form" data-parsley-validate>
                                         <div className="form-group">
-                                            <label htmlFor="name">Start Time </label>
-                                            <input type="text" className="form-control"
-                                                name="startDate" id="startDate" value={module.startDate.substring(0, 10)} readOnly style={{ width: '20%' }} />
+                                            <label htmlFor="name">Class Date: </label>
+                                            <div>
+                                                {module.startDate ? new Date(module.startDate).toLocaleDateString('en-US') : "No class time"}
+                                            </div>
                                         </div>
 
                                         <div className="form-group">
-                                            <h5>Class Hours </h5>
-                                            <ul>
-                                                {module.classLesson.classHours}
-                                            </ul>
+                                            <h5>Class Hours: </h5>
+                                            <div>
+                                                {module.classLesson?.classHours}
+                                            </div>
                                         </div>
 
                                         <div className="form-group">
-                                            <h5>Class Url</h5>
-                                            <ul>
-                                                {module.classLesson.classUrl}
-                                            </ul>
+                                            <h5>Class Url:</h5>
+                                            <div>
+                                                {module.classLesson?.classUrl}
+                                            </div>
                                         </div>
 
                                         <div className="form-group">
-                                            <h5>Topics</h5>
-                                            {
-                                                classTopicList.length > 0 && classTopicList.map((classTopic) => (
-                                                    <ul>
-                                                        {classTopic.name} &nbsp;
-                                                        <Link to={`/edit-topic/${classTopic.id}`} className='text-secondary'>  <i class="fa-regular fa-eye"></i></Link>
-                                                    </ul>
-                                                ))
-                                            }
+                                            <h5>Topics:</h5>
+                                            <>
+                                                <div className="table-responsive">
+                                                    <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                        <thead className="thead-light">
+                                                            <tr>
+                                                                <th data-toggle="true">No.</th>
+                                                                <th data-hide="phone, tablet">Name</th>
+                                                                <th data-hide="phone, tablet">Description</th>
+                                                                <th data-hide="phone, tablet">Created Date</th>
+                                                                <th data-hide="phone, tablet">Updated Date</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {classTopicList.length > 0 && classTopicList.map((classTopic, index) => (
+                                                                <tr key={index}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>
+                                                                        {classTopic.name}
+                                                                    </td>
+                                                                    <td>
+                                                                        {classTopic.description}
+                                                                    </td>
+                                                                    <td>
+                                                                        {classTopic.createdDate}
+                                                                    </td>
+                                                                    <td>
+                                                                        {classTopic.updatedDate}
+                                                                    </td>
+                                                                    <td>
+                                                                        <Link to={`/edit-topic/${classTopic.id}`} className='text-secondary'>
+                                                                            <i className="fa-regular fa-eye"></i>
+                                                                        </Link>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div> {/* end .table-responsive*/}
+                                            </>
 
 
                                         </div>

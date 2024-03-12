@@ -122,7 +122,7 @@ const ListClassTopicMaterial = () => {
                                 <td>{material.createdDate}</td>
                                 <td>{material.updatedDate}</td>
                                 <td>
-                                  <a href={material.materialUrl} target="_blank" rel="noopener noreferrer" className="btn btn-success">View</a>
+                                  <a href={material.materialUrl} target="_blank" rel="noopener noreferrer" ><i class="far fa-eye text-dark"></i></a>
                                 </td>
                               </tr>
                             ))

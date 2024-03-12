@@ -55,6 +55,14 @@ class ClassTopicService {
         });
     }
 
+    getAllQuizzesByClassTopic(id) {
+        return axios.get(`${API_URL}/topics/${id}/quizzes`, {
+            headers: {
+                Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+            }
+        });
+    }
+
 
 }
 export default new ClassTopicService;

@@ -7,15 +7,16 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import classLessonService from '../../services/class-lesson.service';
 import topicService from '../../services/topic.service';
-import classModuleService from '../../services/class-module.service'; 
+import classModuleService from '../../services/class-module.service';
 
 const EditTopic = () => {
   const navigate = useNavigate();
-  
+
   const { storedClassTopicId } = useParams();
   const [createdTopics, setCreatedTopics] = useState([]);
+  const [quizList, setQuizList] = useState([]);
 
-  
+
   //create class topic
   const [classTopic, setClassTopic] = useState({
     name: "",
@@ -37,7 +38,7 @@ const EditTopic = () => {
   });
 
 
- 
+
 
   useEffect(() => {
     if (storedClassTopicId) {
@@ -46,6 +47,19 @@ const EditTopic = () => {
         .then((res) => {
           setClassTopic(res.data);
           console.log(classTopic)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [storedClassTopicId]);
+
+  useEffect(() => {
+    if (storedClassTopicId) {
+      topicService
+        .getAllQuizzesByClassTopic(storedClassTopicId)
+        .then((res) => {
+          setQuizList(res.data);
         })
         .catch((error) => {
           console.log(error);
@@ -79,15 +93,15 @@ const EditTopic = () => {
   const listTopicsByClassLessonId = async (storedClassLessonId) => {
     try {
       const listClassTopicsByClassLesson = await classLessonService.getAllClassTopicsByClassLesson(storedClassLessonId);
-  
-    //   console.log('this is list:', listClassTopicsByClassLesson.data);
-  
-     setCreatedTopics(listClassTopicsByClassLesson.data);
+
+      //   console.log('this is list:', listClassTopicsByClassLesson.data);
+
+      setCreatedTopics(listClassTopicsByClassLesson.data);
     } catch (error) {
       console.log(error);
     }
   };
-  
+
 
 
 
@@ -124,8 +138,8 @@ const EditTopic = () => {
       <div id="wrapper">
         <Header />
         <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
-                    isStaff={sessionStorage.getItem('isStaff') === 'true'}
-                    isCenter={sessionStorage.getItem('isCenter') === 'true'} />        <div className="content-page">
+          isStaff={sessionStorage.getItem('isStaff') === 'true'}
+          isCenter={sessionStorage.getItem('isCenter') === 'true'} />        <div className="content-page">
           <div className="content">
             <div className="container-fluid">
               <div className="row">
@@ -133,7 +147,7 @@ const EditTopic = () => {
                   <div className="card">
                     <div className="card-body">
                       <h4 className="header-title">
-                         DATE - <span className='text-success'>{classModule.startDate.substring(0, 10)}</span> 
+                        DATE - <span className='text-success'>{classModule.startDate ? new Date(classModule.startDate).toLocaleDateString('en-US') : "No class time"}</span> | TOPIC INFORMATION
                       </h4>
                       <form
                         method="post"
@@ -145,29 +159,6 @@ const EditTopic = () => {
                         data-parsley-validate
                         onSubmit={(e) => submitClassTopic(e)}
                       >
-                        <div className="form-group">
-                        <label htmlFor="roomLink">Class Hours:</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name="classHours"
-                            id="classHours"
-                            value={classTopic.classLesson?.classHours}
-                          />
-                        </div>
-
-
-                        <div className="form-group">
-                          <label htmlFor="roomLink">Room Link:</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name="roomLink"
-                            id="roomLink"
-                            value={classTopic.classLesson?.classUrl}
-                            o
-                          />
-                        </div>
 
                         <div className="form-group">
                           <h2 htmlFor="topic">Topic</h2>
@@ -175,54 +166,82 @@ const EditTopic = () => {
                         </div>
                         <div className="form-group">
                           <label htmlFor="name">Name:</label>
-                          <input type="text" className="form-control" name="name" id="name" value={classTopic.name} onChange={(e) => handleChange(e)} />
+                          <div>
+                            {classTopic.name}
+                          </div>
                         </div>
                         <div className="form-group">
                           <label htmlFor="code">Description:</label>
-                          <input type="text" className="form-control" name="description" id="description" value={classTopic.description} onChange={(e) => handleChange(e)} />
+                          <div>
+                            {classTopic.description}
+                          </div>
                         </div>
-                        {/* <div className="form-group">
-                          <label htmlFor="code">Materials * :</label>
-                          <input type="text" className="form-control" name="materialUrl" id="materialUrl" value={classTopic.materialUrl} onChange={(e) => handleChange(e)} />
-                        </div> */}
-                        <div className="form-group mb-0">
-                          {/* <button
-                            type="submit"
-                            className="btn btn-warning mr-2"
-                          >
-                            <i class="fas fa-check-double"></i> Update
-                          </button> */}
-                          <button
-                            type="button"
-                            className="btn btn-secondary mr-2"
-                            onClick={handleListTopics}
-                          >
-                           List Topics
-                          </button>
-                          <Link
-                            to={`/list-material-by-topic/${classTopic.id}`}
-                            className="btn btn-dark"
-                          >
-                           View Materials
-                          </Link>
-                        </div>
+
+
+
                       </form>
 
                       {/* Display created topics */}
-                      <div>
-                        <h4>Created Topics:</h4>
-                        {Array.isArray(createdTopics) && createdTopics.length > 0 ? (
-                          <ul>
-                            {createdTopics.map((topic) => (
-                              <li key={topic.id}>{topic.name}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p>No topics created yet.</p>
-                        )}
-                      </div>
+                      <div className="form-group">
+                        <h5>Quizzes:</h5>
+                        <>
+                          <div className="table-responsive">
+                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                              <thead className="thead-light">
+                                <tr>
+                                  <th data-toggle="true">No.</th>
+                                  <th data-hide="phone, tablet">Name</th>
+                                  <th data-hide="phone, tablet">Grade To Pass</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {quizList.length > 0 && quizList.map((quiz, index) => (
+                                  <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>
+                                      {quiz.name}
+                                    </td>
+                                    <td>
+                                      {quiz.gradeToPass}
+                                    </td>
+                                    <td>
+                                      <Link to={`/edit-quiz/${quiz.id}`} className='text-secondary'>
+                                        <i className="fa-regular fa-eye"></i>
+                                      </Link>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div> {/* end .table-responsive*/}
+                        </>
 
+
+                      </div>
+                      {
+                        quizList.length === 0 && (
+                          <p className='text-center'>There are no quizzes.</p>
+                        )
+                      }
+                      <div className="form-group mb-0">
+                        <Link
+                          to={`/list-material-by-topic/${classTopic.id}`}
+                          className="btn btn-dark"
+                        >
+                          View Materials
+                        </Link>
+
+                        <Link
+                          type="button"
+                          className="btn btn-black mr-2"
+                          to={`/edit-class-module/${classTopic.classLesson.classModuleId}`}
+                        >
+                          <i class="fas fa-long-arrow-alt-left"></i> Back to Class Infomation
+                        </Link>
+                      </div>
                     </div>
+
                   </div>
                 </div>
               </div>
