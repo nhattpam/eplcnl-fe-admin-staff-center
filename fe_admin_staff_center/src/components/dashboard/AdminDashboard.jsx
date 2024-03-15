@@ -419,9 +419,9 @@ const AdminDashboard = () => {
     async function countTransactions() {
         try {
             const res = await transactionService.getAllTransaction();
-            const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
+            // const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
 
-            const transactions = activeTransactions;
+            const transactions = res.data;
             const transactionCount = transactions.length;
 
 
@@ -515,7 +515,7 @@ const AdminDashboard = () => {
                                             </div>
                                             <div className="col-6">
                                                 <div className="text-right">
-                                                    <h3 className="text-dark mt-1">$<span data-plugin="counterup">{sumForCurrentYear.toFixed(2) / 24000}</span></h3>
+                                                    <h3 className="text-dark mt-1">$<span data-plugin="counterup">{(sumForCurrentYear / 24000).toFixed(2)}</span></h3>
                                                     <p className="text-muted mb-1 text-truncate">Earnings (Annual)</p>
                                                 </div>
                                             </div>

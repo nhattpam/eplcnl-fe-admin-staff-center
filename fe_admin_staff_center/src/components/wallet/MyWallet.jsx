@@ -12,6 +12,7 @@ import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 import staffService from '../../services/staff.service';
+import tutorService from '../../services/tutor.service';
 
 const MyWallet = () => {
 
@@ -20,11 +21,15 @@ const MyWallet = () => {
     const [msg, setMsg] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [searchTerm2, setSearchTerm2] = useState('');
+    const [searchTerm3, setSearchTerm3] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [currentPage2, setCurrentPage2] = useState(0);
+    const [currentPage3, setCurrentPage3] = useState(0);
     const [centersPerPage] = useState(2);
     const [staffList, setStaffList] = useState([]);
     const [staffsPerPage] = useState(2);
+    const [tutorList, setTutorList] = useState([]);
+    const [tutorsPerPage] = useState(2);
 
     const { accountId } = useParams();
 
@@ -125,6 +130,44 @@ const MyWallet = () => {
     const offset2 = currentPage2 * staffsPerPage;
     const currentStaffs = filteredStaffs.slice(offset2, offset2 + staffsPerPage);
 
+    //list tutor freelancer
+    useEffect(() => {
+        tutorService
+            .getAllTutor() // Corrected the usage of the condition
+            .then((res) => {
+                const tutorFreelancers = res.data.filter((tutor) => tutor.isFreelancer === true);
+
+                console.log(tutorFreelancers);
+                setTutorList(tutorFreelancers);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+
+
+    const handleSearch3 = (event) => {
+        setSearchTerm3(event.target.value);
+    };
+
+    const filteredTutors = tutorList
+        .filter((tutor) => {
+            return (
+                tutor.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+
+            );
+        });
+
+    const pageCount3 = Math.ceil(filteredTutors.length / tutorsPerPage);
+
+    const handlePageClick3 = (data) => {
+        setCurrentPage3(data.selected);
+    };
+
+    const offset3 = currentPage3 * tutorsPerPage;
+    const currentTutors = filteredTutors.slice(offset2, offset2 + tutorsPerPage);
+
     return (
         <>
             <div id="wrapper">
@@ -140,107 +183,104 @@ const MyWallet = () => {
                                 <div className="card-box">
                                     <h4 className="header-title">MY WALLET</h4>
 
-                                    <form id="demo-form" data-parsley-validate>
-                                        <div className="form-group">
-                                            <label htmlFor="transactionId">Wallet Balance:</label>
-                                            <input type="text" className="form-control" name="transactionId"
-                                                id="transactionId" value={wallet.balance} readOnly style={{ width: '30%' }} />
-                                        </div>
-                                        <label htmlFor="transactionId">Center Information:</label>
+                                    <div className="form-group">
+                                        <label htmlFor="transactionId">Wallet Balance:</label>
+                                        <input type="text" className="form-control" name="transactionId"
+                                            id="transactionId" value={wallet.balance} readOnly style={{ width: '30%' }} />
+                                    </div>
+                                    <label htmlFor="transactionId">Center Information:</label>
 
-                                        <div className="table-responsive">
-                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
-                                                <thead className="thead-light">
-                                                    <tr>
-                                                        <th data-toggle="true">No.</th>
-                                                        <th data-toggle="true">Center Name</th>
-                                                        <th>Email</th>
-                                                        <th data-hide="phone">Description</th>
-                                                        <th data-hide="phone, tablet">Address</th>
-                                                        <th>Is Managed By</th>
-                                                        <th>Status</th>
-                                                        <th>Action</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {
-                                                        currentCenters.length > 0 && currentCenters.map((cus, index) => (
-                                                            <tr key={cus.id}>
-                                                                <td>{index + 1}</td>
-                                                                <td>{cus.name}</td>
-                                                                <td>{cus.email}</td>
-                                                                <td>{cus.description}</td>
-                                                                <td>{cus.address}</td>
-                                                                <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
-                                                                <td>
-                                                                    {cus.isActive ? (
-                                                                        <span className="badge label-table badge-success">Active</span>
-                                                                    ) : (
-                                                                        <span className="badge label-table badge-danger">Inactive</span>
-                                                                    )}
-                                                                </td>
-                                                                <td>
-                                                                    <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
-                                                                        <i className="fa-regular fa-eye"></i>
-                                                                    </Link>
-                                                                </td>
-                                                                <td>
+                                    <div className="table-responsive">
+                                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
+                                            <thead className="thead-light">
+                                                <tr>
+                                                    <th data-toggle="true">No.</th>
+                                                    <th data-toggle="true">Center Name</th>
+                                                    <th>Email</th>
+                                                    <th data-hide="phone">Description</th>
+                                                    <th data-hide="phone, tablet">Address</th>
+                                                    <th>Is Managed By</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    currentCenters.length > 0 && currentCenters.map((cus, index) => (
+                                                        <tr key={cus.id}>
+                                                            <td>{index + 1}</td>
+                                                            <td>{cus.name}</td>
+                                                            <td>{cus.email}</td>
+                                                            <td>{cus.description}</td>
+                                                            <td>{cus.address}</td>
+                                                            <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
+                                                            <td>
+                                                                {cus.isActive ? (
+                                                                    <span className="badge label-table badge-success">Active</span>
+                                                                ) : (
+                                                                    <span className="badge label-table badge-danger">Inactive</span>
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                <Link to={`/edit-center/${cus.id}`} className='text-secondary'>
+                                                                    <i className="fa-regular fa-eye"></i>
+                                                                </Link>
+                                                            </td>
+                                                            {/* <td>
                                                                     <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
                                                                         Transfer
                                                                     </Link>
-                                                                </td>
-                                                            </tr>
-                                                        ))
-                                                    }
+                                                                </td> */}
+                                                        </tr>
+                                                    ))
+                                                }
 
-                                                </tbody>
+                                            </tbody>
 
 
-                                            </table>
+                                        </table>
 
-                                        </div> {/* end .table-responsive*/}
-                                        {
-                                            currentCenters.length === 0 && (
-                                                <p className='text-center'>There are no centers.</p>
-                                            )
-                                        }
+                                    </div> {/* end .table-responsive*/}
+                                    {
+                                        currentCenters.length === 0 && (
+                                            <p className='text-center'>There are no centers.</p>
+                                        )
+                                    }
 
+                                    {/* Pagination */}
+                                    <div className='container-fluid mt-2'>
                                         {/* Pagination */}
-                                        <div className='container-fluid mt-2'>
-                                            {/* Pagination */}
-                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                <ReactPaginate
-                                                    previousLabel={
-                                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
-                                                            <AiFillCaretLeft />
-                                                        </IconContext.Provider>
-                                                    }
-                                                    nextLabel={
-                                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
-                                                            <AiFillCaretRight />
-                                                        </IconContext.Provider>
-                                                    } breakLabel={'...'}
-                                                    breakClassName={'page-item'}
-                                                    breakLinkClassName={'page-link'}
-                                                    pageCount={pageCount}
-                                                    marginPagesDisplayed={2}
-                                                    pageRangeDisplayed={5}
-                                                    onPageChange={handlePageClick}
-                                                    containerClassName={'pagination'}
-                                                    activeClassName={'active'}
-                                                    previousClassName={'page-item'}
-                                                    nextClassName={'page-item'}
-                                                    pageClassName={'page-item'}
-                                                    previousLinkClassName={'page-link'}
-                                                    nextLinkClassName={'page-link'}
-                                                    pageLinkClassName={'page-link'}
-                                                />
-                                            </div>
-
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <ReactPaginate
+                                                previousLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretLeft />
+                                                    </IconContext.Provider>
+                                                }
+                                                nextLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretRight />
+                                                    </IconContext.Provider>
+                                                } breakLabel={'...'}
+                                                breakClassName={'page-item'}
+                                                breakLinkClassName={'page-link'}
+                                                pageCount={pageCount}
+                                                marginPagesDisplayed={2}
+                                                pageRangeDisplayed={5}
+                                                onPageChange={handlePageClick}
+                                                containerClassName={'pagination'}
+                                                activeClassName={'active'}
+                                                previousClassName={'page-item'}
+                                                nextClassName={'page-item'}
+                                                pageClassName={'page-item'}
+                                                previousLinkClassName={'page-link'}
+                                                nextLinkClassName={'page-link'}
+                                                pageLinkClassName={'page-link'}
+                                            />
                                         </div>
 
-                                    </form>
+                                    </div>
+
 
 
                                     <label htmlFor="transactionId" >Staff Information:</label>
@@ -257,7 +297,6 @@ const MyWallet = () => {
                                                     <th data-hide="phone, tablet">Phone Number</th>
                                                     <th data-hide="phone, tablet">Status</th>
                                                     <th>Action</th>
-                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -294,68 +333,167 @@ const MyWallet = () => {
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
-                                                            <td>
+                                                            {/* <td>
                                                                 <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
                                                                     Transfer
                                                                 </Link>
-                                                            </td>
+                                                            </td> */}
                                                         </tr>
                                                     ))
                                                 }
 
                                             </tbody>
-
+                                            {
+                                                currentStaffs.length === 0 && (
+                                                    <p className='text-center'>There are no staffs.</p>
+                                                )
+                                            }
                                         </table>
                                     </div> {/* end .table-responsive*/}
+                                    <div className='container-fluid'>
+                                        {/* Pagination */}
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <ReactPaginate
+                                                previousLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretLeft />
+                                                    </IconContext.Provider>
+                                                }
+                                                nextLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretRight />
+                                                    </IconContext.Provider>
+                                                } breakLabel={'...'}
+                                                breakClassName={'page-item'}
+                                                breakLinkClassName={'page-link'}
+                                                pageCount={pageCount2}
+                                                marginPagesDisplayed={2}
+                                                pageRangeDisplayed={5}
+                                                onPageChange={handlePageClick2}
+                                                containerClassName={'pagination'}
+                                                activeClassName={'active'}
+                                                previousClassName={'page-item'}
+                                                nextClassName={'page-item'}
+                                                pageClassName={'page-item'}
+                                                previousLinkClassName={'page-link'}
+                                                nextLinkClassName={'page-link'}
+                                                pageLinkClassName={'page-link'}
+                                            />
+                                        </div>
 
+                                    </div>
+                                    <label htmlFor="transactionId" >Tutor Freelancer Information:</label>
+                                    <div className="table-responsive">
+                                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                            <thead className="thead-light">
+                                                <tr>
+                                                    <th data-toggle="true">No.</th>
+                                                    <th data-toggle="true">Image</th>
+                                                    <th data-toggle="true">Full Name</th>
+                                                    <th data-hide="phone">Email</th>
+                                                    <th data-hide="phone, tablet">DOB</th>
+                                                    <th data-hide="phone, tablet">Gender</th>
+                                                    <th data-hide="phone, tablet">Phone Number</th>
+                                                    <th data-hide="phone, tablet">Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    currentTutors.length > 0 && currentTutors.map((cus, index) => (
+
+                                                        <tr>
+                                                            <td>{index + 1}</td>
+                                                            <td>
+                                                                <img src={cus.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+
+                                                                </img>
+                                                            </td>
+                                                            <td>{cus.account.fullName}</td>
+                                                            <td>{cus.account.email}</td>
+                                                            <td>{cus.account && cus.account.dateOfBirth ? cus.account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
+                                                            <td>
+                                                                {cus.account.gender ? (
+                                                                    <span className="badge label-table badge-success">Male</span>
+                                                                ) : (
+                                                                    <span className="badge label-table badge-danger">Female</span>
+                                                                )}
+                                                            </td>
+                                                            <td>{cus.account && cus.account.phoneNumber ? cus.account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                            <td>
+                                                                {cus.account.isActive ? (
+                                                                    <span className="badge label-table badge-success">Active</span>
+                                                                ) : (
+                                                                    <span className="badge label-table badge-danger">Inactive</span>
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                <Link to={`/edit-tutor/${cus.account.id}`} className='text-secondary'>
+                                                                    <i class="fa-regular fa-eye"></i>
+                                                                </Link>
+                                                            </td>
+                                                            {/* <td>
+                                                                <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
+                                                                    Transfer
+                                                                </Link>
+                                                            </td> */}
+                                                        </tr>
+                                                    ))
+                                                }
+
+                                            </tbody>
+                                            {
+                                                currentTutors.length === 0 && (
+                                                    <p className='text-center'>There are no tutor freelancers.</p>
+                                                )
+                                            }
+                                        </table>
+                                    </div> {/* end .table-responsive*/}
                                 </div> {/* end card-box*/}
-                                {
-                                    currentStaffs.length === 0 && (
-                                        <p className='text-center'>There are no staffs.</p>
-                                    )
-                                }
 
+                                <div className='container-fluid'>
+                                        {/* Pagination */}
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <ReactPaginate
+                                                previousLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretLeft />
+                                                    </IconContext.Provider>
+                                                }
+                                                nextLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretRight />
+                                                    </IconContext.Provider>
+                                                } breakLabel={'...'}
+                                                breakClassName={'page-item'}
+                                                breakLinkClassName={'page-link'}
+                                                pageCount={pageCount3}
+                                                marginPagesDisplayed={2}
+                                                pageRangeDisplayed={5}
+                                                onPageChange={handlePageClick3}
+                                                containerClassName={'pagination'}
+                                                activeClassName={'active'}
+                                                previousClassName={'page-item'}
+                                                nextClassName={'page-item'}
+                                                pageClassName={'page-item'}
+                                                previousLinkClassName={'page-link'}
+                                                nextLinkClassName={'page-link'}
+                                                pageLinkClassName={'page-link'}
+                                            />
+                                        </div>
+
+                                    </div>
                             </div> {/* end col*/}
                             {/* Pagination */}
-                            <div className='container-fluid'>
-                                {/* Pagination */}
-                                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <ReactPaginate
-                                        previousLabel={
-                                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
-                                                <AiFillCaretLeft />
-                                            </IconContext.Provider>
-                                        }
-                                        nextLabel={
-                                            <IconContext.Provider value={{ color: "#000", size: "14px" }}>
-                                                <AiFillCaretRight />
-                                            </IconContext.Provider>
-                                        } breakLabel={'...'}
-                                        breakClassName={'page-item'}
-                                        breakLinkClassName={'page-link'}
-                                        pageCount={pageCount2}
-                                        marginPagesDisplayed={2}
-                                        pageRangeDisplayed={5}
-                                        onPageChange={handlePageClick2}
-                                        containerClassName={'pagination'}
-                                        activeClassName={'active'}
-                                        previousClassName={'page-item'}
-                                        nextClassName={'page-item'}
-                                        pageClassName={'page-item'}
-                                        previousLinkClassName={'page-link'}
-                                        nextLinkClassName={'page-link'}
-                                        pageLinkClassName={'page-link'}
-                                    />
-                                </div>
 
-                            </div>
 
                         </div>
                         {/* end row*/}
 
-
                     </div> {/* container */}
+
                 </div>
+
             </div>
             <style>
                 {`
