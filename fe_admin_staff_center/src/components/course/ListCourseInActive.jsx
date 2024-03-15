@@ -127,7 +127,7 @@ const ListCourseInActive = () => {
                                                                 <td>{cus.code}</td>
                                                                 <td>{cus.name}</td>
                                                                 <td>{cus.stockPrice}</td>
-                                                                <td>{cus.rating}</td>
+                                                                <td>{cus.rating.toFixed(1)}</td>
                                                                 <td>{cus.tags}</td>
                                                                 <td>{cus.category.name}</td>
                                                                 <td>

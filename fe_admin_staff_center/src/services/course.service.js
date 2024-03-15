@@ -73,6 +73,16 @@ class CourseService {
     });
   }
 
+  getAllFeedbacksByCourse(id) {
+    const url = `${API_URL}/courses/${id}/feedbacks`; // Construct the URL string
+    return axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
+
+
   
 
 }

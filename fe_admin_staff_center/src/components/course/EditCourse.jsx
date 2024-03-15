@@ -123,6 +123,22 @@ const EditCourse = () => {
                 console.log(error);
             });
     };
+
+
+    //list feedbacks
+    const [feedbackList, setFeedbackList] = useState([]);
+    useEffect(() => {
+        if (id) {
+            courseService.getAllFeedbacksByCourse(id)
+                .then((res) => {
+                    setFeedbackList(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [id]);
+
     return (
         <>
             <div id="wrapper">
@@ -234,7 +250,7 @@ const EditCourse = () => {
                                             <div className="form-group mb-2">
                                                 <>
                                                     {moduleList.length === 0 && (
-                                                        <p>No modules available.</p>
+                                                        <p className='text-center'>No modules available.</p>
                                                     )}
                                                     {/* <Link
                                                         type="button"
@@ -281,7 +297,7 @@ const EditCourse = () => {
                                             <div className="form-group mb-2">
                                                 <>
                                                     {classModuleList.length === 0 && (
-                                                        <p>No modules available.</p>
+                                                        <p className='text-center'>No modules available.</p>
                                                     )}
                                                     {/* <Link
                                                         type="button"
@@ -328,6 +344,40 @@ const EditCourse = () => {
 
 
                                     </form>
+                                    <div className="form-group">
+                                        <>
+
+                                            <label>Feedbacks:</label>
+                                            {
+                                                feedbackList.length > 0 && feedbackList.map((feedback, index) => (
+                                                    <>
+                                                        {/* <div className="mt-3 d-flex flex-row align-items-center p-3 form-color"> <img src="https://i.imgur.com/zQZSWrt.jpg" width={50} className="rounded-circle mr-2" /> <input type="text" className="form-control" placeholder="Enter your comment..." /> </div> */}
+                                                        < div className="mt-2" >
+                                                            <div className="d-flex flex-row p-3"> <img src={feedback.learner.account.imageUrl} width={40} height={40} className="rounded-circle mr-3" />
+                                                                <div className="w-100">
+                                                                    <div className="d-flex justify-content-between align-items-center">
+                                                                        <div className="d-flex flex-row align-items-center"> <span className="mr-2" style={{ fontWeight: 'bold' }}>{feedback.learner.account.fullName}</span> <small className="c-badge">Top Comment</small> </div> <small>{feedback.createdDate}</small>
+                                                                    </div>
+                                                                    <p className="text-justify comment-text mb-0" dangerouslySetInnerHTML={{ __html: feedback.feedbackContent }}></p>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </>
+
+                                                ))
+                                            }
+                                            {
+                                                feedbackList.length === 0 && (
+                                                    <p className='text-center'>No feedbacks yet.</p>
+                                                )
+                                            }
+
+
+
+
+                                        </>
+                                    </div>
                                     {showModal && (
                                         <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                                             <div className="modal-dialog">
@@ -367,14 +417,18 @@ const EditCourse = () => {
                                             </div>
                                         </div>
                                     )}
+
                                 </div> {/* end card-box*/}
+
                             </div> {/* end col*/}
+
                         </div>
                         {/* end row*/}
 
                     </div> {/* container */}
                 </div>
             </div>
+
             <style>
                 {`
                     body, #wrapper {

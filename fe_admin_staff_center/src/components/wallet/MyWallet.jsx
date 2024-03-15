@@ -13,6 +13,9 @@ import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 import staffService from '../../services/staff.service';
 import tutorService from '../../services/tutor.service';
+import enrollmentService from '../../services/enrollment.service';
+import walletHistoryService from '../../services/wallet-history.service';
+import walletService from '../../services/wallet.service';
 
 const MyWallet = () => {
 
@@ -166,7 +169,81 @@ const MyWallet = () => {
     };
 
     const offset3 = currentPage3 * tutorsPerPage;
-    const currentTutors = filteredTutors.slice(offset2, offset2 + tutorsPerPage);
+    const currentTutors = filteredTutors.slice(offset3, offset3 + tutorsPerPage);
+
+    //Auto transfer
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+    useEffect(() => {
+        // Function to update currentDateTime every second
+        const interval = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000);
+
+        // Clean-up function to clear the interval when the component unmounts
+        return () => clearInterval(interval);
+    }, []);
+
+    const [enrollmentList, setEnrollmentList] = useState([]);
+
+    useEffect(() => {
+        const processEnrollments = async () => {
+
+            try {
+                const res = await enrollmentService.getAllEnrollment();
+
+
+                const activeEnrollments = res.data.filter((enrollment) => !enrollment.refundStatus);
+                setEnrollmentList(activeEnrollments);
+
+                console.log(activeEnrollments.length)
+
+            } catch (error) {
+                console.error("Error fetching enrollments:", error);
+            }
+        }
+
+        processEnrollments();
+    }, []);
+
+    useEffect(() => {
+        const currentDate = new Date();
+        tutorList.forEach(async (tutor) => { // Changed forEach to async forEach
+            for (const enrollment of enrollmentList) { // Changed forEach to for...of loop for asynchronous handling
+                if (enrollment.enrolledDate) {
+                    const enrolledDate = new Date(enrollment.enrolledDate);
+                    const differenceInMs = currentDate - enrolledDate;
+                    const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
+
+                    if (differenceInDays > 7) {
+                        console.log("Enrollment", enrollment.id, "exceeds 7 days from enrolled date.");
+
+                        if (tutor.id === enrollment.transaction?.course?.tutorId) {
+                            const updatedTutorWallet = {
+                                balance: tutor?.account?.wallet?.balance + (((enrollment.transaction?.amount / 24000) * 20) / 100),
+                                accountId: tutor.accountId,
+                            };
+                            console.log(updatedTutorWallet.balance)
+                            await walletService.updateWallet(tutor.account?.wallet?.id, updatedTutorWallet);
+
+                            const tutorWalletHistory = {
+                                walletId: tutor.account?.wallet?.id,
+                                note: `+${((enrollment.transaction?.amount / 24000) * 20) / 100}$ from MeowLish for your course ${enrollment.transaction?.course?.name} at ${currentDate.toLocaleString()}`, // Changed currentDateTime to currentDate
+                            };
+
+                            await walletHistoryService.saveWalletHistory(tutorWalletHistory);
+                        }
+                    }
+                }
+            }
+        });
+
+    }, []);
+
+
+
+
+
 
     return (
         <>
@@ -185,8 +262,9 @@ const MyWallet = () => {
 
                                     <div className="form-group">
                                         <label htmlFor="transactionId">Wallet Balance:</label>
-                                        <input type="text" className="form-control" name="transactionId"
-                                            id="transactionId" value={wallet.balance} readOnly style={{ width: '30%' }} />
+                                        <span style={{ fontWeight: 'bold', color: 'red' }} className='ml-1'>
+                                            {wallet.balance} $
+                                        </span>
                                     </div>
                                     <label htmlFor="transactionId">Center Information:</label>
 
@@ -452,37 +530,37 @@ const MyWallet = () => {
                                 </div> {/* end card-box*/}
 
                                 <div className='container-fluid'>
-                                        {/* Pagination */}
-                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                            <ReactPaginate
-                                                previousLabel={
-                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
-                                                        <AiFillCaretLeft />
-                                                    </IconContext.Provider>
-                                                }
-                                                nextLabel={
-                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
-                                                        <AiFillCaretRight />
-                                                    </IconContext.Provider>
-                                                } breakLabel={'...'}
-                                                breakClassName={'page-item'}
-                                                breakLinkClassName={'page-link'}
-                                                pageCount={pageCount3}
-                                                marginPagesDisplayed={2}
-                                                pageRangeDisplayed={5}
-                                                onPageChange={handlePageClick3}
-                                                containerClassName={'pagination'}
-                                                activeClassName={'active'}
-                                                previousClassName={'page-item'}
-                                                nextClassName={'page-item'}
-                                                pageClassName={'page-item'}
-                                                previousLinkClassName={'page-link'}
-                                                nextLinkClassName={'page-link'}
-                                                pageLinkClassName={'page-link'}
-                                            />
-                                        </div>
-
+                                    {/* Pagination */}
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <ReactPaginate
+                                            previousLabel={
+                                                <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                    <AiFillCaretLeft />
+                                                </IconContext.Provider>
+                                            }
+                                            nextLabel={
+                                                <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                    <AiFillCaretRight />
+                                                </IconContext.Provider>
+                                            } breakLabel={'...'}
+                                            breakClassName={'page-item'}
+                                            breakLinkClassName={'page-link'}
+                                            pageCount={pageCount3}
+                                            marginPagesDisplayed={2}
+                                            pageRangeDisplayed={5}
+                                            onPageChange={handlePageClick3}
+                                            containerClassName={'pagination'}
+                                            activeClassName={'active'}
+                                            previousClassName={'page-item'}
+                                            nextClassName={'page-item'}
+                                            pageClassName={'page-item'}
+                                            previousLinkClassName={'page-link'}
+                                            nextLinkClassName={'page-link'}
+                                            pageLinkClassName={'page-link'}
+                                        />
                                     </div>
+
+                                </div>
                             </div> {/* end col*/}
                             {/* Pagination */}
 

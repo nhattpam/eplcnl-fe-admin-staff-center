@@ -112,17 +112,17 @@ const EditRefundRequest = () => {
             await refundRequestHistoryService.saveRefundHistory(refundHistory);
 
             // Update learner wallet balance
-            const learnerResponse = await learnerService.getLearnerById(refund.enrollment.transaction.learnerId);
+            const learnerResponse = await learnerService.getLearnerById(refund.enrollment?.transaction?.learnerId);
             const learner = learnerResponse.data;
             const updatedLearnerWallet = {
-                balance: learner.account.wallet.balance + (refund.enrollment.transaction.amount / 24000),
+                balance: learner.account?.wallet?.balance + (refund.enrollment?.transaction?.amount / 24000),
                 accountId: learner.accountId,
             };
             await walletService.updateWallet(learner.account.wallet.id, updatedLearnerWallet);
 
             const walletHistory2 = {
-                walletId: learner.account.wallet.id,
-                note: `+${refund.enrollment.transaction.amount / 24000}$ from MeowLish by refund request for course ${refund.enrollment.transaction.course.name} at ${currentDateTime.toLocaleString()}`,
+                walletId: learner.account?.wallet?.id,
+                note: `+${refund.enrollment?.transaction?.amount / 24000}$ from MeowLish by refund request for course ${refund.enrollment?.transaction?.course?.name} at ${currentDateTime.toLocaleString()}`,
             }
 
             await walletHistoryService.saveWalletHistory(walletHistory2);
