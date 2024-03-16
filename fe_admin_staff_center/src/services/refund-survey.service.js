@@ -1,18 +1,25 @@
 import axios from "axios";
 
+// const API_URL = "https://localhost:7215/api";
 const API_URL = "https://nhatpmse.twentytwo.asia/api";
 
 
-class RefundRequestService {
+class RefundSurveyService {
 
   token = '';
 
   setToken(token) {
     this.token = token;
   }
-
-  getAllRefundRequest() {
-    return axios.get(API_URL + "/refund-requests", {
+  saveRefundSurvey(refundSurvey) {
+    return axios.post(API_URL + "/refund-surveys/", refundSurvey, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
+  getAllRefundSurvey() {
+    return axios.get(API_URL + "/refund-surveys", {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
@@ -20,8 +27,8 @@ class RefundRequestService {
   }
 
 
-  updateRefundRequest(id, refundRequest) {
-    return axios.put(API_URL + "/refund-requests/" + id, refundRequest, {
+  updateRefundSurvey(id, refundSurvey) {
+    return axios.put(API_URL + "/refund-surveys/" + id, refundSurvey, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
@@ -29,16 +36,8 @@ class RefundRequestService {
   }
 
 
-  getRefundRequestById(id) {
-    return axios.get(API_URL + "/refund-requests/" + id, {
-      headers: {
-        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
-      }
-    });
-  }
-
-  getAllRefundSurveyByRefundRequestId(id) {
-    return axios.get(API_URL + `/refund-requests/${id}/refund-surveys` , {
+  getRefundSurveyById(id) {
+    return axios.get(API_URL + "/refund-surveys/" + id, {
       headers: {
         Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
       }
@@ -47,4 +46,4 @@ class RefundRequestService {
 
   
 }
-export default new RefundRequestService;
+export default new RefundSurveyService;

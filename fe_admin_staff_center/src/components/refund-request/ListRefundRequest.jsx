@@ -101,7 +101,6 @@ const ListRefundRequest = () => {
                                                         <th data-toggle="true">No.</th>
                                                         <th data-toggle="true">Requested Date</th>
                                                         <th data-toggle="true">Approved Date</th>
-                                                        <th data-hide="phone, tablet">Reason</th>
                                                         <th data-hide="phone, tablet">Status</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -114,7 +113,6 @@ const ListRefundRequest = () => {
                                                                 <td>{index + 1}</td>
                                                                 <td>{cus.requestedDate}</td>
                                                                 <td >{cus.approvedDate}</td>
-                                                                <td dangerouslySetInnerHTML={{ __html: cus.reason }} className='text-truncate'></td>
                                                                 <td>
                                                                     {cus.status === "APPROVED" && (
                                                                         <span className="badge label-table badge-success">APPROVED</span>

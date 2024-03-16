@@ -35,6 +35,7 @@ const EditRefundRequest = () => {
         refundStatus: ""
     });
 
+    const [refundSurveyList, setRefundSurveyList] = useState([]);
 
 
     useEffect(() => {
@@ -51,6 +52,12 @@ const EditRefundRequest = () => {
                         .catch((error) => {
                             console.log(error);
                         });
+                    refundRequestService.getAllRefundSurveyByRefundRequestId(refundId)
+                        .then((res) => {
+                            setRefundSurveyList(res.data)
+                        }).catch((error) => {
+                            console.log(error);
+                        });
                 })
                 .catch((error) => {
                     console.log(error);
@@ -61,14 +68,14 @@ const EditRefundRequest = () => {
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
     useEffect(() => {
-      // Function to update currentDateTime every second
-      const interval = setInterval(() => {
-        setCurrentDateTime(new Date());
-      }, 1000);
-  
-      // Clean-up function to clear the interval when the component unmounts
-      return () => clearInterval(interval);
-    }, []); 
+        // Function to update currentDateTime every second
+        const interval = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000);
+
+        // Clean-up function to clear the interval when the component unmounts
+        return () => clearInterval(interval);
+    }, []);
 
 
     //approve refund request
@@ -167,20 +174,46 @@ const EditRefundRequest = () => {
                                     <h4 className="header-title">REFUND INFORMATION</h4>
 
                                     <form id="demo-form" data-parsley-validate>
-                                        <div className="form-group">
-                                            <label htmlFor="transactionId">Enrollment Id:</label>
-                                            <div>
-                                                <span>{refund.enrollmentId}</span>
+                                        <div className='row'>
+                                            <div className="col-md-6">
+                                                <div className="form-group">
+                                                    <label htmlFor="transactionId">Enrollment Id:</label>
+                                                    <div>
+                                                        <span>{refund.enrollmentId}</span>
+                                                    </div>
+                                                    <label htmlFor="transactionId" className='mt-1'>Amount:</label>
+                                                    <div>
+                                                        <span>{(refund.enrollment?.transaction?.amount / 24000).toFixed(2)} dollars</span>
+                                                    </div>
+                                                    <label htmlFor="transactionId" className='mt-1'>Requested Date:</label>
+                                                    <div>
+                                                        <span>{refund.requestedDate} </span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <label htmlFor="transactionId" className='mt-1'>Amount:</label>
-                                            <div>
-                                                <span>{refund.enrollment?.transaction?.amount / 24000} dollars</span>
-                                            </div>
-                                            <label htmlFor="transactionId" className='mt-1'>Requested Date:</label>
-                                            <div>
-                                                <span>{refund.requestedDate} </span>
+                                            <div className="col-md-6">
+                                                {
+                                                    !isDoneOrNot && (
+                                                        <>
+                                                            <button
+                                                                type="button"
+                                                                className="btn btn-success" onClick={() => handleApproveRefund()}
+                                                            >
+                                                                Approve
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                className="btn btn-danger ml-1" onClick={() => handleDisApproveRefund()}
+                                                            >
+                                                                Disapprove
+                                                            </button>
+                                                        </>
+
+                                                    )
+                                                }
                                             </div>
                                         </div>
+
                                         <label htmlFor="transactionId">Course Information:</label>
 
                                         <div className="table-responsive">
@@ -218,7 +251,7 @@ const EditRefundRequest = () => {
                                                         </td>
                                                         <td>
                                                             {refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && (
-                                                                <Link to={`/edit-course/${refund.enrollment.transaction.course.id}`} className='text-secondary'>
+                                                                <Link to={`/edit-course/${refund.enrollment?.transaction?.course?.id}`} className='text-secondary'>
                                                                     <i className="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             )}
@@ -229,25 +262,36 @@ const EditRefundRequest = () => {
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
-                                        {
-                                            !isDoneOrNot && (
-                                                <div className="form-group mb-0" style={{ marginTop: '15px' }}>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-success" onClick={() => handleApproveRefund()}
-                                                    >
-                                                        Approve
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-danger ml-1" onClick={() => handleDisApproveRefund()}
-                                                    >
-                                                        Disapprove
-                                                    </button>
-                                                </div>
-                                            )
-                                        }
 
+                                        <label htmlFor="transactionId">Reasons:</label>
+                                        <div className="table-responsive">
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                <thead className="thead-light">
+                                                    <tr>
+                                                        <th data-toggle="true">No.</th>
+                                                        <th data-toggle="true">Reason</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        refundSurveyList.length > 0 && refundSurveyList.map((cus, index) => (
+
+                                                            <tr>
+                                                                <td>{index + 1}</td>
+                                                                <td>{cus.reason}</td>
+                                                            </tr>
+                                                        ))
+                                                    }
+                                                    {
+                                                         refundSurveyList.length === 0 && (
+                                                            <p>No reasons found.</p>
+                                                         )
+                                                    }
+
+                                                </tbody>
+
+                                            </table>
+                                        </div> {/* end .table-responsive*/}
                                     </form>
                                 </div> {/* end card-box*/}
                             </div> {/* end col*/}
