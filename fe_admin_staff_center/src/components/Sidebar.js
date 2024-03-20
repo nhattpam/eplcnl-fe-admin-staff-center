@@ -165,7 +165,7 @@ const Sidebar = ({ isAdmin, isStaff, isCenter }) => {
 
                             {isCenter && (
                                 <li>
-                                    <Link to={`/list-salary-by-center/${centerId}`}>
+                                    <Link to={`/center-wallet/${centerId}`}>
                                         <i class="ti-money"></i>
                                         <span> Salary </span>
                                     </Link>

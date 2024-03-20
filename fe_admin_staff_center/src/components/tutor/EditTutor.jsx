@@ -385,12 +385,13 @@ const EditTutor = () => {
 
 
                                     </form>
+                                    {
+                                        currentCourses.length === 0 && (
+                                            <p className='text-center'>There are no courses.</p>
+                                        )
+                                    }
                                 </div> {/* end card-box*/}
-                                {
-                                    currentCourses.length === 0 && (
-                                        <p>There are no courses.</p>
-                                    )
-                                }
+
                             </div> {/* end col*/}
                         </div>
                         {/* end row*/}

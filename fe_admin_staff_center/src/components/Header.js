@@ -148,7 +148,7 @@ const Header = () => {
                                     {isAdmin && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p>Balance: {account.wallet?.balance}</p>
+                                            <p>Balance: {account.wallet?.balance}$</p>
                                         </>
                                     )}
 
@@ -156,14 +156,16 @@ const Header = () => {
                                     {isStaff && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p></p>
+                                            <p>Balance: {account.wallet?.balance}$</p>
+
                                         </>
                                     )}
 
                                     {isCenter && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p></p>
+                                            <p>Balance: {account.wallet?.balance}$</p>
+
                                         </>
 
                                     )}
@@ -172,16 +174,6 @@ const Header = () => {
                                 <a href="javascript:void(0);" className="dropdown-item notify-item" onClick={openModal} style={{ marginTop: '-30px' }}>
                                     <i className="fe-user" />
                                     <span>My Account</span>
-                                </a>
-                                {/* item*/}
-                                <a href="javascript:void(0);" className="dropdown-item notify-item">
-                                    <i className="fe-settings" />
-                                    <span>Settings</span>
-                                </a>
-                                {/* item*/}
-                                <a href="javascript:void(0);" className="dropdown-item notify-item">
-                                    <i className="fe-lock" />
-                                    <span>Lock Screen</span>
                                 </a>
                                 <div className="dropdown-divider" />
                                 {/* item*/}
