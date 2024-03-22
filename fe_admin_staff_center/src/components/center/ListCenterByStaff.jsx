@@ -110,7 +110,7 @@ const ListCenterByStaff = () => {
                                                         <th>Email</th>
                                                         <th data-hide="phone">Description</th>
                                                         <th data-hide="phone, tablet">Address</th>
-                                                        <th>Is Managed By</th>
+                                                        <th>Managed By</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
                                                         {/* <th>Tutors</th> */}

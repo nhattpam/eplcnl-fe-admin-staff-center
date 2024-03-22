@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import accountService from '../services/account.service';
+import walletHistoryService from '../services/wallet-history.service';
+import walletService from '../services/wallet.service';
 
 const Header = () => {
 
@@ -94,6 +96,32 @@ const Header = () => {
         const { name, value } = event.target;
         setEditedAccount({ ...editedAccount, [name]: value });
     };
+
+      //WALLET HISTORY
+    const [walletHistoryList, setWalletHistoryList] = useState([]);
+
+    useEffect(() => {
+        walletService
+            .getAllWalletHistoryByWallet(account.wallet?.id)
+            .then((res) => {
+                setWalletHistoryList(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [account.wallet?.id]);
+     
+    const [showWalletHistoryModal, setShowWalletHistoryModal] = useState(false);
+
+    const openWalletHistoryModal = () => {
+        setShowWalletHistoryModal(true);
+    };
+
+    const closeWalletHistoryModal = () => {
+        setShowWalletHistoryModal(false);
+    };
+
+
     return (
         <>
             {/* Topbar Start */}
@@ -148,7 +176,7 @@ const Header = () => {
                                     {isAdmin && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p>Balance: {account.wallet?.balance}$</p>
+                                            <p>Balance: {account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
                                         </>
                                     )}
 
@@ -156,7 +184,7 @@ const Header = () => {
                                     {isStaff && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p>Balance: {account.wallet?.balance}$</p>
+                                            <p>Balance: {account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
 
                                         </>
                                     )}
@@ -164,7 +192,7 @@ const Header = () => {
                                     {isCenter && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p>Balance: {account.wallet?.balance}$</p>
+                                            <p>Balance: {account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
 
                                         </>
 
@@ -205,7 +233,7 @@ const Header = () => {
             {/* end Topbar */}
             {/* My Account Modal */}
             {showModal && (
-                <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+                <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -306,7 +334,57 @@ const Header = () => {
                     </div>
                 </div>
             )}
+            {
+                showWalletHistoryModal && (
+                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                        <div className="modal-dialog modal-dialog-scrollable" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Wallet History</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeWalletHistoryModal}>
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    {/* Conditional rendering based on edit mode */}
 
+                                    <div>
+                                        {/* Input fields for editing */}
+                                        <div className="table-responsive">
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
+                                                <thead className="thead-light">
+                                                    <tr>
+                                                        <th>No.</th>
+                                                        <th>Transaction Date</th>
+                                                        <th>Note</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        walletHistoryList.length > 0 && walletHistoryList.map((walletHistory, index) => (
+                                                            <tr key={walletHistory.id}>
+                                                                <td>{index + 1}</td>
+                                                                <td>{walletHistory.transactionDate}</td>
+                                                                <td>{walletHistory.note}</td>
+                                                            </tr>
+                                                        ))
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div className="modal-footer">
+                                    {/* Conditional rendering of buttons based on edit mode */}
+                                    <button type="button" className="btn btn-secondary" onClick={closeWalletHistoryModal}>Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
 
         </>
     )

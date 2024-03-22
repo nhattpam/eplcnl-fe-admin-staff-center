@@ -252,13 +252,6 @@ const EditStaff = () => {
 
                           <button
                             type="button"
-                            className="btn btn-warning ml-1" onClick={handleBanClick}
-                          >
-                            <i class="fas fa-ban"></i>
-                          </button>
-
-                          <button
-                            type="button"
                             className="btn btn-danger ml-1" onClick={handleDeleteClick}
                           >
                             <i class="fa-solid fa-user-xmark"></i>
@@ -270,7 +263,7 @@ const EditStaff = () => {
                     </div>
 
                     {showModal && (
-                      <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                      <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
                         <div className="modal-dialog">
                           <div className="modal-content">
                             <div className="modal-header">

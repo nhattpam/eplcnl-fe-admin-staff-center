@@ -157,26 +157,7 @@ const StaffDashboard = () => {
                             <div className="row">
                                 <div className="col-12">
                                     <div className="page-title-box">
-                                        <div className="page-title-right">
-                                            <form className="form-inline">
-                                                <div className="form-group">
-                                                    <div className="input-group input-group-sm">
-                                                        <input type="text" className="form-control border" id="dash-daterange" />
-                                                        <div className="input-group-append">
-                                                            <span className="input-group-text bg-blue border-blue text-white">
-                                                                <i className="mdi mdi-calendar-range" />
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="javascript: void(0);" className="btn btn-blue btn-sm ml-2">
-                                                    <i className="mdi mdi-autorenew" />
-                                                </a>
-                                                <a href="javascript: void(0);" className="btn btn-blue btn-sm ml-1">
-                                                    <i className="mdi mdi-filter-variant" />
-                                                </a>
-                                            </form>
-                                        </div>
+                                       
                                         <h4 className="page-title">Dashboard</h4>
                                     </div>
                                 </div>
@@ -217,40 +198,7 @@ const StaffDashboard = () => {
                                         </div> {/* end row*/}
                                     </div> {/* end widget-rounded-circle*/}
                                 </div> {/* end col*/}
-                                <div className="col-md-6 col-xl-3">
-                                    <div className="widget-rounded-circle card-box">
-                                        <div className="row">
-                                            <div className="col-6">
-                                                <div className="avatar-lg rounded-circle bg-soft-info border-info border">
-                                                    <i className="fe-bar-chart-line- font-22 avatar-title text-info" />
-                                                </div>
-                                            </div>
-                                            <div className="col-6">
-                                                <div className="text-right">
-                                                    <h3 className="text-dark mt-1"><span data-plugin="counterup">0.58</span>%</h3>
-                                                    <p className="text-muted mb-1 text-truncate">Conversion</p>
-                                                </div>
-                                            </div>
-                                        </div> {/* end row*/}
-                                    </div> {/* end widget-rounded-circle*/}
-                                </div> {/* end col*/}
-                                <div className="col-md-6 col-xl-3">
-                                    <div className="widget-rounded-circle card-box">
-                                        <div className="row">
-                                            <div className="col-6">
-                                                <div className="avatar-lg rounded-circle bg-soft-warning border-warning border">
-                                                    <i className="fe-eye font-22 avatar-title text-warning" />
-                                                </div>
-                                            </div>
-                                            <div className="col-6">
-                                                <div className="text-right">
-                                                    <h3 className="text-dark mt-1"><span data-plugin="counterup">78.41</span>k</h3>
-                                                    <p className="text-muted mb-1 text-truncate">Today's Visits</p>
-                                                </div>
-                                            </div>
-                                        </div> {/* end row*/}
-                                    </div> {/* end widget-rounded-circle*/}
-                                </div> {/* end col*/}
+                                
                             </div>
                             {/* end row*/}
 

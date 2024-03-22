@@ -183,7 +183,7 @@ const EditCenter = () => {
                                         <div className="row">
                                             <div className="col-md-8">
                                                 <div className="table-responsive">
-                                                    <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-2" data-page-size={7}>
+                                                    <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-2" data-page-size={7}>
                                                         <tbody>
                                                             <tr>
                                                                 <th>Center Name:</th>
@@ -196,6 +196,14 @@ const EditCenter = () => {
                                                             <tr>
                                                                 <th>Description:</th>
                                                                 <td>{center.description}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Phone Number:</th>
+                                                                <td>{center.phoneNumber}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Tax Number:</th>
+                                                                <td>{center.taxIdentificationNumber}</td>
                                                             </tr>
 
                                                         </tbody>
@@ -235,7 +243,7 @@ const EditCenter = () => {
                                         {isAdmin && (
 
                                             <div className="form-group">
-                                                <label htmlFor="staffId">Is Managed By *:</label>
+                                                <label htmlFor="staffId">Managed By *:</label>
                                                 <select
                                                     className="form-control"
                                                     id="staffId"

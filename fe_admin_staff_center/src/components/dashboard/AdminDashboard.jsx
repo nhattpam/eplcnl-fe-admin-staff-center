@@ -24,7 +24,7 @@ const AdminDashboard = () => {
     //list transaction
     const [transactionList, setTransactionList] = useState([]);
     const [enrollmentList, setEnrollmentList] = useState([]);
-    const [transactionsPerPage] = useState(5);
+    const [transactionsPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
 
@@ -462,26 +462,6 @@ const AdminDashboard = () => {
                             <div className="row">
                                 <div className="col-12">
                                     <div className="page-title-box">
-                                        <div className="page-title-right">
-                                            <form className="form-inline">
-                                                <div className="form-group">
-                                                    <div className="input-group input-group-sm">
-                                                        <input type="text" className="form-control btransaction" id="dash-daterange" />
-                                                        <div className="input-group-append">
-                                                            <span className="input-group-text bg-blue btransaction-blue text-white">
-                                                                <i className="mdi mdi-calendar-range" />
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="javascript: void(0);" className="btn btn-blue btn-sm ml-2">
-                                                    <i className="mdi mdi-autorenew" />
-                                                </a>
-                                                <a href="javascript: void(0);" className="btn btn-blue btn-sm ml-1">
-                                                    <i className="mdi mdi-filter-variant" />
-                                                </a>
-                                            </form>
-                                        </div>
                                         <h4 className="page-title">Dashboard</h4>
                                     </div>
                                 </div>
@@ -539,23 +519,7 @@ const AdminDashboard = () => {
                                         </div> {/* end row*/}
                                     </div> {/* end widget-rounded-circle*/}
                                 </div> {/* end col*/}
-                                <div className="col-md-6 col-xl-3">
-                                    <div className="widget-rounded-circle card-box">
-                                        <div className="row">
-                                            <div className="col-6">
-                                                <div className="avatar-lg rounded-circle bg-soft-warning btransaction-warning btransaction">
-                                                    <i className="fe-eye font-22 avatar-title text-warning" />
-                                                </div>
-                                            </div>
-                                            <div className="col-6">
-                                                <div className="text-right">
-                                                    <h3 className="text-dark mt-1"><span data-plugin="counterup">78.41</span>k</h3>
-                                                    <p className="text-muted mb-1 text-truncate">Today's Visits</p>
-                                                </div>
-                                            </div>
-                                        </div> {/* end row*/}
-                                    </div> {/* end widget-rounded-circle*/}
-                                </div> {/* end col*/}
+                               
                             </div>
                             {/* end row*/}
                             <div className="row">
@@ -569,21 +533,7 @@ const AdminDashboard = () => {
                                             <div id="total-revenue" className="mt-0" data-colors="#f1556c" />
                                             <h5 className="text-muted mt-0">Total sales made today</h5>
                                             <h2>${sumForToday}</h2>
-                                            <p className="text-muted w-75 mx-auto sp-line-2">Traditional heading elements are designed to work best in the meat of your page content.</p>
-                                            <div className="row mt-3">
-                                                <div className="col-4">
-                                                    <p className="text-muted font-15 mb-1 text-truncate">Target</p>
-                                                    <h4><i className="fe-arrow-down text-danger mr-1" />$7.8k</h4>
-                                                </div>
-                                                <div className="col-4">
-                                                    <p className="text-muted font-15 mb-1 text-truncate">Last week</p>
-                                                    <h4><i className="fe-arrow-up text-success mr-1" />$1.4k</h4>
-                                                </div>
-                                                <div className="col-4">
-                                                    <p className="text-muted font-15 mb-1 text-truncate">Last Month</p>
-                                                    <h4><i className="fe-arrow-down text-danger mr-1" />$15k</h4>
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                     </div> {/* end card-box */}
                                 </div> {/* end col*/}

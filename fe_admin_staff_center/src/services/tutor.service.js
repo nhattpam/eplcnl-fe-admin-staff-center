@@ -52,5 +52,13 @@ class TutorService {
       }
     });
   }
+
+  getAllPaperWorksByTutor(id) {
+    return axios.get(`${API_URL}/tutors/${id}/paper-works`, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
 }
 export default new TutorService;

@@ -154,11 +154,6 @@ const EditTutor = () => {
     };
 
 
-    const handleBanClick = () => {
-        setShowModal(true); // Show modal when thumb-down button is clicked
-        setAccount({ ...account, isActive: false }); // Set isActive to false
-    };
-
     const handleDeleteClick = () => {
         setShowModal(true); // Show modal when thumb-down button is clicked
         setAccount({ ...account, isActive: false, isDeleted: true }); // Set isActive to false
@@ -167,6 +162,29 @@ const EditTutor = () => {
     const handleActiveClick = () => {
         setAccount({ ...account, isActive: true, isDeleted: false }); // Set isActive to false
     };
+
+    //paper work tutor
+    const [showQualificationModal, setShowQualificationModal] = useState(false);
+    //qualification
+    const openQualificationModal = () => {
+        setShowQualificationModal(true);
+
+    };
+
+    const closeQualificationModal = () => {
+        setShowQualificationModal(false);
+    };
+    const [paperWorkList, setPaperWorkList] = useState([]);
+    useEffect(() => {
+        tutorService
+            .getAllPaperWorksByTutor(tutor.id)
+            .then((res) => {
+                setPaperWorkList(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
 
     return (
@@ -231,40 +249,46 @@ const EditTutor = () => {
                                                                 <th>Note:</th>
                                                                 <td dangerouslySetInnerHTML={{ __html: account.note }} />
                                                             </tr>
+                                                            <tr>
+                                                                <th>Qualifications:</th>
+                                                                <td>
+                                                                    <button type="button" className='btn btn-success' onClick={openQualificationModal}> <i class="fas fa-folder-open"> </i></button>
+                                                                </td>
+                                                            </tr>
                                                         </tbody>
 
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div className="col-md-4">
-                                                <div className="form-group mb-0">
-                                                    <button
-                                                        type="submit"
-                                                        className="btn btn-success " onClick={handleActiveClick}
-                                                    >
-                                                        <i class="fas fa-thumbs-up"></i>
-                                                    </button>
+                                            {
+                                                isAdmin && (
+                                                    <div className="col-md-4">
+                                                        <div className="form-group mb-0">
+                                                            <button
+                                                                type="submit"
+                                                                className="btn btn-success " onClick={handleActiveClick}
+                                                            >
+                                                                <i class="fas fa-thumbs-up"></i>
+                                                            </button>
 
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-warning ml-1" onClick={handleBanClick}
-                                                    >
-                                                        <i class="fas fa-ban"></i>
-                                                    </button>
 
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-danger ml-1" onClick={handleDeleteClick}
-                                                    >
-                                                        <i class="fa-solid fa-user-xmark"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
+
+                                                            <button
+                                                                type="button"
+                                                                className="btn btn-danger ml-1" onClick={handleDeleteClick}
+                                                            >
+                                                                <i class="fa-solid fa-user-xmark"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+
 
 
                                         </div>
                                         {showModal && (
-                                            <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                                            <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
                                                 <div className="modal-dialog">
                                                     <div className="modal-content">
                                                         <div className="modal-header">
@@ -302,10 +326,57 @@ const EditTutor = () => {
                                                 </div>
                                             </div>
                                         )}
+                                        {showQualificationModal && (
+                                            <>
+                                                <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                                                    <div className="modal-dialog modal-lg modal-dialog-centered " role="document"> {/* Added modal-dialog-centered class */}
+
+                                                        <div className="modal-content">
+                                                            <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
+                                                                <div>
+                                                                    <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                                        <thead className="thead-light">
+                                                                            <tr>
+                                                                                <th scope="col">#</th>
+                                                                                <th scope="col">Type</th>
+                                                                                <th scope="col">Url</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {paperWorkList.length > 0 && paperWorkList.map((paperWork, index) => (
+
+                                                                                <tr>
+                                                                                    <th scope="row">{index + 1}</th>
+                                                                                    <td>{paperWork.paperWorkType.name}</td>
+                                                                                    <td className='text-truncate' style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}><Link to={paperWork.paperWorkUrl}>{paperWork.paperWorkUrl}</Link></td>
+                                                                                </tr>
+                                                                            ))}
+                                                                            {
+                                                                                paperWorkList.length === 0 && (
+                                                                                    <p className='text-center'>No paper works.</p>
+                                                                                )
+                                                                            }
+
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                </div>
+                                                            </div>
+                                                            <div className="modal-footer">
+                                                                <button type="button" className="btn btn-secondary" onClick={closeQualificationModal}>Close</button>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </>
+                                        )
+                                        }
 
                                         {isAdmin && (
                                             <div className="form-group">
-                                                <label htmlFor="staffId">Is Managed By *:</label>
+                                                <label htmlFor="staffId">Managed By *:</label>
                                                 <select
                                                     className="form-control"
                                                     id="staffId"

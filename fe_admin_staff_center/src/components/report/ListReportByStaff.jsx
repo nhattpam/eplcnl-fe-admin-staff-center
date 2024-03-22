@@ -154,10 +154,11 @@ const ListReportByStaff = () => {
                                                                 </tr>
                                                                 {expandedReasons[cus.id] && (
                                                                     <>
-                                                                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+                                                                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)'}}
+>
                                                                             <div className="modal-dialog modal-lg modal-dialog-centered" role="document"> {/* Added modal-dialog-centered class */}
 
-                                                                                <div className="modal-content">
+                                                                                <div className="modal-content" >
 
 
                                                                                     <div className="modal-header">
@@ -172,7 +173,7 @@ const ListReportByStaff = () => {
                                                                                         </div>
                                                                                         <div className="modal-footer">
                                                                                             {/* Conditional rendering of buttons based on edit mode */}
-                                                                                            <button type="button" className="btn btn-secondary" onClick={closeReasonModal}>Close</button>
+                                                                                            <button type="button" className="btn btn-dark" onClick={closeReasonModal}>Close</button>
                                                                                         </div>
                                                                                     </div>
 

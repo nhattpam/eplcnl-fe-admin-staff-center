@@ -14,6 +14,8 @@ import learnerService from '../../services/learner.service';
 
 const EditLearner = () => {
 
+  const [payout, setPayout] = useState(0);
+
   const [account, setAccount] = useState({
     id: "",
     email: "",
@@ -60,8 +62,12 @@ const EditLearner = () => {
           const enrollmentResponse = await enrollmentService.getAllEnrollment();
           const enrollmentData = enrollmentResponse.data;
 
-          const learnerEnrollments = enrollmentData.filter(enrollment => enrollment.learnerId === learnerData.id);
+
+
+          const learnerEnrollments = enrollmentData.filter(enrollment => enrollment.transaction?.learnerId === learnerData.id && enrollment.refundStatus === false);
+          console.log("LENGH: " + learnerEnrollments.length)
           setEnrollmentList(learnerEnrollments);
+
         }
       } catch (error) {
         console.log(error);
@@ -70,6 +76,18 @@ const EditLearner = () => {
 
     fetchData();
   }, [id]);
+
+  // Use useEffect to ensure enrollmentList is updated before calculating payout
+  useEffect(() => {
+    let payout = 0;
+    enrollmentList.forEach((enrollment) => {
+      if (enrollment.transaction && enrollment.transaction.course && enrollment.transaction.course.stockPrice) {
+        payout += enrollment.transaction.course.stockPrice;
+      }
+    });
+    console.log("Payout: " + payout);
+    setPayout(payout); // Update the payout state
+  }, [enrollmentList]); // Trigger the effect whenever enrollmentList changes
 
 
   const filteredEnrollments = enrollmentList
@@ -183,6 +201,12 @@ const EditLearner = () => {
                                 <th>Note:</th>
                                 <td dangerouslySetInnerHTML={{ __html: account.note }} />
                               </tr>
+                              <tr>
+                                <th>Total Payout:</th>
+                                <td>
+                                  {payout} $
+                                </td>
+                              </tr>
                             </tbody>
                           </table>
                         </div>
@@ -196,12 +220,6 @@ const EditLearner = () => {
                             <i class="fas fa-thumbs-up"></i>
                           </button>
 
-                          <button
-                            type="button"
-                            className="btn btn-warning ml-1" onClick={handleBanClick}
-                          >
-                            <i class="fas fa-ban"></i>
-                          </button>
 
                           <button
                             type="button"
@@ -214,7 +232,7 @@ const EditLearner = () => {
                     </div>
 
                     {showModal && (
-                      <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                      <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
                         <div className="modal-dialog">
                           <div className="modal-content">
                             <div className="modal-header">
@@ -275,18 +293,18 @@ const EditLearner = () => {
                                 <tr>
                                   <td>{index + 1}</td>
                                   <td>
-                                    <img src={cus.course.imageUrl} style={{ height: '70px', width: '100px' }}>
+                                    <img src={cus.transaction.course.imageUrl} style={{ height: '70px', width: '100px' }}>
 
                                     </img>
                                   </td>
                                   <td>
-                                    <Link to={`/edit-course/${cus.courseId}`} className='text-success'>
-                                      {cus.course.name}
+                                    <Link to={`/edit-course/${cus.transaction.courseId}`} className='text-success'>
+                                      {cus.transaction.course.name}
                                     </Link>
                                   </td>
                                   {/* <td>{cus.name}</td> */}
                                   <td>{cus.enrolledDate}</td>
-                                  <td>{cus.status}</td>
+                                  <td>{cus.transaction.status}</td>
                                   <td>{cus.totalGrade}</td>
                                 </tr>
                               ))

@@ -45,6 +45,13 @@ class WalletService {
     });
   }
 
+  getAllWalletHistoryByWallet(id) {
+    return axios.get(API_URL + `/wallets/${id}/wallet-histories` , {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
   
 }
 export default new WalletService;

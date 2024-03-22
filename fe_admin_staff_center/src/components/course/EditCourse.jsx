@@ -176,6 +176,12 @@ const EditCourse = () => {
                                                             <span className="badge label-table badge-warning">{course.tags}</span>
                                                         </td>
                                                     </tr>
+                                                    <tr>
+                                                        <th>Tutor:</th>
+                                                        <td>
+                                                             {course.tutor?.account?.fullName}
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -379,7 +385,7 @@ const EditCourse = () => {
                                         </>
                                     </div>
                                     {showModal && (
-                                        <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                                        <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
                                             <div className="modal-dialog">
                                                 <div className="modal-content">
                                                     <div className="modal-header">

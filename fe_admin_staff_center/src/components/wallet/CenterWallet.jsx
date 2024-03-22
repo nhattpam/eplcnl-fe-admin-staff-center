@@ -304,7 +304,7 @@ const CenterWallet = () => {
                                     )
                                 }
                                 {showModal && (
-                                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+                                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' , backgroundColor: 'rgba(29, 29, 29, 0.75)'}}>
                                         <div className="modal-dialog" role="document">
                                             <div className="modal-content">
                                                 <form onSubmit={submitWallet}>
