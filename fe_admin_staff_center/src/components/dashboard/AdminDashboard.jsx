@@ -5,6 +5,7 @@ import Sidebar from '../Sidebar'
 import { Chart, PieController, ArcElement, registerables } from "chart.js";
 import transactionService from "../../services/transaction.service";
 import enrollmentService from "../../services/enrollment.service";
+import accountService from "../../services/account.service";
 
 const AdminDashboard = () => {
 
@@ -14,6 +15,7 @@ const AdminDashboard = () => {
     const areaChartRef = useRef(null);
 
     const [transactionCount, setTransactionCount] = useState(0);
+    const [userCount, setUserCount] = useState(0);
     // const [appointmentCount, setAppointmentCount] = useState(0);
     const [sumForCurrentMonth, setSumForCurrentMonth] = useState(0);
     const [sumForPreviousMonth, setSumForPreviousMonth] = useState(0);
@@ -35,6 +37,7 @@ const AdminDashboard = () => {
         fetchMonthlyData();
         fetchTransactions();
         fetchEnrollmentsAndCalculateSum4();
+        countUser();
     }, []);
 
     useEffect(() => {
@@ -419,8 +422,6 @@ const AdminDashboard = () => {
     async function countTransactions() {
         try {
             const res = await transactionService.getAllTransaction();
-            // const activeTransactions = res.data.filter((transaction) => transaction.refundStatus === false);
-
             const transactions = res.data;
             const transactionCount = transactions.length;
 
@@ -430,18 +431,21 @@ const AdminDashboard = () => {
             console.error("Error counting transactions:", error);
         }
     }
-    // async function countAppointments() {
-    //     try {
-    //         const response = await appointmentService.getAllAppointment();
-    //         const appointments = response.data;
-    //         const appointmentCount = appointments.length;
+   //count all user 
+    async function countUser() {
+        try {
+            const res = await accountService.getAllAccount();
+
+            const users = res.data;
+            const userCount = users.length;
 
 
-    //         setAppointmentCount(appointmentCount);
-    //     } catch (error) {
-    //         console.error("Error counting transactions:", error);
-    //     }
-    // }
+            setUserCount(userCount);
+        } catch (error) {
+            console.error("Error counting users:", error);
+        }
+    }
+   
 
 
     return (
@@ -519,7 +523,24 @@ const AdminDashboard = () => {
                                         </div> {/* end row*/}
                                     </div> {/* end widget-rounded-circle*/}
                                 </div> {/* end col*/}
-                               
+                                <div className="col-md-6 col-xl-3">
+                                    <div className="widget-rounded-circle card-box">
+                                        <div className="row">
+                                            <div className="col-6">
+                                                <div className="avatar-lg rounded-circle bg-soft-warning btransaction-warning btransaction">
+                                                    <i className="fe-users font-22 avatar-title text-info" />
+                                                </div>
+                                            </div>
+                                            <div className="col-6">
+                                                <div className="text-right">
+                                                    <h3 className="text-dark mt-1"><span data-plugin="counterup">{userCount}</span></h3>
+                                                    <p className="text-muted mb-1 text-truncate">Total Users</p>
+                                                </div>
+                                            </div>
+                                        </div> {/* end row*/}
+                                    </div> {/* end widget-rounded-circle*/}
+                                </div> {/* end col*/}
+
                             </div>
                             {/* end row*/}
                             <div className="row">
@@ -533,7 +554,7 @@ const AdminDashboard = () => {
                                             <div id="total-revenue" className="mt-0" data-colors="#f1556c" />
                                             <h5 className="text-muted mt-0">Total sales made today</h5>
                                             <h2>${sumForToday}</h2>
-                                            
+
                                         </div>
                                     </div> {/* end card-box */}
                                 </div> {/* end col*/}

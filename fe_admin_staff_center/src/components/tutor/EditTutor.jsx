@@ -252,7 +252,7 @@ const EditTutor = () => {
                                                             <tr>
                                                                 <th>Qualifications:</th>
                                                                 <td>
-                                                                    <button type="button" className='btn btn-success' onClick={openQualificationModal}> <i class="fas fa-folder-open"> </i></button>
+                                                                    <button type="button"  onClick={openQualificationModal}> <i class="fas fa-folder-open"> </i></button>
                                                                 </td>
                                                             </tr>
                                                         </tbody>

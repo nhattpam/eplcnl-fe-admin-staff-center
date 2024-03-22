@@ -45,7 +45,6 @@ const ListTutorByCenter = () => {
         setSearchTerm(event.target.value);
     };
 
-    console.log(typeof tutorList);
 
     const filteredTutors = tutorList
         .filter((tutor) => {
@@ -103,7 +102,7 @@ const ListTutorByCenter = () => {
 
                                                         <Link to="/create-tutor">
                                                             <button className="btn btn-success mr-2">
-                                                                 Create
+                                                                Create
                                                             </button>
                                                         </Link>
                                                     )}
@@ -128,7 +127,6 @@ const ListTutorByCenter = () => {
                                                         <th data-hide="phone, tablet">DOB</th>
                                                         <th data-hide="phone, tablet">Status</th>
                                                         <th>Action</th>
-                                                        <th>Courses</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -137,13 +135,13 @@ const ListTutorByCenter = () => {
                                                             <tr key={tutor.id}>
                                                                 <td>{index + 1}</td>
                                                                 <td>
-                                                                    <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+                                                                    <img src={tutor.account?.imageUrl} style={{ height: '70px', width: '50px' }}>
 
                                                                     </img>
                                                                 </td>
-                                                                <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
-                                                                <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
-                                                                <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
+                                                                <td>{tutor.account && tutor.account?.fullName ? tutor.account?.fullName : 'Unknown Name'}</td>
+                                                                <td>{tutor.account && tutor.account?.phoneNumber ? tutor.account?.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                <td>{tutor.account && tutor.account?.gender !== undefined ? (tutor.account?.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
                                                                 <td>
                                                                     {tutor.account.isActive ? (
                                                                         <span className="badge label-table badge-success">Active</span>
@@ -156,11 +154,7 @@ const ListTutorByCenter = () => {
                                                                         <i className="fa-regular fa-eye"></i>
                                                                     </Link>
                                                                 </td>
-                                                                <td>
-                                                                    <Link to={`/list-course-by-tutor/${tutor.id}`} className='text-dark'>
-                                                                        <i class="ti-more-alt"></i>
-                                                                    </Link>
-                                                                </td>
+
                                                             </tr>
                                                         ))
                                                     }
