@@ -184,7 +184,7 @@ const EditTutor = () => {
             .catch((error) => {
                 console.log(error);
             });
-    }, []);
+    }, [tutor.id]);
 
 
     return (
@@ -252,7 +252,7 @@ const EditTutor = () => {
                                                             <tr>
                                                                 <th>Qualifications:</th>
                                                                 <td>
-                                                                    <button type="button"  onClick={openQualificationModal}> <i class="fas fa-folder-open"> </i></button>
+                                                                    <button type="button" onClick={openQualificationModal}> <i class="fas fa-folder-open"> </i></button>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -348,20 +348,23 @@ const EditTutor = () => {
                                                                                 <tr>
                                                                                     <th scope="row">{index + 1}</th>
                                                                                     <td>{paperWork.paperWorkType.name}</td>
-                                                                                    <td className='text-truncate' style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}><Link to={paperWork.paperWorkUrl}>{paperWork.paperWorkUrl}</Link></td>
+                                                                                    <td className='text-truncate' style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                                                        <a href={paperWork.paperWorkUrl} target="_blank" rel="noopener noreferrer" >{paperWork.paperWorkUrl}</a>
+                                                                                    </td>
                                                                                 </tr>
                                                                             ))}
-                                                                            {
-                                                                                paperWorkList.length === 0 && (
-                                                                                    <p className='text-center'>No paper works.</p>
-                                                                                )
-                                                                            }
+
 
                                                                         </tbody>
                                                                     </table>
 
                                                                 </div>
                                                             </div>
+                                                            {
+                                                                paperWorkList.length === 0 && (
+                                                                    <p className='text-center'>No paper works.</p>
+                                                                )
+                                                            }
                                                             <div className="modal-footer">
                                                                 <button type="button" className="btn btn-secondary" onClick={closeQualificationModal}>Close</button>
                                                             </div>

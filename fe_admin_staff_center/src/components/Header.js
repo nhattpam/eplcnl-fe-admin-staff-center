@@ -128,33 +128,6 @@ const Header = () => {
             <div className="navbar-custom" style={{ backgroundColor: '#242732' }}>
                 <div className="container-fluid">
                     <ul className="list-unstyled topnav-menu float-right mb-0">
-                        <li className="d-none d-lg-block">
-                            <form className="app-search">
-                                <div className="app-search-box dropdown">
-                                    <div className="input-group">
-                                        <input type="search" className="form-control" placeholder="Search..." id="top-search" />
-                                        <div className="input-group-append">
-                                            <button className="btn" type="submit">
-                                                <i className="fe-search" />
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </form>
-                        </li>
-                        <li className="dropdown d-inline-block d-lg-none">
-                            <a className="nav-link dropdown-toggle arrow-none waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                <i className="fe-search noti-icon" />
-                            </a>
-                            <div className="dropdown-menu dropdown-lg dropdown-menu-right p-0">
-                                <form className="p-3">
-                                    <input type="text" className="form-control" placeholder="Search ..." aria-label="Recipient's username" />
-                                </form>
-                            </div>
-                        </li>
-
-
 
                         <li className="dropdown notification-list topbar-dropdown">
                             <a className="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">

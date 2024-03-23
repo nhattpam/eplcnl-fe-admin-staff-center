@@ -27,7 +27,13 @@ const ListTutorByStaff = () => {
             .getAllTutorsByStaff(staffId)
             .then((res) => {
                 console.log(res.data);
-                setTutorList(res.data);
+                const sortedTutors = res.data.sort((a, b) => {
+                    // Assuming createdDate is a valid property on account
+                    const dateA = new Date(a.account?.createdDate);
+                    const dateB = new Date(b.account?.createdDate);
+                    return dateB - dateA; // Sort in descending order, change to dateA - dateB for ascending
+                });
+                setTutorList(sortedTutors);
 
             })
             .catch((error) => {
@@ -113,6 +119,8 @@ const ListTutorByStaff = () => {
                                                         <th data-hide="phone">Gender</th>
                                                         <th data-hide="phone, tablet">DOB</th>
                                                         <th data-hide="phone, tablet">Status</th>
+                                                        <th data-hide="phone, tablet">Joined Date</th>
+
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -135,6 +143,9 @@ const ListTutorByStaff = () => {
                                                                     ) : (
                                                                         <span className="badge label-table badge-danger">Inactive</span>
                                                                     )}
+                                                                </td>
+                                                                <td>
+                                                                    {tutor.account?.createdDate}
                                                                 </td>
                                                                 <td>
                                                                     <Link to={`/edit-tutor/${tutor.account.id}`} className='text-secondary'>

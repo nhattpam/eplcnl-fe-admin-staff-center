@@ -21,7 +21,13 @@ const ListLearner = () => {
             .getAllLearner()
             .then((res) => {
                 console.log(res.data);
-                setLearnerList(res.data);
+                const sortedLearners = res.data.sort((a, b) => {
+                    // Assuming createdDate is a valid property on account
+                    const dateA = new Date(a.account?.createdDate);
+                    const dateB = new Date(b.account?.createdDate);
+                    return dateB - dateA; // Sort in descending order, change to dateA - dateB for ascending
+                });
+                setLearnerList(sortedLearners);
 
             })
             .catch((error) => {
@@ -103,6 +109,8 @@ const ListLearner = () => {
                                                         <th data-hide="phone, tablet">Gender</th>
                                                         <th data-hide="phone, tablet">Phone Number</th>
                                                         <th data-hide="phone, tablet">Status</th>
+                                                        <th data-hide="phone, tablet">Joined Date</th>
+
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -134,6 +142,9 @@ const ListLearner = () => {
                                                                     ) : (
                                                                         <span className="badge label-table badge-danger">Inactive</span>
                                                                     )}
+                                                                </td>
+                                                                <td>
+                                                                    {cus.account?.createdDate}
                                                                 </td>
                                                                 <td>
                                                                     <Link to={`/edit-learner/${cus.account.id}`} className='text-secondary'>

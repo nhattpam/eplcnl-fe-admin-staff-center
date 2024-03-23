@@ -21,7 +21,13 @@ const ListStaff = () => {
             .getAllStaff()
             .then((res) => {
                 console.log(res.data);
-                setStaffList(res.data);
+                const sortedStaffs = res.data.sort((a, b) => {
+                    // Assuming createdDate is a valid property on account
+                    const dateA = new Date(a.account?.createdDate);
+                    const dateB = new Date(b.account?.createdDate);
+                    return dateB - dateA; // Sort in descending order, change to dateA - dateB for ascending
+                });
+                setStaffList(sortedStaffs);
 
             })
             .catch((error) => {
@@ -110,6 +116,8 @@ const ListStaff = () => {
                                                         <th data-hide="phone, tablet">Gender</th>
                                                         <th data-hide="phone, tablet">Phone Number</th>
                                                         <th data-hide="phone, tablet">Status</th>
+                                                        <th data-hide="phone, tablet">Joined Date</th>
+
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -141,6 +149,9 @@ const ListStaff = () => {
                                                                     ) : (
                                                                         <span className="badge label-table badge-danger">Inactive</span>
                                                                     )}
+                                                                </td>
+                                                                <td>
+                                                                    {cus.account?.createdDate}
                                                                 </td>
                                                                 <td>
                                                                     <Link to={`/edit-staff/${cus.account.id}`} className='text-secondary'>
