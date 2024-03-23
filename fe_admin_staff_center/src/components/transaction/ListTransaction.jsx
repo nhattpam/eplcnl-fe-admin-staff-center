@@ -40,7 +40,10 @@ const ListTransaction = () => {
     const filteredTransactions = transactionList
         .filter((transaction) => {
             return (
-                transaction.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                transaction.course?.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                transaction.course?.code.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                transaction.learner?.account.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                transaction.learner?.account.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
 
             );
         });

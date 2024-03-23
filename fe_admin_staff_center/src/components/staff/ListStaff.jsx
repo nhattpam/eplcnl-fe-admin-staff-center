@@ -43,8 +43,9 @@ const ListStaff = () => {
     const filteredStaffs = staffList
         .filter((staff) => {
             return (
-                staff.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
-
+                staff.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                staff.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                staff.account?.phoneNumber.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
             );
         });
 

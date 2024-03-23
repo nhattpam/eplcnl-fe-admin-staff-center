@@ -43,8 +43,10 @@ const ListLearner = () => {
     const filteredLearners = learnerList
         .filter((learner) => {
             return (
-                learner.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
-
+                learner.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                learner.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                learner.account?.phoneNumber.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                learner.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase())
             );
         });
 
