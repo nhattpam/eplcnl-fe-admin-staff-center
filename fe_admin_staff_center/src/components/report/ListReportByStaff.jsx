@@ -42,7 +42,8 @@ const ListReportByStaff = () => {
     const filteredReports = ReportList
         .filter((Report) => {
             return (
-                Report.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                Report.course?.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                Report.learner?.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
 
             );
         });

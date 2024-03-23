@@ -42,12 +42,10 @@ const ListCenterByStaff = () => {
     const filteredCenters = centerList
         .filter((center) => {
             return (
-                center.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
                 center.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
                 center.description.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
                 center.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-                center.address.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-                center.isActive.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                center.address.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
 
             );
         });

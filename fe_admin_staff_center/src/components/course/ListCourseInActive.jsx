@@ -44,8 +44,11 @@ const ListCourseInActive = () => {
     const filteredCourses = courseList
         .filter((course) => {
             return (
-                course.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
-
+                course.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                course.code.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                course.stockPrice.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                course.tags.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                course.category?.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
             );
         });
 
@@ -126,7 +129,7 @@ const ListCourseInActive = () => {
                                                                 </td>
                                                                 <td>{cus.code}</td>
                                                                 <td>{cus.name}</td>
-                                                                <td>{cus.stockPrice}</td>
+                                                                <td>{cus.stockPrice}$</td>
                                                                 <td>{cus.rating.toFixed(1)}</td>
                                                                 <td>{cus.tags}</td>
                                                                 <td>{cus.category.name}</td>
