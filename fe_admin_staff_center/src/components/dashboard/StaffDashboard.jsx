@@ -5,6 +5,7 @@ import Sidebar from '../Sidebar'
 import { Chart, PieController, ArcElement, registerables } from "chart.js";
 import staffService from "../../services/staff.service";
 import { Link } from "react-router-dom";
+import accountService from "../../services/account.service";
 
 const StaffDashboard = () => {
 
@@ -13,11 +14,35 @@ const StaffDashboard = () => {
     const [centerCount, setCenterCount] = useState(0);
 
     const storedStaffId = localStorage.getItem('staffId');
+    const storedAccountId = localStorage.getItem('accountId');
 
     useEffect(() => {
         countCenters();
         countTutors();
     }, []);
+
+    const [account, setAccount] = useState({
+        email: "",
+        password: "",
+        fullName: "",
+        phoneNumber: "",
+        imageUrl: "",
+        gender: "",
+        wallet: []
+    });
+
+    useEffect(() => {
+        if (storedAccountId) {
+            accountService
+                .getAccountById(storedAccountId)
+                .then((res) => {
+                    setAccount(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [storedAccountId]);
 
     // Function to count the centers
     async function countCenters() {
@@ -157,13 +182,30 @@ const StaffDashboard = () => {
                             <div className="row">
                                 <div className="col-12">
                                     <div className="page-title-box">
-                                       
+
                                         <h4 className="page-title">Dashboard</h4>
                                     </div>
                                 </div>
                             </div>
                             {/* end page title */}
                             <div className="row">
+                                <div className="col-md-6 col-xl-3">
+                                    <div className="widget-rounded-circle card-box">
+                                        <div className="row">
+                                            <div className="col-6">
+                                                <div className="avatar-lg rounded-circle bg-soft-warning border-warning border">
+                                                    <i className="fe-heart font-22 avatar-title text-warning" />
+                                                </div>
+                                            </div>
+                                            <div className="col-6">
+                                                <div className="text-right">
+                                                    <h3 className="mt-1">$<span data-plugin="counterup">{account.wallet?.balance}</span></h3>
+                                                    <p className="text-muted mb-1 text-truncate">Total Revenue</p>
+                                                </div>
+                                            </div>
+                                        </div> {/* end row*/}
+                                    </div> {/* end widget-rounded-circle*/}
+                                </div> {/* end col*/}
                                 <div className="col-md-6 col-xl-3">
                                     <div className="widget-rounded-circle card-box">
                                         <div className="row">
@@ -198,7 +240,7 @@ const StaffDashboard = () => {
                                         </div> {/* end row*/}
                                     </div> {/* end widget-rounded-circle*/}
                                 </div> {/* end col*/}
-                                
+
                             </div>
                             {/* end row*/}
 

@@ -55,7 +55,9 @@ const ListTutorByCenter = () => {
     const filteredTutors = tutorList
         .filter((tutor) => {
             return (
-                tutor.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                tutor.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                tutor.account?.phoneNumber.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
+                tutor.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
 
             );
         });

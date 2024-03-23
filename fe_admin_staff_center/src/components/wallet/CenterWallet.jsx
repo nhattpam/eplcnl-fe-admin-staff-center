@@ -358,7 +358,7 @@ const CenterWallet = () => {
                                                     </div>
                                                     <div className="modal-footer">
                                                         <button type="submit" className="btn btn-warning">Transfer</button> {/* Change button type to submit */}
-                                                        <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
+                                                        <button type="button" className="btn btn-dark" onClick={closeModal}>Close</button>
                                                     </div>
                                                 </form>
 

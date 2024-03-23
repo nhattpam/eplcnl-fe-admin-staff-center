@@ -161,6 +161,23 @@ const CenterDashboard = () => {
                                     <div className="widget-rounded-circle card-box">
                                         <div className="row">
                                             <div className="col-6">
+                                                <div className="avatar-lg rounded-circle bg-soft-warning border-warning border">
+                                                    <i className="fe-heart font-22 avatar-title text-warning" />
+                                                </div>
+                                            </div>
+                                            <div className="col-6">
+                                                <div className="text-right">
+                                                    <h3 className="mt-1">$<span data-plugin="counterup">{account.wallet?.balance}</span></h3>
+                                                    <p className="text-muted mb-1 text-truncate">Total Revenue</p>
+                                                </div>
+                                            </div>
+                                        </div> {/* end row*/}
+                                    </div> {/* end widget-rounded-circle*/}
+                                </div> {/* end col*/}
+                                <div className="col-md-6 col-xl-3">
+                                    <div className="widget-rounded-circle card-box">
+                                        <div className="row">
+                                            <div className="col-6">
                                                 <div className="avatar-lg rounded-circle bg-soft-primary border-primary border">
                                                     <i className="fe-users font-22 avatar-title text-primary" />
                                                 </div>

@@ -97,7 +97,7 @@ const Header = () => {
         setEditedAccount({ ...editedAccount, [name]: value });
     };
 
-      //WALLET HISTORY
+    //WALLET HISTORY
     const [walletHistoryList, setWalletHistoryList] = useState([]);
 
     useEffect(() => {
@@ -110,7 +110,7 @@ const Header = () => {
                 console.log(error);
             });
     }, [account.wallet?.id]);
-     
+
     const [showWalletHistoryModal, setShowWalletHistoryModal] = useState(false);
 
     const openWalletHistoryModal = () => {
@@ -343,12 +343,19 @@ const Header = () => {
                                                         ))
                                                     }
 
+
                                                 </tbody>
                                             </table>
                                         </div>
 
                                     </div>
+
                                 </div>
+                                {
+                                    walletHistoryList.length === 0 && (
+                                        <p className='text-center'>No histories found.</p>
+                                    )
+                                }
                                 <div className="modal-footer">
                                     {/* Conditional rendering of buttons based on edit mode */}
                                     <button type="button" className="btn btn-secondary" onClick={closeWalletHistoryModal}>Close</button>
