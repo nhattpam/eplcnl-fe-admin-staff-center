@@ -23,12 +23,19 @@ const ListRefundRequest = () => {
             .getAllRefundRequest()
             .then((res) => {
                 // Filter the refunds where isActive is true
-                setRefundList(res.data);
+                const filteredRefundList = res.data;
+                // Sort refundList by requestedDate
+                const sortedRefundList = [...filteredRefundList].sort((a, b) => {
+                    // Assuming requestedDate is a string in ISO 8601 format
+                    return new Date(b.requestedDate) - new Date(a.requestedDate);
+                });
+                setRefundList(sortedRefundList);
             })
             .catch((error) => {
                 console.log(error);
             });
     }, []);
+    
 
 
 

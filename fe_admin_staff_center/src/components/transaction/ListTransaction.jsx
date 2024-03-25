@@ -24,7 +24,13 @@ const ListTransaction = () => {
             .getAllTransaction()
             .then((res) => {
                 // Filter the transactions where isActive is true
-                setTransactionList(res.data);
+                const filteredTransactionList = res.data;
+                // Sort refundList by requestedDate
+                const sortedTransactionList = [...filteredTransactionList].sort((a, b) => {
+                    // Assuming requestedDate is a string in ISO 8601 format
+                    return new Date(b.transactionDate) - new Date(a.transactionDate);
+                });
+                setTransactionList(sortedTransactionList);
             })
             .catch((error) => {
                 console.log(error);
