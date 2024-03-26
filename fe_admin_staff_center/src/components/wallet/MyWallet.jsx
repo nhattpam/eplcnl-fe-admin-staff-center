@@ -246,6 +246,7 @@ const MyWallet = () => {
     //tutor
     const [showModalTutor, setShowModalTutor] = useState(false);
     const [totalAmountTutor, setTotalAmountTutor] = useState(0);
+    const [amountToTransfer, setAmountToTransfer] = useState(0);
 
     const [account, setAccount] = useState({
         email: "",
@@ -273,6 +274,7 @@ const MyWallet = () => {
         tutorService.getTotalAmountByTutor(tutorId)
             .then((res) => {
                 setTotalAmountTutor(res.data);
+                setAmountToTransfer(res.data * 0.2);
             })
     };
 
@@ -282,7 +284,7 @@ const MyWallet = () => {
 
     const submitWalletTutor = async (e) => {
         e.preventDefault();
-        const amount = parseFloat(e.target.amount.value); // Capture the amount from the input field
+        const amount = parseFloat(e.target.amount.value * 0.2); // Capture the amount from the input field
 
         try {
             const adminWallet = { // Use object syntax {} instead of array syntax []
@@ -314,7 +316,7 @@ const MyWallet = () => {
             const walletHistoryTutor = {
                 transactionDate: currentDateTime,
                 walletId: tutorWallet.id,
-                note: `+ ${amount}$ for receiving salary from center at ${currentDateTime}`
+                note: `+ ${amount}$ for receiving salary from MeowLish at ${currentDateTime}`
 
             };
             await walletHistoryService.saveWalletHistory(walletHistoryTutor);
@@ -358,13 +360,136 @@ const MyWallet = () => {
         centerService.getTotalAmountByCenter(centerId)
             .then((res) => {
                 setTotalAmountCenter(res.data);
+                setAmountToTransfer(res.data * 0.2);
             })
     };
 
     const closeModalCenter = () => {
         setShowModalCenter(false);
     };
+
+    const submitWalletCenter = async (e) => {
+        e.preventDefault();
+        const amount = parseFloat(e.target.amount.value * 0.2); // Capture the amount from the input field
+
+        try {
+            const adminWallet = { // Use object syntax {} instead of array syntax []
+                id: wallet.id,
+                balance: wallet.balance - amount,
+                accountId: wallet.accountId
+            };
+            console.log(JSON.stringify(adminWallet))
+
+            await walletService.updateWallet(adminWallet.id, adminWallet);
+
+            const walletHistory = { // Similarly, use object syntax {} here
+                transactionDate: currentDateTime,
+                walletId: adminWallet.id,
+                note: `- ${amount}$ for transfering to center ${center.name} at ${currentDateTime}`
+            };
+            await walletHistoryService.saveWalletHistory(walletHistory);
+
+
+            const centerWallet = {
+                id: center.account?.wallet?.id,
+                balance: center.account?.wallet?.balance + amount,
+                accountId: center.accountId
+            };
+            console.log(JSON.stringify(centerWallet))
+
+            await walletService.updateWallet(centerWallet.id, centerWallet);
+
+            const walletHistoryCenter = {
+                transactionDate: currentDateTime,
+                walletId: centerWallet.id,
+                note: `+ ${amount}$ for receiving salary from MeowLish at ${currentDateTime}`
+
+            };
+            await walletHistoryService.saveWalletHistory(walletHistoryCenter);
+
+            closeModalTutor();
+            window.alert("Transfer successfully!");
+
+            // Reload the page
+            window.location.reload();
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
     //staff
+    const [showModalStaff, setShowModalStaff] = useState(false);
+    const [totalAmountStaff, setTotalAmountStaff] = useState(0);
+
+    const openModalStaff = (accountId, staffId) => {
+        setShowModalStaff(true);
+        if (accountId) {
+            accountService
+                .getAccountById(accountId)
+                .then((res) => {
+                    setAccount(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+
+    };
+
+    const closeModalStaff = () => {
+        setShowModalStaff(false);
+    };
+
+    const submitWalletStaff = async (e) => {
+        e.preventDefault();
+        const amount = parseFloat(e.target.amount.value); // Capture the amount from the input field
+
+        try {
+            const adminWallet = { // Use object syntax {} instead of array syntax []
+                id: wallet.id,
+                balance: wallet.balance - amount,
+                accountId: wallet.accountId
+            };
+            console.log(JSON.stringify(adminWallet))
+
+            await walletService.updateWallet(adminWallet.id, adminWallet);
+
+            const walletHistory = { // Similarly, use object syntax {} here
+                transactionDate: currentDateTime,
+                walletId: adminWallet.id,
+                note: `- ${amount}$ for transfering to staff ${account.fullName} at ${currentDateTime}`
+            };
+            await walletHistoryService.saveWalletHistory(walletHistory);
+
+
+            const staffWallet = {
+                id: account.wallet?.id,
+                balance: account.wallet?.balance + amount,
+                accountId: account.id
+            };
+            console.log(JSON.stringify(staffWallet))
+
+            await walletService.updateWallet(staffWallet.id, staffWallet);
+
+            const walletHistoryStaff = {
+                transactionDate: currentDateTime,
+                walletId: staffWallet.id,
+                note: `+ ${amount}$ for receiving salary from MeowLish at ${currentDateTime}`
+
+            };
+            await walletHistoryService.saveWalletHistory(walletHistoryStaff);
+
+            closeModalTutor();
+            window.alert("Transfer successfully!");
+
+            // Reload the page
+            window.location.reload();
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
     //TRANSFER
 
 
@@ -453,10 +578,10 @@ const MyWallet = () => {
                                         <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
                                             <div className="modal-dialog" role="document">
                                                 <div className="modal-content">
-                                                    <form onSubmit={submitWalletTutor}>
+                                                    <form onSubmit={submitWalletCenter}>
 
                                                         <div className="modal-header">
-                                                            <h5 className="modal-title">Your balance: {wallet.balance}$</h5>
+                                                            <h5 className="modal-title">Your balance: ${wallet.balance}</h5>
                                                             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModalCenter}>
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
@@ -496,6 +621,7 @@ const MyWallet = () => {
                                                                 </div>
                                                                 <div className="col-md-12">
                                                                     <h4>Revenue this month: ${totalAmountCenter}</h4>
+                                                                    <p>Amount to transfer: ${totalAmountCenter} x 20% = ${amountToTransfer}</p>
                                                                 </div>
                                                                 <div className="col-md-12">
                                                                     <input type='hidden' name='amount' value={totalAmountCenter} className='form-control' />
@@ -606,9 +732,9 @@ const MyWallet = () => {
                                                                 </Link>
                                                             </td>
                                                             <td>
-                                                                <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
+                                                                <button className='btn btn-success' onClick={() => openModalStaff(cus.account?.id, cus.id)}>
                                                                     Transfer
-                                                                </Link>
+                                                                </button>
                                                             </td>
                                                         </tr>
                                                     ))
@@ -622,6 +748,72 @@ const MyWallet = () => {
                                             }
                                         </table>
                                     </div> {/* end .table-responsive*/}
+                                    {showModalStaff && (
+                                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                                            <div className="modal-dialog" role="document">
+                                                <div className="modal-content">
+                                                    <form onSubmit={submitWalletStaff}>
+
+                                                        <div className="modal-header">
+                                                            <h5 className="modal-title">Your balance: ${wallet.balance}</h5>
+                                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModalStaff}>
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div className="modal-body">
+
+                                                            <div className='row'>
+                                                                <div className="col-md-4">
+                                                                    <img src={account.imageUrl} alt="avatar" className="rounded-circle mt-4" style={{ width: '90%' }} />
+
+                                                                </div>
+                                                                <div className="col-md-8">
+                                                                    <table className="table table-responsive table-hover mt-3">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <th style={{ width: '30%' }}>Full Name:</th>
+                                                                                <td>{account.fullName}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Email:</th>
+                                                                                <td>{account.email}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Phone Number:</th>
+                                                                                <td>{account && account.phoneNumber ? account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Gender:</th>
+                                                                                <td>
+                                                                                    {account.gender ? (
+                                                                                        <span className="badge label-table badge-success">Male</span>
+                                                                                    ) : (
+                                                                                        <span className="badge label-table badge-danger">Female</span>
+                                                                                    )}
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                <div className="col-md-12">
+                                                                    <input type='number' name='amount' placeholder='Enter the amount' className='form-control' />                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            {
+                                                                wallet.balance > totalAmountTutor && (
+                                                                    <button type="submit" className="btn btn-warning">Transfer</button>
+                                                                )
+                                                            }
+                                                            <button type="button" className="btn btn-dark" onClick={closeModalStaff}>Close</button>
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                     <div className='container-fluid'>
                                         {/* Pagination */}
                                         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -730,7 +922,7 @@ const MyWallet = () => {
                                                 <form onSubmit={submitWalletTutor}>
 
                                                     <div className="modal-header">
-                                                        <h5 className="modal-title">Your balance: {wallet.balance}$</h5>
+                                                        <h5 className="modal-title">Your balance: ${wallet.balance}</h5>
                                                         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModalTutor}>
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -772,6 +964,7 @@ const MyWallet = () => {
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <h4>Revenue this month: ${totalAmountTutor}</h4>
+                                                                <p>Amount to transfer: ${totalAmountTutor} x 20% = ${amountToTransfer}</p>
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <input type='hidden' name='amount' value={totalAmountTutor} className='form-control' />

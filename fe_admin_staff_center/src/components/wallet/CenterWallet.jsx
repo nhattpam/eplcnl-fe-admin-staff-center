@@ -46,6 +46,7 @@ const CenterWallet = () => {
     });
 
     const [totalAmount, setTotalAmount] = useState(0);
+    const [amountToTransfer, setAmountToTransfer] = useState(0);
 
     const [account, setAccount] = useState({
         email: "",
@@ -132,6 +133,7 @@ const CenterWallet = () => {
         tutorService.getTotalAmountByTutor(tutorId)
             .then((res) => {
                 setTotalAmount(res.data);
+                setAmountToTransfer(res.data * 0.2);
             })
     };
 
@@ -171,7 +173,7 @@ const CenterWallet = () => {
     const submitWallet = async (e) => {
         e.preventDefault();
         // Capture the amount from the input field and calculate 20% of it in one step
-        const amount = parseFloat(e.target.amount.value) * 0.20;
+        const amount = parseFloat(e.target.amount.value * 0.2);
 
         try {
             const centerWallet = { // Use object syntax {} instead of array syntax []
@@ -321,7 +323,7 @@ const CenterWallet = () => {
                                                 <form onSubmit={submitWallet}>
 
                                                     <div className="modal-header">
-                                                        <h5 className="modal-title">Your balance: {wallet.balance}$</h5>
+                                                        <h5 className="modal-title">Your balance: ${wallet.balance}</h5>
                                                         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}>
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -363,6 +365,7 @@ const CenterWallet = () => {
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <h4>Revenue this month: ${totalAmount}</h4>
+                                                                <p>Amount to transfer: ${totalAmount} x 20% = ${amountToTransfer}</p>
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <input type='hidden' name='amount' value={totalAmount} className='form-control' />

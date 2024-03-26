@@ -304,10 +304,10 @@ const EditStaff = () => {
 
 
                     <div className="form-group">
-                      <label>Is Managing Centers:</label>
+                      <label>Managing Centers:</label>
 
                       <div className="table-responsive">
-                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
                           <thead className="thead-light">
                             <tr>
                               <th data-toggle="true">No.</th>
@@ -315,7 +315,7 @@ const EditStaff = () => {
                               <th>Email</th>
                               <th data-hide="phone">Description</th>
                               <th data-hide="phone, tablet">Address</th>
-                              <th>Is Managed By</th>
+                              <th>Managed By</th>
                               <th>Status</th>
                               <th>Action</th>
                             </tr>
@@ -391,7 +391,7 @@ const EditStaff = () => {
                     </div>
 
                     <div className="form-group">
-                      <label>Is Managing Tutors:</label>
+                      <label>Managing Tutors:</label>
 
                       <div className="table-responsive">
                         <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
