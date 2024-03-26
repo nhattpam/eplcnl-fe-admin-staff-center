@@ -45,6 +45,8 @@ const CenterWallet = () => {
         accountId: ""
     });
 
+    const [totalAmount, setTotalAmount] = useState(0);
+
     const [account, setAccount] = useState({
         email: "",
         password: "",
@@ -114,7 +116,7 @@ const CenterWallet = () => {
     //TRANSFER
     const [showModal, setShowModal] = useState(false);
 
-    const openModal = (accountId) => {
+    const openModal = (accountId, tutorId) => {
         setShowModal(true);
         if (accountId) {
             accountService
@@ -126,6 +128,11 @@ const CenterWallet = () => {
                     console.log(error);
                 });
         }
+
+        tutorService.getTotalAmountByTutor(tutorId)
+            .then((res) => {
+                setTotalAmount(res.data);
+            })
     };
 
     const closeModal = () => {
@@ -201,6 +208,7 @@ const CenterWallet = () => {
             await walletHistoryService.saveWalletHistory(walletHistoryTutor);
 
             closeModal();
+            window.alert("Transfer successfully!");
 
             // Reload the page
             window.location.reload();
@@ -209,6 +217,8 @@ const CenterWallet = () => {
             console.log(error);
         }
     };
+
+
 
 
     return (
@@ -285,7 +295,7 @@ const CenterWallet = () => {
                                                                 </Link>
                                                             </td>
                                                             <td>
-                                                                <button className='btn btn-success' onClick={() => openModal(cus.account?.id)}>
+                                                                <button className='btn btn-success' onClick={() => openModal(cus.account?.id, cus.id)}>
                                                                     Transfer
                                                                 </button>
                                                             </td>
@@ -304,7 +314,7 @@ const CenterWallet = () => {
                                     )
                                 }
                                 {showModal && (
-                                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' , backgroundColor: 'rgba(29, 29, 29, 0.75)'}}>
+                                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
                                         <div className="modal-dialog" role="document">
                                             <div className="modal-content">
                                                 <form onSubmit={submitWallet}>
@@ -351,13 +361,20 @@ const CenterWallet = () => {
                                                                 </table>
                                                             </div>
                                                             <div className="col-md-12">
-                                                                <input type='number' name='amount' placeholder='Enter the amount' className='form-control' />
+                                                                <h4>Revenue this month: ${totalAmount}</h4>
+                                                            </div>
+                                                            <div className="col-md-12">
+                                                                <input type='hidden' name='amount' value={totalAmount} className='form-control' />
                                                             </div>
                                                         </div>
 
                                                     </div>
                                                     <div className="modal-footer">
-                                                        <button type="submit" className="btn btn-warning">Transfer</button> {/* Change button type to submit */}
+                                                        {
+                                                            wallet.balance > totalAmount && (
+                                                                <button type="submit" className="btn btn-warning">Transfer</button> 
+                                                            )
+                                                        }
                                                         <button type="button" className="btn btn-dark" onClick={closeModal}>Close</button>
                                                     </div>
                                                 </form>

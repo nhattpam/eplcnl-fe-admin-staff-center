@@ -188,7 +188,6 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                                         type="email" id="emailaddress" required placeholder="Enter your email" />
                                 </div>
                                 <div className="form-group">
-                                    <a href="auth-recoverpw-2.html" className="text-muted float-right"><small>Forgot your password?</small></a>
                                     <label htmlFor="password">Password</label>
                                     <div className="input-group input-group-merge">
                                         <input type="password" id="password" value={password}
