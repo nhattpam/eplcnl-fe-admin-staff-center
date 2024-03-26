@@ -104,10 +104,17 @@ const Header = () => {
         walletService
             .getAllWalletHistoryByWallet(account.wallet?.id)
             .then((res) => {
-                setWalletHistoryList(res.data);
+                const filteredHistoryList = res.data;
+                // Sort refundList by requestedDate
+                const sortedHistoryList = [...filteredHistoryList].sort((a, b) => {
+                    // Assuming requestedDate is a string in ISO 8601 format
+                    return new Date(b.transactionDate) - new Date(a.transactionDate);
+                });
+
+                setWalletHistoryList(sortedHistoryList);
             })
             .catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
     }, [account.wallet?.id]);
 
@@ -358,7 +365,7 @@ const Header = () => {
                                 }
                                 <div className="modal-footer">
                                     {/* Conditional rendering of buttons based on edit mode */}
-                                    <button type="button" className="btn btn-secondary" onClick={closeWalletHistoryModal}>Close</button>
+                                    <button type="button" className="btn btn-dark" onClick={closeWalletHistoryModal}>Close</button>
                                 </div>
                             </div>
                         </div>
