@@ -74,5 +74,13 @@ class AccountService {
       }
     });
   }
+
+  uploadImage(account) {
+    return axios.post(API_URL + "/accounts/image/", account, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
 }
 export default new AccountService;
