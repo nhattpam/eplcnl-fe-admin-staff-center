@@ -241,7 +241,131 @@ const MyWallet = () => {
     }, []);
 
 
+    //TRANSFER
 
+    //tutor
+    const [showModalTutor, setShowModalTutor] = useState(false);
+    const [totalAmountTutor, setTotalAmountTutor] = useState(0);
+
+    const [account, setAccount] = useState({
+        email: "",
+        password: "",
+        fullName: "",
+        phoneNumber: "",
+        imageUrl: "",
+        gender: ""
+    });
+
+
+    const openModalTutor = (accountId, tutorId) => {
+        setShowModalTutor(true);
+        if (accountId) {
+            accountService
+                .getAccountById(accountId)
+                .then((res) => {
+                    setAccount(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+        tutorService.getTotalAmountByTutor(tutorId)
+            .then((res) => {
+                setTotalAmountTutor(res.data);
+            })
+    };
+
+    const closeModalTutor = () => {
+        setShowModalTutor(false);
+    };
+
+    const submitWalletTutor = async (e) => {
+        e.preventDefault();
+        const amount = parseFloat(e.target.amount.value); // Capture the amount from the input field
+
+        try {
+            const adminWallet = { // Use object syntax {} instead of array syntax []
+                id: wallet.id,
+                balance: wallet.balance - amount,
+                accountId: wallet.accountId
+            };
+            console.log(JSON.stringify(adminWallet))
+
+            await walletService.updateWallet(adminWallet.id, adminWallet);
+
+            const walletHistory = { // Similarly, use object syntax {} here
+                transactionDate: currentDateTime,
+                walletId: adminWallet.id,
+                note: `- ${amount}$ for transfering to tutor ${account.fullName} at ${currentDateTime}`
+            };
+            await walletHistoryService.saveWalletHistory(walletHistory);
+
+
+            const tutorWallet = {
+                id: account.wallet?.id,
+                balance: account.wallet?.balance + amount,
+                accountId: account.id
+            };
+            console.log(JSON.stringify(tutorWallet))
+
+            await walletService.updateWallet(tutorWallet.id, tutorWallet);
+
+            const walletHistoryTutor = {
+                transactionDate: currentDateTime,
+                walletId: tutorWallet.id,
+                note: `+ ${amount}$ for receiving salary from center at ${currentDateTime}`
+
+            };
+            await walletHistoryService.saveWalletHistory(walletHistoryTutor);
+
+            closeModalTutor();
+            window.alert("Transfer successfully!");
+
+            // Reload the page
+            window.location.reload();
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    //center
+    const [showModalCenter, setShowModalCenter] = useState(false);
+    const [totalAmountCenter, setTotalAmountCenter] = useState(0);
+
+    const [center, setCenter] = useState({
+        email: "",
+        name: "",
+        phoneNumber: "",
+        taxIdentificationNumber: "",
+        description: ""
+    });
+
+    const openModalCenter = (centerId) => {
+        setShowModalCenter(true);
+        if (centerId) {
+            centerService
+                .getCenterById(centerId)
+                .then((res) => {
+                    setCenter(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+        centerService.getTotalAmountByCenter(centerId)
+            .then((res) => {
+                setTotalAmountCenter(res.data);
+            })
+    };
+
+    const closeModalCenter = () => {
+        setShowModalCenter(false);
+    };
+    //staff
+    //TRANSFER
 
 
 
@@ -280,6 +404,7 @@ const MyWallet = () => {
                                                     <th>Managed By</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -304,11 +429,11 @@ const MyWallet = () => {
                                                                     <i className="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
-                                                            {/* <td>
-                                                                    <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
-                                                                        Transfer
-                                                                    </Link>
-                                                                </td> */}
+                                                            <td>
+                                                                <button className='btn btn-success' onClick={() => openModalCenter(cus.id)}>
+                                                                    Transfer
+                                                                </button>
+                                                            </td>
                                                         </tr>
                                                     ))
                                                 }
@@ -324,6 +449,74 @@ const MyWallet = () => {
                                             <p className='text-center'>There are no centers.</p>
                                         )
                                     }
+                                    {showModalCenter && (
+                                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                                            <div className="modal-dialog" role="document">
+                                                <div className="modal-content">
+                                                    <form onSubmit={submitWalletTutor}>
+
+                                                        <div className="modal-header">
+                                                            <h5 className="modal-title">Your balance: {wallet.balance}$</h5>
+                                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModalCenter}>
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div className="modal-body">
+
+                                                            <div className='row'>
+                                                                <div className="col-md-12">
+                                                                    <table className="table table-responsive table-hover ">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <th style={{ width: '30%' }}>Name:</th>
+                                                                                <td>{center.name}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Email:</th>
+                                                                                <td>{center.email}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Phone Number:</th>
+                                                                                <td>{center && center.phoneNumber ? center.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Address:</th>
+                                                                                <td>{center && center.address ? center.address : 'Unknown Address'}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Tax Code:</th>
+                                                                                <td>{center && center.taxIdentificationNumber ? center.taxIdentificationNumber : 'Unknown Tax Code'}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Description:</th>
+                                                                                <td>{center && center.description ? center.description : 'Unknown Description'}</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                <div className="col-md-12">
+                                                                    <h4>Revenue this month: ${totalAmountCenter}</h4>
+                                                                </div>
+                                                                <div className="col-md-12">
+                                                                    <input type='hidden' name='amount' value={totalAmountCenter} className='form-control' />
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            {
+                                                                wallet.balance > totalAmountCenter && (
+                                                                    <button type="submit" className="btn btn-warning">Transfer</button>
+                                                                )
+                                                            }
+                                                            <button type="button" className="btn btn-dark" onClick={closeModalCenter}>Close</button>
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {/* Pagination */}
                                     <div className='container-fluid mt-2'>
@@ -375,6 +568,7 @@ const MyWallet = () => {
                                                     <th data-hide="phone, tablet">Phone Number</th>
                                                     <th data-hide="phone, tablet">Status</th>
                                                     <th>Action</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -411,11 +605,11 @@ const MyWallet = () => {
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
-                                                            {/* <td>
+                                                            <td>
                                                                 <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
                                                                     Transfer
                                                                 </Link>
-                                                            </td> */}
+                                                            </td>
                                                         </tr>
                                                     ))
                                                 }
@@ -474,6 +668,7 @@ const MyWallet = () => {
                                                     <th data-hide="phone, tablet">Phone Number</th>
                                                     <th data-hide="phone, tablet">Status</th>
                                                     <th>Action</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -510,11 +705,11 @@ const MyWallet = () => {
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
-                                                            {/* <td>
-                                                                <Link to={`/edit-center/${cus.id}`} className='btn btn-success'>
+                                                            <td>
+                                                                <button className='btn btn-success' onClick={() => openModalTutor(cus.account?.id, cus.id)}>
                                                                     Transfer
-                                                                </Link>
-                                                            </td> */}
+                                                                </button>
+                                                            </td>
                                                         </tr>
                                                     ))
                                                 }
@@ -528,7 +723,76 @@ const MyWallet = () => {
                                         </table>
                                     </div> {/* end .table-responsive*/}
                                 </div> {/* end card-box*/}
+                                {showModalTutor && (
+                                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                                        <div className="modal-dialog" role="document">
+                                            <div className="modal-content">
+                                                <form onSubmit={submitWalletTutor}>
 
+                                                    <div className="modal-header">
+                                                        <h5 className="modal-title">Your balance: {wallet.balance}$</h5>
+                                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModalTutor}>
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div className="modal-body">
+
+                                                        <div className='row'>
+                                                            <div className="col-md-4">
+                                                                <img src={account.imageUrl} alt="avatar" className="rounded-circle mt-4" style={{ width: '90%' }} />
+
+                                                            </div>
+                                                            <div className="col-md-8">
+                                                                <table className="table table-responsive table-hover mt-3">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <th style={{ width: '30%' }}>Full Name:</th>
+                                                                            <td>{account.fullName}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>Email:</th>
+                                                                            <td>{account.email}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>Phone Number:</th>
+                                                                            <td>{account && account.phoneNumber ? account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>Gender:</th>
+                                                                            <td>
+                                                                                {account.gender ? (
+                                                                                    <span className="badge label-table badge-success">Male</span>
+                                                                                ) : (
+                                                                                    <span className="badge label-table badge-danger">Female</span>
+                                                                                )}
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div className="col-md-12">
+                                                                <h4>Revenue this month: ${totalAmountTutor}</h4>
+                                                            </div>
+                                                            <div className="col-md-12">
+                                                                <input type='hidden' name='amount' value={totalAmountTutor} className='form-control' />
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div className="modal-footer">
+                                                        {
+                                                            wallet.balance > totalAmountTutor && (
+                                                                <button type="submit" className="btn btn-warning">Transfer</button>
+                                                            )
+                                                        }
+                                                        <button type="button" className="btn btn-dark" onClick={closeModalTutor}>Close</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                                 <div className='container-fluid'>
                                     {/* Pagination */}
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>

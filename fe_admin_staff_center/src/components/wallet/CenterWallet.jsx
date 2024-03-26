@@ -170,7 +170,8 @@ const CenterWallet = () => {
 
     const submitWallet = async (e) => {
         e.preventDefault();
-        const amount = parseFloat(e.target.amount.value); // Capture the amount from the input field
+        // Capture the amount from the input field and calculate 20% of it in one step
+        const amount = parseFloat(e.target.amount.value) * 0.20;
 
         try {
             const centerWallet = { // Use object syntax {} instead of array syntax []
@@ -372,7 +373,7 @@ const CenterWallet = () => {
                                                     <div className="modal-footer">
                                                         {
                                                             wallet.balance > totalAmount && (
-                                                                <button type="submit" className="btn btn-warning">Transfer</button> 
+                                                                <button type="submit" className="btn btn-warning">Transfer</button>
                                                             )
                                                         }
                                                         <button type="button" className="btn btn-dark" onClick={closeModal}>Close</button>
