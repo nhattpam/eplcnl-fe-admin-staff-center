@@ -133,7 +133,7 @@ const CenterWallet = () => {
         tutorService.getTotalAmountByTutor(tutorId)
             .then((res) => {
                 setTotalAmount(res.data);
-                setAmountToTransfer(res.data * 0.2);
+                setAmountToTransfer(res.data * 0.8);
             })
     };
 
@@ -173,7 +173,7 @@ const CenterWallet = () => {
     const submitWallet = async (e) => {
         e.preventDefault();
         // Capture the amount from the input field and calculate 20% of it in one step
-        const amount = parseFloat(e.target.amount.value * 0.2);
+        const amount = parseFloat(e.target.amount.value * 0.8);
 
         try {
             const centerWallet = { // Use object syntax {} instead of array syntax []
@@ -365,7 +365,7 @@ const CenterWallet = () => {
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <h4>Revenue this month: ${totalAmount}</h4>
-                                                                <p>Amount to transfer: ${totalAmount} x 20% = ${amountToTransfer}</p>
+                                                                <p>Amount to transfer: ${totalAmount} x 80% = ${amountToTransfer}</p>
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <input type='hidden' name='amount' value={totalAmount} className='form-control' />

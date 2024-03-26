@@ -274,7 +274,7 @@ const MyWallet = () => {
         tutorService.getTotalAmountByTutor(tutorId)
             .then((res) => {
                 setTotalAmountTutor(res.data);
-                setAmountToTransfer(res.data * 0.2);
+                setAmountToTransfer(res.data * 0.8);
             })
     };
 
@@ -284,7 +284,7 @@ const MyWallet = () => {
 
     const submitWalletTutor = async (e) => {
         e.preventDefault();
-        const amount = parseFloat(e.target.amount.value * 0.2); // Capture the amount from the input field
+        const amount = parseFloat(e.target.amount.value * 0.8); // Capture the amount from the input field
 
         try {
             const adminWallet = { // Use object syntax {} instead of array syntax []
@@ -360,7 +360,7 @@ const MyWallet = () => {
         centerService.getTotalAmountByCenter(centerId)
             .then((res) => {
                 setTotalAmountCenter(res.data);
-                setAmountToTransfer(res.data * 0.2);
+                setAmountToTransfer(res.data * 0.8);
             })
     };
 
@@ -370,7 +370,7 @@ const MyWallet = () => {
 
     const submitWalletCenter = async (e) => {
         e.preventDefault();
-        const amount = parseFloat(e.target.amount.value * 0.2); // Capture the amount from the input field
+        const amount = parseFloat(e.target.amount.value * 0.8); // Capture the amount from the input field
 
         try {
             const adminWallet = { // Use object syntax {} instead of array syntax []
@@ -621,7 +621,7 @@ const MyWallet = () => {
                                                                 </div>
                                                                 <div className="col-md-12">
                                                                     <h4>Revenue this month: ${totalAmountCenter}</h4>
-                                                                    <p>Amount to transfer: ${totalAmountCenter} x 20% = ${amountToTransfer}</p>
+                                                                    <p>Amount to transfer: ${totalAmountCenter} x 80% = ${amountToTransfer}</p>
                                                                 </div>
                                                                 <div className="col-md-12">
                                                                     <input type='hidden' name='amount' value={totalAmountCenter} className='form-control' />
@@ -964,7 +964,7 @@ const MyWallet = () => {
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <h4>Revenue this month: ${totalAmountTutor}</h4>
-                                                                <p>Amount to transfer: ${totalAmountTutor} x 20% = ${amountToTransfer}</p>
+                                                                <p>Amount to transfer: ${totalAmountTutor} x 80% = ${amountToTransfer}</p>
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <input type='hidden' name='amount' value={totalAmountTutor} className='form-control' />
