@@ -117,7 +117,7 @@ const ListReportByStaff = () => {
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on"
                                                             value={searchTerm}
-                                                            onChange={handleSearch} />
+                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }}/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -170,7 +170,11 @@ const ListReportByStaff = () => {
                                                                                     </div>
                                                                                     <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
                                                                                         <div dangerouslySetInnerHTML={{ __html: cus.reason }}>
+                                                                                        
 
+                                                                                        </div>
+                                                                                        <div>
+                                                                                            <img src={cus.imageUrl}></img>
                                                                                         </div>
                                                                                         <div className="modal-footer">
                                                                                             {/* Conditional rendering of buttons based on edit mode */}

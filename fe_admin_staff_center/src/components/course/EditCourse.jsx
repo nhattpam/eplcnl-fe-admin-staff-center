@@ -272,7 +272,7 @@ const EditCourse = () => {
                                                             type="submit"
                                                             className="btn btn-success"
                                                             onClick={() => setCourse({ ...course, isActive: true })}
-
+                                                            style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                         >
                                                             <i class="fa-solid fa-thumbs-up"></i>
                                                         </button>
@@ -280,7 +280,7 @@ const EditCourse = () => {
                                                     {isStaff && (
 
 
-                                                        <button type="button" className="btn btn-danger ml-1" onClick={handleThumbDownClick}>
+                                                        <button type="button" className="btn btn-danger ml-1" onClick={handleThumbDownClick} style={{ borderRadius: '50px', padding: `8px 25px` }}>
                                                             <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
                                                     )}
@@ -320,6 +320,7 @@ const EditCourse = () => {
                                                             type="submit"
                                                             className="btn btn-success"
                                                             onClick={() => setCourse({ ...course, isActive: true })}
+                                                            style={{ borderRadius: '50px', padding: `8px 25px` }}
 
                                                         >
                                                             <i class="fa-solid fa-thumbs-up"></i>
@@ -327,7 +328,8 @@ const EditCourse = () => {
                                                     )}
                                                     {isStaff && (
 
-                                                        <button type="button" className="btn btn-danger ml-1" onClick={handleThumbDownClick}>
+                                                        <button type="button" className="btn btn-danger ml-1" onClick={handleThumbDownClick} style={{ borderRadius: '50px', padding: `8px 25px` }}>
+                                                            
                                                             <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
                                                     )}
@@ -416,8 +418,8 @@ const EditCourse = () => {
                                                         />
                                                     </div>
                                                     <div className="modal-footer">
-                                                        <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                                                        <button type="button" className="btn btn-primary" onClick={(e) => submitCourse(e)}>Submit</button>
+                                                        <button type="button" className="btn btn-dark" onClick={() => setShowModal(false)} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
+                                                        <button type="button" className="btn btn-danger" onClick={(e) => submitCourse(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}>Submit</button>
                                                     </div>
                                                 </div>
                                             </div>

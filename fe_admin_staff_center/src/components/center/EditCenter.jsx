@@ -268,7 +268,7 @@ const EditCenter = () => {
                                         )}
 
                                         <div className="form-group">
-                                            <label>Tutors:</label>
+                                            <label>Tutors Of Center:</label>
 
                                             <div className="table-responsive text-center">
                                                 <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
