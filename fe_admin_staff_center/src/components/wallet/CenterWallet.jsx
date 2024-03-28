@@ -270,13 +270,13 @@ const CenterWallet = () => {
                                                         <tr>
                                                             <td>{index + 1}</td>
                                                             <td>
-                                                                <img src={cus.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+                                                                <img src={cus.account?.imageUrl} style={{ height: '70px', width: '50px' }}>
 
                                                                 </img>
                                                             </td>
-                                                            <td>{cus.account.fullName}</td>
-                                                            <td>{cus.account.email}</td>
-                                                            <td>{cus.account && cus.account.dateOfBirth ? cus.account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
+                                                            <td>{cus.account?.fullName}</td>
+                                                            <td>{cus.account?.email}</td>
+                                                            <td>{cus.account && cus.account?.dateOfBirth ? cus.account?.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
                                                             <td>
                                                                 {cus.account.gender ? (
                                                                     <span className="badge label-table badge-success">Male</span>
@@ -284,7 +284,7 @@ const CenterWallet = () => {
                                                                     <span className="badge label-table badge-danger">Female</span>
                                                                 )}
                                                             </td>
-                                                            <td>{cus.account && cus.account.phoneNumber ? cus.account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                            <td>{cus.account && cus.account?.phoneNumber ? cus.account?.phoneNumber : 'Unknown Phone Number'}</td>
                                                             <td>
                                                                 {cus.account.isActive ? (
                                                                     <span className="badge label-table badge-success">Active</span>
@@ -293,12 +293,12 @@ const CenterWallet = () => {
                                                                 )}
                                                             </td>
                                                             <td>
-                                                                <Link to={`/edit-tutor/${cus.account.id}`} className='text-secondary'>
+                                                                <Link to={`/edit-tutor/${cus.account?.id}`} className='text-secondary'>
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
                                                             <td>
-                                                                <button className='btn btn-success' onClick={() => openModal(cus.account?.id, cus.id)}>
+                                                                <button className='btn btn-success' onClick={() => openModal(cus.account?.id, cus.id)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
                                                                     Transfer
                                                                 </button>
                                                             </td>
@@ -376,10 +376,10 @@ const CenterWallet = () => {
                                                     <div className="modal-footer">
                                                         {
                                                             wallet.balance > totalAmount && (
-                                                                <button type="submit" className="btn btn-warning">Transfer</button>
+                                                                <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
                                                             )
                                                         }
-                                                        <button type="button" className="btn btn-dark" onClick={closeModal}>Close</button>
+                                                        <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                     </div>
                                                 </form>
 
