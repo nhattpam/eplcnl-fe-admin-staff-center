@@ -212,12 +212,13 @@ const EditModule = () => {
 
                                                 </table>
                                             </div> {/* end .table-responsive*/}
+                                            {
+                                                currentLessons.length === 0 && (
+                                                    <p className='text-center mt-2'>There are no lessons.</p>
+                                                )
+                                            }
                                         </div>
-                                        {
-                                            currentLessons.length === 0 && (
-                                                <p>There are no lessons.</p>
-                                            )
-                                        }
+
                                         <div className='container-fluid'>
                                             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                                                 <ReactPaginate
@@ -283,12 +284,13 @@ const EditModule = () => {
 
                                                 </table>
                                             </div> {/* end .table-responsive*/}
+                                            {
+                                                currentAssignments.length === 0 && (
+                                                    <p className='mt-2 text-center'>There are no assignments.</p>
+                                                )
+                                            }
                                         </div>
-                                        {
-                                            currentAssignments.length === 0 && (
-                                                <p>There are no assignments.</p>
-                                            )
-                                        }
+
                                         <div className='container-fluid'>
                                             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                                                 <ReactPaginate
@@ -354,12 +356,13 @@ const EditModule = () => {
 
                                                 </table>
                                             </div> {/* end .table-responsive*/}
+                                            {
+                                                currentQuizs.length === 0 && (
+                                                    <p className='text-center mt-2'>There are no quizzes.</p>
+                                                )
+                                            }
                                         </div>
-                                        {
-                                            currentQuizs.length === 0 && (
-                                                <p>There are no quizzes.</p>
-                                            )
-                                        }
+
                                         <div className='container-fluid'>
                                             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                                                 <ReactPaginate

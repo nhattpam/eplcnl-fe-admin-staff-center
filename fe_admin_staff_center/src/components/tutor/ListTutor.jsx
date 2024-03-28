@@ -101,7 +101,7 @@ const ListTutor = () => {
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on"
                                                             value={searchTerm}
-                                                            onChange={handleSearch} />
+                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }}/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -171,13 +171,14 @@ const ListTutor = () => {
                                                 </tbody>
                                             </table>
                                         </div>
-
-                                    </div> {/* end card-box */}
-                                    {
+                                        {
                                         currentTutors.length === 0 && (
-                                            <p>There are no tutors.</p>
+                                            <p className='mt-2'>There are no tutors.</p>
                                         )
                                     }
+
+                                    </div> {/* end card-box */}
+                                   
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

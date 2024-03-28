@@ -218,6 +218,7 @@ const EditCenter = () => {
                                                             type="submit"
                                                             className="btn btn-success mr-2"
                                                             onClick={() => setCenter({ ...center, isActive: true })}
+                                                            style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                         >
                                                             <i class="fa-solid fa-thumbs-up"></i>
                                                         </button>
@@ -225,6 +226,7 @@ const EditCenter = () => {
                                                             type="submit"
                                                             className="btn btn-danger mr-2"
                                                             onClick={() => setCenter({ ...center, isActive: false })}
+                                                            style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                         >
                                                             <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
@@ -250,6 +252,7 @@ const EditCenter = () => {
                                                     name="staffId"
                                                     value={center.staffId}
                                                     onChange={handleChange}
+                                                    style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                 >
                                                     <option value="">Select Staff</option>
                                                     {staffList.map((staff) => (

@@ -512,7 +512,7 @@ const MyWallet = () => {
                                     <div className="form-group">
                                         <label htmlFor="transactionId">Wallet Balance:</label>
                                         <span style={{ fontWeight: 'bold', color: 'red' }} className='ml-1'>
-                                            {wallet.balance} $
+                                            ${wallet.balance}
                                         </span>
                                     </div>
                                     <label htmlFor="transactionId">Center Information:</label>
@@ -555,7 +555,7 @@ const MyWallet = () => {
                                                                 </Link>
                                                             </td>
                                                             <td>
-                                                                <button className='btn btn-success' onClick={() => openModalCenter(cus.id)}>
+                                                                <button className='btn btn-success' onClick={() => openModalCenter(cus.id)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
                                                                     Transfer
                                                                 </button>
                                                             </td>
@@ -632,10 +632,10 @@ const MyWallet = () => {
                                                         <div className="modal-footer">
                                                             {
                                                                 wallet.balance > totalAmountCenter && (
-                                                                    <button type="submit" className="btn btn-warning">Transfer</button>
+                                                                    <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
                                                                 )
                                                             }
-                                                            <button type="button" className="btn btn-dark" onClick={closeModalCenter}>Close</button>
+                                                            <button type="button" className="btn btn-dark" onClick={closeModalCenter} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                         </div>
                                                     </form>
 
@@ -732,7 +732,7 @@ const MyWallet = () => {
                                                                 </Link>
                                                             </td>
                                                             <td>
-                                                                <button className='btn btn-success' onClick={() => openModalStaff(cus.account?.id, cus.id)}>
+                                                                <button className='btn btn-success' onClick={() => openModalStaff(cus.account?.id, cus.id)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
                                                                     Transfer
                                                                 </button>
                                                             </td>
@@ -796,17 +796,17 @@ const MyWallet = () => {
                                                                     </table>
                                                                 </div>
                                                                 <div className="col-md-12">
-                                                                    <input type='number' name='amount' placeholder='Enter the amount' className='form-control' />                                                                </div>
+                                                                    <input type='number' name='amount' placeholder='Enter the amount' className='form-control' style={{ borderRadius: '50px', padding: `8px 25px` }}/>                                                                </div>
                                                             </div>
 
                                                         </div>
                                                         <div className="modal-footer">
                                                             {
                                                                 wallet.balance > totalAmountTutor && (
-                                                                    <button type="submit" className="btn btn-warning">Transfer</button>
+                                                                    <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
                                                                 )
                                                             }
-                                                            <button type="button" className="btn btn-dark" onClick={closeModalStaff}>Close</button>
+                                                            <button type="button" className="btn btn-dark" onClick={closeModalStaff} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                         </div>
                                                     </form>
 
@@ -898,7 +898,7 @@ const MyWallet = () => {
                                                                 </Link>
                                                             </td>
                                                             <td>
-                                                                <button className='btn btn-success' onClick={() => openModalTutor(cus.account?.id, cus.id)}>
+                                                                <button className='btn btn-success' onClick={() => openModalTutor(cus.account?.id, cus.id)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
                                                                     Transfer
                                                                 </button>
                                                             </td>
@@ -975,10 +975,10 @@ const MyWallet = () => {
                                                     <div className="modal-footer">
                                                         {
                                                             wallet.balance > totalAmountTutor && (
-                                                                <button type="submit" className="btn btn-warning">Transfer</button>
+                                                                <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
                                                             )
                                                         }
-                                                        <button type="button" className="btn btn-dark" onClick={closeModalTutor}>Close</button>
+                                                        <button type="button" className="btn btn-dark" onClick={closeModalTutor} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                     </div>
                                                 </form>
 

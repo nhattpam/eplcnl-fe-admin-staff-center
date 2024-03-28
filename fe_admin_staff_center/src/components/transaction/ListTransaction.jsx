@@ -46,10 +46,10 @@ const ListTransaction = () => {
     const filteredTransactions = transactionList
         .filter((transaction) => {
             return (
-                transaction.course?.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                transaction.course?.code.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                transaction.learner?.account.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-                transaction.learner?.account.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
+                transaction.course?.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                transaction.course?.code.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                transaction.learner?.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                transaction.learner?.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase())
 
             );
         });
@@ -98,7 +98,7 @@ const ListTransaction = () => {
                                                 <div className="col-12 text-sm-center form-inline">
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm}
-                                                            onChange={handleSearch} />
+                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -124,32 +124,112 @@ const ListTransaction = () => {
                                                         currentTransactions.length > 0 && currentTransactions.map((cus) => (
 
                                                             <tr>
-                                                                <td>
-                                                                    <img src={cus.course.imageUrl} style={{ height: '70px', width: '100px' }}>
+                                                                {
+                                                                    cus.course !== null && (
+                                                                        <>
+                                                                            <td>
+                                                                                <img src={cus.course?.imageUrl} style={{ height: '70px', width: '100px' }}>
 
-                                                                    </img>
-                                                                </td>
+                                                                                </img>
+                                                                            </td>
+                                                                        </>
+                                                                    )
+                                                                }
+                                                                {
+                                                                    cus.course === null && (
+                                                                        <>
+                                                                            <td>
+
+                                                                            </td>
+                                                                        </>
+                                                                    )
+                                                                }
+                                                                {
+                                                                    cus.course !== null && (
+                                                                        <>
+                                                                            <td>
+                                                                                <Link to={`/edit-course/${cus.course?.id}`} className='text-secondary'>
+                                                                                    {cus.course?.name}
+                                                                                </Link>
+                                                                            </td>
+                                                                        </>
+                                                                    )
+                                                                }
+                                                                {
+                                                                    cus.course === null && (
+                                                                        <>
+                                                                            <td>
+                                                                                Deposit to system
+                                                                            </td>
+                                                                        </>
+                                                                    )
+                                                                }
+                                                                {
+                                                                    cus.course !== null && (
+                                                                        <>
+                                                                            <td>${cus.course?.stockPrice}</td>
+
+                                                                        </>
+                                                                    )
+                                                                }
+                                                                {
+                                                                    cus.course === null && (
+                                                                        <>
+                                                                            <td>
+                                                                                ${cus.amount / 24000}
+                                                                            </td>
+                                                                        </>
+                                                                    )
+                                                                }
+
+                                                                {
+                                                                    cus.course !== null && (
+                                                                        <>
+                                                                            <td>
+                                                                                <span className={`badge ${cus.course?.isOnlineClass ? 'badge-success' : 'badge-danger'}`}>{cus.isOnlineClass ? 'Class' : 'Video'}</span>
+                                                                            </td>
+                                                                        </>
+                                                                    )
+                                                                }
+                                                                {
+                                                                    cus.course === null && (
+                                                                        <>
+                                                                            <td>
+
+                                                                            </td>
+                                                                        </>
+                                                                    )
+                                                                }
+
                                                                 <td>
-                                                                    <Link to={`/edit-course/${cus.course.id}`} className='text-secondary'>
-                                                                        {cus.course.name}
-                                                                    </Link></td>
-                                                                <td>{cus.course.stockPrice}</td>
-                                                                <td>
-                                                                    <span className={`badge ${cus.course.isOnlineClass ? 'badge-success' : 'badge-danger'}`}>{cus.isOnlineClass ? 'Class' : 'Video'}</span>
-                                                                </td>
-                                                                <td>
-                                                                    <Link to={`/edit-learner/${cus.learner.account.id}`} className='text-secondary'>
-                                                                        {cus.learner.account.fullName}
+                                                                    <Link to={`/edit-learner/${cus.learner?.account?.id}`} className='text-secondary'>
+                                                                        {cus.learner?.account?.fullName}
                                                                     </Link></td>
                                                                 <td>{cus.transactionDate}</td>
-                                                                <td>{cus.paymentMethod.name}</td>
+                                                                <td>{cus.paymentMethod?.name}</td>
                                                                 <td>{cus.status}</td>
 
-                                                                <td>
-                                                                    <Link to={`/edit-course/${cus.course.id}`} className='text-secondary'>
-                                                                        <i class="fa-regular fa-eye"></i>
-                                                                    </Link>
-                                                                </td>
+                                                                {
+                                                                    cus.course !== null && (
+                                                                        <>
+                                                                            <td>
+                                                                                <Link to={`/edit-course/${cus.course?.id}`} className='text-secondary'>
+                                                                                    <i class="fa-regular fa-eye"></i>
+                                                                                </Link>
+                                                                            </td>
+                                                                        </>
+                                                                    )
+                                                                }
+                                                                {
+                                                                    cus.course === null && (
+                                                                        <>
+                                                                            <td>
+
+                                                                            </td>
+                                                                        </>
+                                                                    )
+                                                                }
+
                                                             </tr>
                                                         ))
                                                     }
@@ -158,12 +238,13 @@ const ListTransaction = () => {
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
+                                        {
+                                            currentTransactions.length === 0 && (
+                                                <p className='mt-2'>There are no transactions.</p>
+                                            )
+                                        }
                                     </div> {/* end card-box */}
-                                    {
-                                        currentTransactions.length === 0 && (
-                                            <p>There are no transactions.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

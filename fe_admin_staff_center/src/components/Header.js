@@ -359,28 +359,28 @@ const Header = () => {
                                                                 <tr>
                                                                     <th style={{ width: '30%' }}>Full Name:</th>
                                                                     <td>
-                                                                        <input type="text" className="form-control" name="fullName" value={account.fullName} onChange={(e) => handleChange(e)} />
+                                                                        <input type="text" className="form-control" name="fullName" value={account.fullName} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}/>
                                                                         {errors.fullName && <p className="text-danger">{errors.fullName}</p>}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>Phone Number:</th>
                                                                     <td>
-                                                                        <input type="number" className="form-control" name="phoneNumber" value={account.phoneNumber} onChange={(e) => handleChange(e)} />
+                                                                        <input type="number" className="form-control" name="phoneNumber" value={account.phoneNumber} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}/>
                                                                         {errors.phoneNumber && <p className="text-danger">{errors.phoneNumber}</p>}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>Address:</th>
                                                                     <td>
-                                                                        <input type="text" className="form-control" name="address" value={account.address} onChange={(e) => handleChange(e)} />
+                                                                        <input type="text" className="form-control" name="address" value={account.address} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}/>
                                                                         {errors.address && <p className="text-danger">{errors.address}</p>}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>Gender:</th>
                                                                     <td>
-                                                                        <select className="form-control" name="gender" value={account.gender} onChange={(e) => handleChange(e)}>
+                                                                        <select className="form-control" name="gender" value={account.gender} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
                                                                             <option value="male">Male</option>
                                                                             <option value="female">Female</option>
                                                                         </select>
@@ -391,8 +391,8 @@ const Header = () => {
                                                     </div>
                                                 </div>
                                                 <div className="modal-footer">
-                                                    <button type="submit" className="btn btn-success">Save Changes</button>
-                                                    <button type="button" className="btn btn-dark" onClick={closeModal}>Close</button>
+                                                    <button type="submit" className="btn btn-success" style={{ borderRadius: '50px', padding: `8px 25px` }}>Save Changes</button>
+                                                    <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                 </div>
                                             </form>
                                         </>
@@ -439,8 +439,8 @@ const Header = () => {
         
                                             </div>
                                             <div className="modal-footer">
-                                                <button type="button" className="btn btn-warning" onClick={toggleEditMode}>Edit</button>
-                                                <button type="button" className="btn btn-dark" onClick={closeModal}>Close</button>
+                                                <button type="button" className="btn btn-warning" onClick={toggleEditMode} style={{ borderRadius: '50px', padding: `8px 25px` }}>Edit</button>
+                                                <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                             </div>
                                         </>
         
@@ -730,7 +730,7 @@ const Header = () => {
         
                                             </div>
                                             <div className="modal-footer">
-                                                <button type="button" className="btn btn-dark" onClick={closeModal}>Close</button>
+                                                <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                             </div>
                                         </>
         
@@ -793,7 +793,7 @@ const Header = () => {
                                 }
                                 <div className="modal-footer">
                                     {/* Conditional rendering of buttons based on edit mode */}
-                                    <button type="button" className="btn btn-dark" onClick={closeWalletHistoryModal}>Close</button>
+                                    <button type="button" className="btn btn-dark" onClick={closeWalletHistoryModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                 </div>
                             </div>
                         </div>

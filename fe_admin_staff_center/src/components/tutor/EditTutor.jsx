@@ -267,6 +267,7 @@ const EditTutor = () => {
                                                             <button
                                                                 type="submit"
                                                                 className="btn btn-success " onClick={handleActiveClick}
+                                                                style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                             >
                                                                 <i class="fas fa-thumbs-up"></i>
                                                             </button>
@@ -276,6 +277,7 @@ const EditTutor = () => {
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-danger ml-1" onClick={handleDeleteClick}
+                                                                style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                             >
                                                                 <i class="fa-solid fa-user-xmark"></i>
                                                             </button>
@@ -366,7 +368,7 @@ const EditTutor = () => {
                                                                 )
                                                             }
                                                             <div className="modal-footer">
-                                                                <button type="button" className="btn btn-secondary" onClick={closeQualificationModal}>Close</button>
+                                                                <button type="button" className="btn btn-dark" onClick={closeQualificationModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                             </div>
 
                                                         </div>
@@ -386,11 +388,12 @@ const EditTutor = () => {
                                                     name="staffId"
                                                     value={tutor.staffId}
                                                     onChange={handleChange}
+                                                    style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                 >
                                                     <option value="">Select Staff</option>
                                                     {staffList.map((staff) => (
                                                         <option key={staff.id} value={staff.id}>
-                                                            {staff.account ? staff.account.fullName : 'Unknown Name'}
+                                                            {staff.account ? staff.account?.fullName : 'Unknown Name'}
                                                         </option>
                                                     ))}
 

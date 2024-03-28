@@ -216,6 +216,7 @@ const EditLearner = () => {
                           <button
                             type="submit"
                             className="btn btn-success " onClick={handleActiveClick}
+                            style={{ borderRadius: '50px', padding: `8px 25px` }}
                           >
                             <i class="fas fa-thumbs-up"></i>
                           </button>
@@ -224,6 +225,7 @@ const EditLearner = () => {
                           <button
                             type="button"
                             className="btn btn-danger ml-1" onClick={handleDeleteClick}
+                            style={{ borderRadius: '50px', padding: `8px 25px` }}
                           >
                             <i class="fa-solid fa-user-xmark"></i>
                           </button>
@@ -272,7 +274,7 @@ const EditLearner = () => {
                     )}
 
                     <div className="form-group">
-                      <label>Is Enrolling Courses:</label>
+                      <label>Enrolling Courses:</label>
                       <div className="table-responsive">
                         <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
                           <thead className="thead-light">

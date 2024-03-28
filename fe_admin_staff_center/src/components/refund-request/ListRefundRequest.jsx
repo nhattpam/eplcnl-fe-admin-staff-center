@@ -35,7 +35,7 @@ const ListRefundRequest = () => {
                 console.log(error);
             });
     }, []);
-    
+
 
 
 
@@ -146,13 +146,14 @@ const ListRefundRequest = () => {
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
+                                        {
+                                            currentRefunds.length === 0 && (
+                                                <p className='mt-2'>There are no refund requests.</p>
+                                            )
+                                        }
 
                                     </div> {/* end card-box */}
-                                    {
-                                        currentRefunds.length === 0 && (
-                                            <p>There are no refund requests.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

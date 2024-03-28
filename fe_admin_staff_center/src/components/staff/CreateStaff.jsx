@@ -163,18 +163,18 @@ const CreateStaff = () => {
                                     <form id="demo-form" data-parsley-validate onSubmit={(e) => submitAccount(e)}>
                                         <div className="form-group">
                                             <label htmlFor="fullName">Full Name * :</label>
-                                            <input type="text" className="form-control" name="fullName" id="fullName"  
-                                            value={account.fullName} onChange={(e) => handleChange(e)} style={{ width: '70%' }}/>
+                                            <input type="text" className="form-control" name="fullName" id="fullName"   required
+                                            value={account.fullName} onChange={(e) => handleChange(e)} style={{ width: '70%', borderRadius: '50px', padding: `8px 25px` }}/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="email">Email * :</label>
-                                            <input type="email" id="email" className="form-control" name="email" data-parsley-trigger="change"  
-                                            value={account.email} onChange={(e) => handleChange(e)} style={{ width: '70%' }}/>
+                                            <input type="email" id="email" className="form-control" name="email" data-parsley-trigger="change"  required
+                                            value={account.email} onChange={(e) => handleChange(e)} style={{ width: '70%', borderRadius: '50px', padding: `8px 25px` }}/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="password">Password * :</label>
-                                            <input type="password" className="form-control" name="password" id="password" 
-                                             value={account.password} onChange={(e) => handleChange(e)} style={{ width: '70%' }}/>
+                                            <input type="password" className="form-control" name="password" id="password" required
+                                             value={account.password} onChange={(e) => handleChange(e)} style={{ width: '70%', borderRadius: '50px', padding: `8px 25px` }}/>
                                         </div>
                                         <div className="form-group">
                                             <label>Gender *:</label>
@@ -184,7 +184,7 @@ const CreateStaff = () => {
                                                 className="form-control"
                                                 value={account.gender === null ? '' : account.gender ? 'Male' : 'Female'}
                                                 onChange={(e) => handleDropdownChange(e)}
-                                                style={{ width: '70%' }}
+                                                style={{ width: '70%' , borderRadius: '50px', padding: `8px 25px`}}
                                             >
                                                 <option value="" disabled>Select Gender</option>
                                                 <option value="Male">Male</option>
@@ -200,7 +200,7 @@ const CreateStaff = () => {
                                         </div>
                                         <div className="form-group mb-0">
                                             {/* Approve Button */}
-                                            <button type="submit" className="btn btn-success mr-2">
+                                            <button type="submit" className="btn btn-success mr-2" style={{ borderRadius: '50px', padding: `8px 25px` }}> 
                                                 <i className="bi bi-check-lg"></i> Create
                                             </button>
 
@@ -208,7 +208,7 @@ const CreateStaff = () => {
                                     </form>
                                     {/* Table to display tutor information from Excel */}
                                     {fileData.length > 0 && (
-                                        <div className="mt-4" style={{ width: '70%' }}>
+                                        <div className="mt-4" style={{ width: '70%', borderRadius: '50px', padding: `8px 25px` }}>
                                             <h5>Staff Information from Uploaded Excel</h5>
                                             <table className="table table-bordered">
                                                 <thead>

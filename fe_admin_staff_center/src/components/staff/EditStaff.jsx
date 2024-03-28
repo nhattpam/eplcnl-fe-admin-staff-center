@@ -246,6 +246,7 @@ const EditStaff = () => {
                           <button
                             type="submit"
                             className="btn btn-success " onClick={handleActiveClick}
+                            style={{ borderRadius: '50px', padding: `8px 25px` }}
                           >
                             <i class="fas fa-thumbs-up"></i>
                           </button>
@@ -253,6 +254,7 @@ const EditStaff = () => {
                           <button
                             type="button"
                             className="btn btn-danger ml-1" onClick={handleDeleteClick}
+                            style={{ borderRadius: '50px', padding: `8px 25px` }}
                           >
                             <i class="fa-solid fa-user-xmark"></i>
                           </button>
@@ -294,8 +296,8 @@ const EditStaff = () => {
                               />
                             </div>
                             <div className="modal-footer">
-                              <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                              <button type="button" className="btn btn-primary" onClick={(e) => submitAccount(e)}>Submit</button>
+                              <button type="button" className="btn btn-dark" onClick={() => setShowModal(false)} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
+                              <button type="button" className="btn btn-danger" onClick={(e) => submitAccount(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}>DISABLE</button>
                             </div>
                           </div>
                         </div>

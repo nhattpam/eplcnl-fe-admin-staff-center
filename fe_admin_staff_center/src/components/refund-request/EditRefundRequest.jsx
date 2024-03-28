@@ -198,12 +198,14 @@ const EditRefundRequest = () => {
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-success" onClick={() => handleApproveRefund()}
+                                                                style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                             >
                                                                 Approve
                                                             </button>
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-danger ml-1" onClick={() => handleDisApproveRefund()}
+                                                                style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                             >
                                                                 Disapprove
                                                             </button>

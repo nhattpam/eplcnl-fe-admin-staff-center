@@ -94,6 +94,22 @@ const EditLesson = () => {
     }
   };
 
+  const [materialList, setMaterialList] = useState([]);
+
+
+  useEffect(() => {
+    if (lessonId) {
+      lessonService
+        .getAllMaterialsByLesson(lessonId)
+        .then((res) => {
+          setMaterialList(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [lessonId]);
+
   return (
     <>
       <div id="wrapper">
@@ -121,10 +137,10 @@ const EditLesson = () => {
                         onSubmit={submitLesson}>
 
                         <div className="card" style={{ marginTop: '-20px' }}>
-                          <div className='card-body'>
+                          {/* <div className='card-body'>
                             <label htmlFor="video">Video Url:</label>
                             <input type="text" className="form-control" name="videoUrl" id="videoUrl" value={lesson.videoUrl} readOnly />
-                          </div>
+                          </div> */}
 
                           <div className='card-body'>
                             <label htmlFor="video">Video Preview:</label>
@@ -147,9 +163,39 @@ const EditLesson = () => {
                           {/* <button type="submit" className="btn btn-primary " style={{ marginLeft: '23px', marginTop: '10px' }} >
                             Edit
                           </button> */}
-                          <Link to={`/list-material-by-lesson/${lesson.id}`} className="btn btn-dark " style={{ marginLeft: '20px', marginTop: '10px' }} >
-                            View Materials
-                          </Link>
+                          <h5>Materials of lesson:</h5>
+                          <div className="table-responsive">
+                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                              <thead className="thead-light">
+                                <tr>
+                                  <th data-toggle="true">Material Name</th>
+                                  {/* <th>Url</th> */}
+                                  <th data-hide="phone">Created Date</th>
+                                  <th data-hide="phone, tablet">Updated Date</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {
+                                  materialList.length > 0 && materialList.map((material) => (
+                                    <tr key={material.id}>
+                                      <td>
+                                        <a href={material.materialUrl} target="_blank" rel="noopener noreferrer" className='text-success'>{material.name}</a>
+                                        </td>
+                                      {/* <td>{material.materialUrl}</td> */}
+                                      <td>{material.createdDate}</td>
+                                      <td>{material.updatedDate}</td>
+                                    </tr>
+                                  ))
+                                }
+
+                              </tbody>
+
+                            </table>
+
+                          </div> {/* end .table-responsive*/}
+                          {materialList.length === 0 && (
+                            <p className='text-center'>No materials yet</p>
+                          )}
                         </div>
                       </form>
                     </div>
