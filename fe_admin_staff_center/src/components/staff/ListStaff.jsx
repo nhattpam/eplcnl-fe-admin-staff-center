@@ -40,14 +40,16 @@ const ListStaff = () => {
         setSearchTerm(event.target.value);
     };
 
-    const filteredStaffs = staffList
-        .filter((staff) => {
-            return (
-                staff.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                staff.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                staff.account?.phoneNumber.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
-            );
-        });
+    const filteredStaffs = staffList.filter((staff) => {
+        const fullName = staff.account?.fullName || '';
+        const email = staff.account?.email || '';
+        const phoneNumber = staff.account?.phoneNumber || '';
+        return (
+            fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            phoneNumber.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    });
 
     const pageCount = Math.ceil(filteredStaffs.length / staffsPerPage);
 
@@ -129,23 +131,23 @@ const ListStaff = () => {
                                                             <tr>
                                                                 <td>{index + 1}</td>
                                                                 <td>
-                                                                    <img src={cus.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+                                                                    <img src={cus.account?.imageUrl} style={{ height: '70px', width: '50px' }}>
 
                                                                     </img>
                                                                 </td>
-                                                                <td>{cus.account.fullName}</td>
-                                                                <td>{cus.account.email}</td>
-                                                                <td>{cus.account && cus.account.dateOfBirth ? cus.account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
+                                                                <td>{cus.account?.fullName}</td>
+                                                                <td>{cus.account?.email}</td>
+                                                                <td>{cus.account && cus.account?.dateOfBirth ? cus.account?.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
                                                                 <td>
-                                                                    {cus.account.gender ? (
+                                                                    {cus.account?.gender ? (
                                                                         <span className="badge label-table badge-success">Male</span>
                                                                     ) : (
                                                                         <span className="badge label-table badge-danger">Female</span>
                                                                     )}
                                                                 </td>
-                                                                <td>{cus.account && cus.account.phoneNumber ? cus.account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                <td>{cus.account && cus.account?.phoneNumber ? cus.account?.phoneNumber : 'Unknown Phone Number'}</td>
                                                                 <td>
-                                                                    {cus.account.isActive ? (
+                                                                    {cus.account?.isActive ? (
                                                                         <span className="badge label-table badge-success">Active</span>
                                                                     ) : (
                                                                         <span className="badge label-table badge-danger">Inactive</span>
@@ -155,7 +157,7 @@ const ListStaff = () => {
                                                                     {cus.account?.createdDate}
                                                                 </td>
                                                                 <td>
-                                                                    <Link to={`/edit-staff/${cus.account.id}`} className='text-secondary'>
+                                                                    <Link to={`/edit-staff/${cus.account?.id}`} className='text-secondary'>
                                                                         <i class="fa-regular fa-eye"></i>
                                                                     </Link>
                                                                 </td>

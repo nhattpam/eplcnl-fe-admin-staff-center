@@ -121,6 +121,9 @@ const EditTutor = () => {
                     // centerService.sendEmail(center.id);
                     //assign staff to tutor
                     tutorService.updateTutor(tutor.id, tutor);
+                    if (account.isActive === false) {
+                        accountService.sendMailBanAccount(account.id);
+                    }
                 }
                 navigate("/list-tutor/");
             })
@@ -321,8 +324,8 @@ const EditTutor = () => {
                                                             />
                                                         </div>
                                                         <div className="modal-footer">
-                                                            <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                                                            <button type="button" className="btn btn-primary" onClick={(e) => submitAccount(e)}>Submit</button>
+                                                            <button type="button" className="btn btn-dark" style={{ color: '#fff', borderRadius: '50px', padding: `8px 25px` }} onClick={() => setShowModal(false)}>Close</button>
+                                                            <button type="button" className="btn btn-danger" style={{ color: '#fff', borderRadius: '50px', padding: `8px 25px` }} onClick={(e) => submitAccount(e)}>Disable</button>
                                                         </div>
                                                     </div>
                                                 </div>

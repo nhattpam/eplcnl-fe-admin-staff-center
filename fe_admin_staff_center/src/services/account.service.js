@@ -82,5 +82,13 @@ class AccountService {
       }
     });
   }
+
+  sendMailBanAccount(id) {
+    return axios.post(API_URL + `/accounts/${id}/mail-lock`, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
 }
 export default new AccountService;

@@ -47,10 +47,13 @@ const ListTutor = () => {
 
     const filteredTutors = tutorList
         .filter((tutor) => {
+            const fullName = tutor.account?.fullName || '';
+            const email = tutor.account?.email || '';
+            const phoneNumber = tutor.account?.phoneNumber || '';
             return (
-                tutor.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                tutor.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                tutor.account?.phoneNumber.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
+                fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                phoneNumber.toLowerCase().includes(searchTerm.toLowerCase())
             );
         });
 
@@ -128,12 +131,12 @@ const ListTutor = () => {
                                                             <tr key={tutor.id}>
                                                                 <td>{index + 1}</td>
                                                                 <td>
-                                                                    <img src={tutor.account.imageUrl} style={{ height: '70px', width: '50px' }}>
+                                                                    <img src={tutor.account?.imageUrl} style={{ height: '70px', width: '50px' }}>
 
                                                                     </img>
                                                                 </td>
-                                                                <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
-                                                                <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                <td>{tutor.account && tutor.account?.fullName ? tutor.account?.fullName : 'Unknown Name'}</td>
+                                                                <td>{tutor.account && tutor.account?.phoneNumber ? tutor.account?.phoneNumber : 'Unknown Phone Number'}</td>
                                                                 <td>
                                                                     {tutor.account.gender ? (
                                                                         <span className="badge label-table badge-success">Male</span>
@@ -141,7 +144,7 @@ const ListTutor = () => {
                                                                         <span className="badge label-table badge-danger">Female</span>
                                                                     )}
                                                                 </td>
-                                                                <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
+                                                                <td>{tutor.account && tutor.account?.dateOfBirth ? tutor.account?.dateOfBirth.substring(0, 10) : 'Unknown DOB'}</td>
                                                                 <td>
                                                                     {tutor.isFreelancer ? (
                                                                         <span className="badge label-table badge-success">Yes</span>
@@ -150,7 +153,7 @@ const ListTutor = () => {
                                                                     )}
                                                                 </td>
                                                                 <td>
-                                                                    {tutor.account.isActive ? (
+                                                                    {tutor.account?.isActive ? (
                                                                         <span className="badge label-table badge-success">Active</span>
                                                                     ) : (
                                                                         <span className="badge label-table badge-danger">Inactive</span>
@@ -160,7 +163,7 @@ const ListTutor = () => {
                                                                     {tutor.account?.createdDate}
                                                                 </td>
                                                                 <td>
-                                                                    <Link to={`/edit-tutor/${tutor.account.id}`} className='text-secondary'>
+                                                                    <Link to={`/edit-tutor/${tutor.account?.id}`} className='text-secondary'>
                                                                         <i className="fa-regular fa-eye"></i>
                                                                     </Link>
                                                                 </td>

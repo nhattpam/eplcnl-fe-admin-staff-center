@@ -40,15 +40,17 @@ const ListLearner = () => {
         setSearchTerm(event.target.value);
     };
 
-    const filteredLearners = learnerList
-        .filter((learner) => {
-            return (
-                learner.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                learner.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                learner.account?.phoneNumber.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                learner.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase())
-            );
-        });
+    const filteredLearners = learnerList.filter((learner) => {
+        const fullName = learner.account?.fullName || '';
+        const email = learner.account?.email || '';
+        const phoneNumber = learner.account?.phoneNumber || '';
+        return (
+            fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+            email.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+            phoneNumber.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    });
+    
 
     const pageCount = Math.ceil(filteredLearners.length / learnersPerPage);
 

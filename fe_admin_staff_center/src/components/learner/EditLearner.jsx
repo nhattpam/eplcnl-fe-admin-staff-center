@@ -114,6 +114,9 @@ const EditLearner = () => {
       .updateAccount(account.id, account)
       .then((res) => {
         navigate("/list-learner/");
+        if(account.isActive===false){
+          accountService.sendMailBanAccount(account.id);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -162,7 +165,7 @@ const EditLearner = () => {
                           <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-2" data-page-size={7}>
                             <tbody>
                               <tr>
-                                <th>Tutor Name:</th>
+                                <th>Learner Name:</th>
                                 <td>{account.fullName}</td>
                               </tr>
                               <tr>
@@ -204,7 +207,7 @@ const EditLearner = () => {
                               <tr>
                                 <th>Total Payout:</th>
                                 <td>
-                                  {payout} $
+                                ${payout} 
                                 </td>
                               </tr>
                             </tbody>
@@ -265,8 +268,8 @@ const EditLearner = () => {
                               />
                             </div>
                             <div className="modal-footer">
-                              <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
-                              <button type="button" className="btn btn-primary" onClick={(e) => submitAccount(e)}>Submit</button>
+                              <button type="button" className="btn btn-dark" style={{  color: '#fff', borderRadius: '50px', padding: `8px 25px`}} onClick={() => setShowModal(false)}>Close</button>
+                              <button type="button" className="btn btn-danger" style={{ color: '#fff', borderRadius: '50px', padding: `8px 25px`}} onClick={(e) => submitAccount(e)}>Disable</button>
                             </div>
                           </div>
                         </div>

@@ -169,6 +169,9 @@ const EditStaff = () => {
       .updateAccount(account.id, account)
       .then((res) => {
         navigate(`/list-staff`);
+        if(account.isActive===false){
+          accountService.sendMailBanAccount(account.id);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -297,7 +300,7 @@ const EditStaff = () => {
                             </div>
                             <div className="modal-footer">
                               <button type="button" className="btn btn-dark" onClick={() => setShowModal(false)} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
-                              <button type="button" className="btn btn-danger" onClick={(e) => submitAccount(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}>DISABLE</button>
+                              <button type="button" className="btn btn-danger" onClick={(e) => submitAccount(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}>Disable</button>
                             </div>
                           </div>
                         </div>

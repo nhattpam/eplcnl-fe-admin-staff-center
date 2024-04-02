@@ -53,14 +53,16 @@ const ListTutorByCenter = () => {
 
 
     const filteredTutors = tutorList
-        .filter((tutor) => {
-            return (
-                tutor.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                tutor.account?.phoneNumber.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                tutor.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
-
-            );
-        });
+    .filter((tutor) => {
+        const fullName = tutor.account?.fullName || '';
+        const email = tutor.account?.email || '';
+        const phoneNumber = tutor.account?.phoneNumber || '';
+        return (
+            fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            phoneNumber.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    });
 
     const pageCount = Math.ceil(filteredTutors.length / tutorsPerPage);
 
