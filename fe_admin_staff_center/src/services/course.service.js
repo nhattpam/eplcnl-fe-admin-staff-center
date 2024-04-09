@@ -82,6 +82,15 @@ class CourseService {
     });
   }
 
+  getAllEnrollmentsByCourse(id) {
+    const url = `${API_URL}/courses/${id}/enrollments`; // Construct the URL string
+    return axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
+
 
   
 

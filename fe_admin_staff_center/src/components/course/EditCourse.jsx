@@ -6,7 +6,9 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import courseService from '../../services/course.service';
 import moduleService from '../../services/module.service';
 import ReactQuill from 'react-quill';
-
+import ReactPaginate from 'react-paginate';
+import { IconContext } from 'react-icons';
+import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 const EditCourse = () => {
 
     // Define isAdmin and isStaff outside of the component
@@ -139,6 +141,78 @@ const EditCourse = () => {
         }
     }, [id]);
 
+    //enrolled learners:
+    const [enrollmentList, setEnrollmentList] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+    const [enrollmentsPerPage] = useState(5);
+    useEffect(() => {
+        courseService
+            .getAllEnrollmentsByCourse(id)
+            .then((res) => {
+                const notRefundEnrollments = res.data.filter(enrollment => enrollment.refundStatus === false);
+
+                console.log(res.data);
+                setEnrollmentList(notRefundEnrollments);
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [id]);
+
+    const filteredEnrollments = enrollmentList
+        .filter((enrollment) => {
+            return (
+                enrollment.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        });
+
+    const pageCount = Math.ceil(filteredEnrollments.length / enrollmentsPerPage);
+
+    const handlePageClick = (data) => {
+        setCurrentPage(data.selected);
+    };
+
+    const offset = currentPage * enrollmentsPerPage;
+    const currentEnrollments = filteredEnrollments.slice(offset, offset + enrollmentsPerPage);
+
+    //refund learners:
+    const [enrollmentList2, setEnrollmentList2] = useState([]);
+    const [searchTerm2, setSearchTerm2] = useState('');
+    const [currentPage2, setCurrentPage2] = useState(0);
+    const [enrollmentsPerPage2] = useState(5);
+    useEffect(() => {
+        courseService
+            .getAllEnrollmentsByCourse(id)
+            .then((res) => {
+                const notRefundEnrollments = res.data.filter(enrollment => enrollment.refundStatus === true);
+
+                console.log(res.data);
+                setEnrollmentList2(notRefundEnrollments);
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [id]);
+
+    const filteredEnrollments2 = enrollmentList2
+        .filter((enrollment) => {
+            return (
+                enrollment.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        });
+
+    const pageCount2 = Math.ceil(filteredEnrollments2.length / enrollmentsPerPage2);
+
+    const handlePageClick2 = (data) => {
+        setCurrentPage2(data.selected);
+    };
+
+    const offset2 = currentPage2 * enrollmentsPerPage2;
+    const currentEnrollments2 = filteredEnrollments2.slice(offset2, offset2 + enrollmentsPerPage2);
+
     return (
         <>
             <div id="wrapper">
@@ -179,7 +253,7 @@ const EditCourse = () => {
                                                     <tr>
                                                         <th>Tutor:</th>
                                                         <td>
-                                                             {course.tutor?.account?.fullName}
+                                                            {course.tutor?.account?.fullName}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -187,7 +261,7 @@ const EditCourse = () => {
                                         </div>
 
                                         <div className="form-group">
-                                            <label>Modules:</label>
+                                            <h5>Modules:</h5>
                                             {!course.isOnlineClass && (
                                                 <>
                                                     <div className="table-responsive">
@@ -329,7 +403,7 @@ const EditCourse = () => {
                                                     {isStaff && (
 
                                                         <button type="button" className="btn btn-danger ml-1" onClick={handleThumbDownClick} style={{ borderRadius: '50px', padding: `8px 25px` }}>
-                                                            
+
                                                             <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
                                                     )}
@@ -355,16 +429,16 @@ const EditCourse = () => {
                                     <div className="form-group">
                                         <>
 
-                                            <label>Feedbacks:</label>
+                                            <h5>Feedbacks:</h5>
                                             {
                                                 feedbackList.length > 0 && feedbackList.map((feedback, index) => (
                                                     <>
                                                         {/* <div className="mt-3 d-flex flex-row align-items-center p-3 form-color"> <img src="https://i.imgur.com/zQZSWrt.jpg" width={50} className="rounded-circle mr-2" /> <input type="text" className="form-control" placeholder="Enter your comment..." /> </div> */}
                                                         < div className="mt-2" >
-                                                            <div className="d-flex flex-row p-3"> <img src={feedback.learner.account.imageUrl} width={40} height={40} className="rounded-circle mr-3" />
+                                                            <div className="d-flex flex-row p-3"> <img src={feedback.learner?.account?.imageUrl} width={40} height={40} className="rounded-circle mr-3" />
                                                                 <div className="w-100">
                                                                     <div className="d-flex justify-content-between align-items-center">
-                                                                        <div className="d-flex flex-row align-items-center"> <span className="mr-2" style={{ fontWeight: 'bold' }}>{feedback.learner.account.fullName}</span> <small className="c-badge">Top Comment</small> </div> <small>{feedback.createdDate}</small>
+                                                                        <div className="d-flex flex-row align-items-center"> <span className="mr-2" style={{ fontWeight: 'bold' }}>{feedback.learner?.account?.fullName}</span> <small className="c-badge">Top Comment</small> </div> <small>{feedback.createdDate}</small>
                                                                     </div>
                                                                     <p className="text-justify comment-text mb-0" dangerouslySetInnerHTML={{ __html: feedback.feedbackContent }}></p>
                                                                 </div>
@@ -386,6 +460,210 @@ const EditCourse = () => {
 
                                         </>
                                     </div>
+                                    <div className="form-group mt-4">
+                                        <h5>Enrolled Learners:</h5>
+
+                                        <div className="table-responsive text-center">
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                <thead className="thead-light">
+                                                    <tr>
+                                                        <th data-toggle="true">No.</th>
+                                                        <th data-toggle="true">Image</th>
+                                                        <th data-toggle="true">Full Name</th>
+                                                        <th data-toggle="true">Phone</th>
+                                                        <th data-hide="phone">Gender</th>
+                                                        <th data-hide="phone, tablet">DOB</th>
+                                                        <th data-hide="phone, tablet">Status</th>
+                                                        {/* <th>Action</th> */}
+                                                        {/* <th>Courses</th> */}
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        currentEnrollments.length > 0 && currentEnrollments.map((enrollment, index) => (
+                                                            <tr key={enrollment.id}>
+                                                                <td>{index + 1}</td>
+                                                                <td>
+                                                                    <img src={enrollment.transaction?.learner?.account?.imageUrl} style={{ height: '70px', width: '50px' }}>
+
+                                                                    </img>
+                                                                </td>
+                                                                <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.fullName ? enrollment.transaction?.learner?.account?.fullName : 'Unknown Name'}</td>
+                                                                <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.phoneNumber ? enrollment.transaction?.learner?.account?.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.gender !== undefined ? (enrollment.transaction?.learner?.account?.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>
+                                                                <td>
+                                                                    {enrollment.transaction?.learner?.account?.dateOfBirth && typeof enrollment.transaction.learner.account.dateOfBirth === 'string' ?
+                                                                        enrollment.transaction.learner.account.dateOfBirth.substring(0, 10) :
+                                                                        'Unknown DOB'}
+                                                                </td>
+                                                                <td>
+                                                                    {enrollment.transaction?.learner?.account?.isActive ? (
+                                                                        <span className="badge label-table badge-success">Active</span>
+                                                                    ) : (
+                                                                        <span className="badge label-table badge-danger">Inactive</span>
+                                                                    )}
+                                                                </td>
+                                                                {/* <td>
+                                                                    <Link to={`/edit-learner/${enrollment.transaction?.learner?.account?.id}`} className='text-secondary'>
+                                                                        <i className="fa-regular fa-eye"></i>
+                                                                    </Link>
+                                                                </td> */}
+                                                                {/* <td>
+                                                                            <Link to={`/list-course-by-tutor/${tutor.id}`} className='text-dark'>
+                                                                                <i class="ti-more-alt"></i>
+                                                                            </Link>
+                                                                        </td> */}
+                                                            </tr>
+                                                        ))
+                                                    }
+
+                                                </tbody>
+                                            </table>
+
+
+                                        </div>
+                                    </div>
+                                    {
+                                        enrollmentList.length === 0 && (
+                                            <p className='text-center'>No enrollments yet.</p>
+                                        )
+                                    }
+                                    {/* Pagination */}
+                                    <div className='container-fluid'>
+                                        {/* Pagination */}
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <ReactPaginate
+                                                previousLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretLeft />
+                                                    </IconContext.Provider>
+                                                }
+                                                nextLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretRight />
+                                                    </IconContext.Provider>
+                                                } breakLabel={'...'}
+                                                breakClassName={'page-item'}
+                                                breakLinkClassName={'page-link'}
+                                                pageCount={pageCount}
+                                                marginPagesDisplayed={2}
+                                                pageRangeDisplayed={5}
+                                                onPageChange={handlePageClick}
+                                                containerClassName={'pagination'}
+                                                activeClassName={'active'}
+                                                previousClassName={'page-item'}
+                                                nextClassName={'page-item'}
+                                                pageClassName={'page-item'}
+                                                previousLinkClassName={'page-link'}
+                                                nextLinkClassName={'page-link'}
+                                                pageLinkClassName={'page-link'}
+                                            />
+                                        </div>
+
+                                    </div>
+
+                                    <div className="form-group mt-4">
+                                        <h5>Refunded Learners:</h5>
+
+                                        <div className="table-responsive text-center">
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                <thead className="thead-light">
+                                                    <tr>
+                                                        <th data-toggle="true">No.</th>
+                                                        <th data-toggle="true">Image</th>
+                                                        <th data-toggle="true">Full Name</th>
+                                                        <th data-toggle="true">Phone</th>
+                                                        <th data-hide="phone">Gender</th>
+                                                        <th data-hide="phone, tablet">DOB</th>
+                                                        <th data-hide="phone, tablet">Status</th>
+                                                        {/* <th>Action</th> */}
+                                                        {/* <th>Courses</th> */}
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        currentEnrollments2.length > 0 && currentEnrollments2.map((enrollment, index) => (
+                                                            <tr key={enrollment.id}>
+                                                                <td>{index + 1}</td>
+                                                                <td>
+                                                                    <img src={enrollment.transaction?.learner?.account?.imageUrl} style={{ height: '70px', width: '50px' }}>
+
+                                                                    </img>
+                                                                </td>
+                                                                <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.fullName ? enrollment.transaction?.learner?.account?.fullName : 'Unknown Name'}</td>
+                                                                <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.phoneNumber ? enrollment.transaction?.learner?.account?.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.gender !== undefined ? (enrollment.transaction?.learner?.account?.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>
+                                                                <td>
+                                                                    {enrollment.transaction?.learner?.account?.dateOfBirth && typeof enrollment.transaction.learner.account.dateOfBirth === 'string' ?
+                                                                        enrollment.transaction.learner.account.dateOfBirth.substring(0, 10) :
+                                                                        'Unknown DOB'}
+                                                                </td>
+                                                                <td>
+                                                                    {enrollment.transaction?.learner?.account?.isActive ? (
+                                                                        <span className="badge label-table badge-success">Active</span>
+                                                                    ) : (
+                                                                        <span className="badge label-table badge-danger">Inactive</span>
+                                                                    )}
+                                                                </td>
+                                                                {/* <td>
+                                                                    <Link to={`/edit-learner/${enrollment.transaction?.learner?.account?.id}`} className='text-secondary'>
+                                                                        <i className="fa-regular fa-eye"></i>
+                                                                    </Link>
+                                                                </td> */}
+                                                                {/* <td>
+                                                                            <Link to={`/list-course-by-tutor/${tutor.id}`} className='text-dark'>
+                                                                                <i class="ti-more-alt"></i>
+                                                                            </Link>
+                                                                        </td> */}
+                                                            </tr>
+                                                        ))
+                                                    }
+
+                                                </tbody>
+                                            </table>
+
+
+                                        </div>
+                                    </div>
+                                    {
+                                        enrollmentList2.length === 0 && (
+                                            <p className='text-center'>No refunds yet.</p>
+                                        )
+                                    }
+                                    {/* Pagination */}
+                                    <div className='container-fluid'>
+                                        {/* Pagination */}
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <ReactPaginate
+                                                previousLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretLeft />
+                                                    </IconContext.Provider>
+                                                }
+                                                nextLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretRight />
+                                                    </IconContext.Provider>
+                                                } breakLabel={'...'}
+                                                breakClassName={'page-item'}
+                                                breakLinkClassName={'page-link'}
+                                                pageCount={pageCount2}
+                                                marginPagesDisplayed={2}
+                                                pageRangeDisplayed={5}
+                                                onPageChange={handlePageClick2}
+                                                containerClassName={'pagination'}
+                                                activeClassName={'active'}
+                                                previousClassName={'page-item'}
+                                                nextClassName={'page-item'}
+                                                pageClassName={'page-item'}
+                                                previousLinkClassName={'page-link'}
+                                                nextLinkClassName={'page-link'}
+                                                pageLinkClassName={'page-link'}
+                                            />
+                                        </div>
+
+                                    </div>
+
                                     {showModal && (
                                         <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
                                             <div className="modal-dialog">
@@ -453,6 +731,10 @@ const EditCourse = () => {
                         flex: 1;
                         width: 85%;
                         text-align: left;
+                    }
+                    .page-item.active .page-link{
+                        background-color: #20c997;
+                        border-color: #20c997;
                     }
                 `}
             </style>

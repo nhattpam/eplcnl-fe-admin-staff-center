@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "meowlish-manager"
-  }
+    "default": "meowlish-management"
+  },
+  "targets": {},
+  "etags": {}
 }

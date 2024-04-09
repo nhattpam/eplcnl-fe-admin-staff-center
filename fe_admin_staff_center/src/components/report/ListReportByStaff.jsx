@@ -204,7 +204,7 @@ const ListReportByStaff = () => {
                                     </div> {/* end card-box */}
                                     {
                                         currentReports.length === 0 && (
-                                            <p>There are no reports.</p>
+                                            <p>No reports found.</p>
                                         )
                                     }
                                 </div> {/* end col */}

@@ -62,7 +62,9 @@ const MyWallet = () => {
             .getAllCenter()
             .then((res) => {
                 // console.log(res.data);
-                setCenterList(res.data);
+                const activeCenters = res.data.filter((center) => center.isActive === true);
+
+                setCenterList(activeCenters);
 
             })
             .catch((error) => {

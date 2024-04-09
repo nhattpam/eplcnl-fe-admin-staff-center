@@ -159,7 +159,7 @@ const ListCourseInActive = () => {
                                     </div> {/* end card-box */}
                                     {
                                         currentCourses.length === 0 && (
-                                            <p>There are no Courses.</p>
+                                            <p>No courses found.</p>
                                         )
                                     }
                                 </div> {/* end col */}
