@@ -451,9 +451,7 @@ const AdminDashboard = () => {
     //loi lo
     useEffect(() => {
         setCurrentMonthVsPreviousMonth(sumForCurrentMonth - sumForPreviousMonth);
-        console.log("THIS MONTH: " + sumForCurrentMonth)
-        console.log("LAST MONTH: " + sumForPreviousMonth)
-    }, []);
+    }, [sumForCurrentMonth, sumForPreviousMonth]);
 
 
 
