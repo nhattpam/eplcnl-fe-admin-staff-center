@@ -54,22 +54,6 @@ const EditQuestion = () => {
 
 
 
-    const handleDeleteQuestionAnswer = async (questionAnswerId) => {
-        try {
-            // Delete the question answer
-            const response = await questionAnswerService.deleteQuestionAnswer(questionAnswerId);
-            console.log(response)
-            // Reload the question answer list
-            const updatedQuestionAnswerList = await questionService.getAllQuestionAnswersByQuestion(questionId);
-            setQuestionAnswerList(updatedQuestionAnswerList.data);
-
-            // Optionally, display a success message
-            setMsg('Question answer deleted successfully');
-        } catch (error) {
-            console.error('Error deleting question answer:', error);
-        }
-    };
-
 
     return (
         <>
@@ -88,11 +72,11 @@ const EditQuestion = () => {
 
                                     <form id="demo-form" data-parsley-validate>
                                         <div className="table-responsive">
-                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-2" data-page-size={7}>
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-2" data-page-size={7}>
                                                 <tbody>
                                                     {question.questionText !== "" && (
                                                         <tr>
-                                                            <th>Question Text</th>
+                                                            <th style={{fontWeight: 'bold'}}>Question Text</th>
                                                             <td dangerouslySetInnerHTML={{ __html: question.questionText }} />
                                                         </tr>
                                                     )}
@@ -150,23 +134,8 @@ const EditQuestion = () => {
                                         <div className="form-group mb-2">
                                             <>
                                                 {questionAnswerList.length === 0 && (
-                                                    <p>No answers available.</p>
+                                                    <p className='text-center mt-3'>No answers available.</p>
                                                 )}
-                                                {/* <Link
-                                                    type="button"
-                                                    className="btn btn-success mr-2"
-                                                    to={`/tutor/courses/create/create-video-course/create-question-answer/${question.id}`}
-                                                >
-                                                    <i className="bi bi-plus"></i> Create new answer
-                                                </Link>
-
-
-                                                <button
-                                                    type="submit"
-                                                    className="btn btn-danger"
-                                                >
-                                                    <i className="bi bi-x-lg"></i> Request to delete
-                                                </button> */}
                                             </>
 
 

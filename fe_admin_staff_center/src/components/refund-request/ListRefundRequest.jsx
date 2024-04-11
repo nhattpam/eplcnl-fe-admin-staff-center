@@ -148,7 +148,7 @@ const ListRefundRequest = () => {
                                         </div> {/* end .table-responsive*/}
                                         {
                                             currentRefunds.length === 0 && (
-                                                <p className='mt-2'>There are no refund requests.</p>
+                                                <p className='text-center mt-3'>No refund requests found.</p>
                                             )
                                         }
 

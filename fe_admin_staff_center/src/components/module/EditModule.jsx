@@ -214,7 +214,7 @@ const EditModule = () => {
                                             </div> {/* end .table-responsive*/}
                                             {
                                                 currentLessons.length === 0 && (
-                                                    <p className='text-center mt-2'>There are no lessons.</p>
+                                                    <p className='text-center mt-2'>No lessons found.</p>
                                                 )
                                             }
                                         </div>
@@ -253,7 +253,7 @@ const EditModule = () => {
                                                         <tr>
                                                             <th>No.</th>
                                                             <th>Time</th>
-                                                            <th>Question</th>
+                                                            <th>Grade To Pass</th>
                                                             <th data-hide="phone">Created Date</th>
                                                             <th data-hide="phone, tablet">Updated Date</th>
                                                             <th>Action</th>
@@ -266,7 +266,7 @@ const EditModule = () => {
                                                                     <tr key={assignment.id}>
                                                                         <td>{index + 1}</td>
                                                                         <td>{assignment.deadline}</td>
-                                                                        <td className='truncate-text' dangerouslySetInnerHTML={{ __html: assignment.questionText }} />
+                                                                        <td>{assignment.gradeToPass}</td>
                                                                         <td>{assignment.createdDate}</td>
                                                                         <td>{assignment.updatedDate}</td>
                                                                         <td>
@@ -286,7 +286,7 @@ const EditModule = () => {
                                             </div> {/* end .table-responsive*/}
                                             {
                                                 currentAssignments.length === 0 && (
-                                                    <p className='mt-2 text-center'>There are no assignments.</p>
+                                                    <p className='mt-2 text-center'>No assignments found.</p>
                                                 )
                                             }
                                         </div>
@@ -358,7 +358,7 @@ const EditModule = () => {
                                             </div> {/* end .table-responsive*/}
                                             {
                                                 currentQuizs.length === 0 && (
-                                                    <p className='text-center mt-2'>There are no quizzes.</p>
+                                                    <p className='text-center mt-2'>No quizzes found.</p>
                                                 )
                                             }
                                         </div>

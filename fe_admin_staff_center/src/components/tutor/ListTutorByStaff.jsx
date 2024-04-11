@@ -48,16 +48,16 @@ const ListTutorByStaff = () => {
     console.log(typeof tutorList);
 
     const filteredTutors = tutorList
-    .filter((tutor) => {
-        const fullName = tutor.account?.fullName || '';
-        const email = tutor.account?.email || '';
-        const phoneNumber = tutor.account?.phoneNumber || '';
-        return (
-            fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            phoneNumber.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    });
+        .filter((tutor) => {
+            const fullName = tutor.account?.fullName || '';
+            const email = tutor.account?.email || '';
+            const phoneNumber = tutor.account?.phoneNumber || '';
+            return (
+                fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                phoneNumber.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        });
 
     const pageCount = Math.ceil(filteredTutors.length / tutorsPerPage);
 
@@ -156,7 +156,7 @@ const ListTutorByStaff = () => {
                                                                         <i className="fa-regular fa-eye"></i>
                                                                     </Link>
                                                                 </td>
-                                                               
+
                                                             </tr>
                                                         ))
                                                     }
@@ -164,13 +164,13 @@ const ListTutorByStaff = () => {
                                                 </tbody>
                                             </table>
                                         </div>
-
+                                        {
+                                            currentTutors.length === 0 && (
+                                                <p className='text-center mt-3'>No tutors found.</p>
+                                            )
+                                        }
                                     </div> {/* end card-box */}
-                                    {
-                                        currentTutors.length === 0 && (
-                                            <p>There are no tutors.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

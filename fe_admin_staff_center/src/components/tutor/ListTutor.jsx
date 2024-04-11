@@ -110,7 +110,7 @@ const ListTutor = () => {
                                             </div>
                                         </div>
                                         <div className="table-responsive">
-                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
                                                 <thead className="thead-light">
                                                     <tr>
                                                         <th data-toggle="true">No.</th>
@@ -176,7 +176,7 @@ const ListTutor = () => {
                                         </div>
                                         {
                                         currentTutors.length === 0 && (
-                                            <p className='mt-2'>There are no tutors.</p>
+                                            <p className='text-center mt-3'>No tutors found.</p>
                                         )
                                     }
 

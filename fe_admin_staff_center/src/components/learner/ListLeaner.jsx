@@ -50,7 +50,7 @@ const ListLearner = () => {
             phoneNumber.toString().toLowerCase().includes(searchTerm.toLowerCase())
         );
     });
-    
+
 
     const pageCount = Math.ceil(filteredLearners.length / learnersPerPage);
 
@@ -96,13 +96,13 @@ const ListLearner = () => {
                                                 <div className="col-12 text-sm-center form-inline">
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm}
-                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }}/>
+                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }} />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="table-responsive">
-                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
                                                 <thead className="thead-light">
                                                     <tr>
                                                         <th data-toggle="true">No.</th>
@@ -163,12 +163,13 @@ const ListLearner = () => {
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
+                                        {
+                                            currentLearners.length === 0 && (
+                                                <p className='text-center mt-3'>No learners found.</p>
+                                            )
+                                        }
                                     </div> {/* end card-box */}
-                                    {
-                                        currentLearners.length === 0 && (
-                                            <p>There are no Learners.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

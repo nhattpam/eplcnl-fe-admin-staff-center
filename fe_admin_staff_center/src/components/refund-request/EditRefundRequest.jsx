@@ -200,14 +200,14 @@ const EditRefundRequest = () => {
                                                                 className="btn btn-success" onClick={() => handleApproveRefund()}
                                                                 style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                             >
-                                                                Approve
+                                                                <i class="fa-solid fa-thumbs-up"></i>
                                                             </button>
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-danger ml-1" onClick={() => handleDisApproveRefund()}
                                                                 style={{ borderRadius: '50px', padding: `8px 25px` }}
                                                             >
-                                                                Disapprove
+                                                                <i class="fa-solid fa-thumbs-down"></i>
                                                             </button>
                                                         </>
 
@@ -235,15 +235,15 @@ const EditRefundRequest = () => {
                                                 <tbody>
                                                     <tr>
                                                         <td>
-                                                            {refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && (
+                                                            {refund.enrollment && refund.enrollment?.transaction && refund.enrollment?.transaction?.course && (
                                                                 <img src={refund.enrollment.transaction.course.imageUrl} style={{ height: '70px', width: '100px' }} alt="Course Image" />
                                                             )}
                                                         </td>
-                                                        <td>{refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.code}</td>
-                                                        <td>{refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.name}</td>
-                                                        <td>{refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.stockPrice}$</td>
-                                                        <td>{refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.rating}</td>
-                                                        <td>{refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.tags}</td>
+                                                        <td>{refund.enrollment && refund.enrollment?.transaction && refund.enrollment?.transaction?.course && refund.enrollment?.transaction?.course?.code}</td>
+                                                        <td>{refund.enrollment && refund.enrollment?.transaction && refund.enrollment?.transaction?.course && refund.enrollment?.transaction?.course?.name}</td>
+                                                        <td>${refund.enrollment && refund.enrollment?.transaction && refund.enrollment?.transaction?.course && refund.enrollment?.transaction?.course?.stockPrice}</td>
+                                                        <td>{refund.enrollment && refund.enrollment?.transaction && refund.enrollment?.transaction?.course && refund.enrollment?.transaction?.course?.rating} <i class="fa-solid fa-star text-warning"></i></td>
+                                                        <td>{refund.enrollment && refund.enrollment?.transaction && refund.enrollment?.transaction?.course && refund.enrollment?.transaction?.course?.tags}</td>
                                                         <td>
                                                             {refund.enrollment && refund.enrollment.transaction && refund.enrollment.transaction.course && refund.enrollment.transaction.course.isActive ? (
                                                                 <span className="badge label-table badge-success">Active</span>
@@ -284,16 +284,17 @@ const EditRefundRequest = () => {
                                                             </tr>
                                                         ))
                                                     }
-                                                    {
-                                                         refundSurveyList.length === 0 && (
-                                                            <p>No reasons found.</p>
-                                                         )
-                                                    }
+
 
                                                 </tbody>
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
+                                        {
+                                            refundSurveyList.length === 0 && (
+                                                <p className='text-center mt-3'>No reasons found.</p>
+                                            )
+                                        }
                                     </form>
                                 </div> {/* end card-box*/}
                             </div> {/* end col*/}

@@ -26,7 +26,7 @@ const Header = () => {
         fullName: "",
         phoneNumber: "",
         imageUrl: "",
-        gender: ""
+        gender: false
     });
     const [center, setCenter] = useState({
         email: "",
@@ -159,17 +159,17 @@ const Header = () => {
     const validateForm = () => {
         let isValid = true;
         const errors = {};
-    
+
         if (!account || !account.fullName || account.fullName.trim() === '') {
             errors.fullName = 'Name is required';
             isValid = false;
         }
-    
+
         if (!account || !account.address || account.address.trim() === '') {
             errors.address = 'Address is required';
             isValid = false;
         }
-    
+
         if (!account || !account.phoneNumber || account.phoneNumber.trim() === '') {
             errors.phoneNumber = 'Phone Number is required';
             isValid = false;
@@ -177,7 +177,7 @@ const Header = () => {
             errors.phoneNumber = 'Phone Number must be exactly 10 digits';
             isValid = false;
         }
-    
+
         setErrors(errors);
         return isValid;
     };
@@ -186,36 +186,47 @@ const Header = () => {
         e.preventDefault();
 
         if (validateForm()) {
-            // Save account
             let imageUrl = account.imageUrl; // Keep the existing imageUrl if available
 
             if (file) {
-                // Upload image and get the link
-                const imageData = new FormData();
-                imageData.append("file", file);
-                const imageResponse = await accountService.uploadImage(imageData);
+                try {
+                    // Upload image and get the link
+                    const imageData = new FormData();
+                    imageData.append("file", file);
+                    const imageResponse = await accountService.uploadImage(imageData);
 
-                // Update the imageUrl with the link obtained from the API
-                let imageUrl = imageResponse.data;
+                    // Update the imageUrl with the link obtained from the API
+                    imageUrl = imageResponse.data;
 
-                // Log the imageUrl after updating
-                console.log("this is url: " + imageUrl);
-                account.imageUrl = imageResponse.data;
+                    // Log the imageUrl after updating
+                    console.log("this is url: " + imageUrl);
+                } catch (error) {
+                    console.error("Error uploading image:", error);
+                    // Handle image upload error here, show appropriate feedback to the user
+                    return;
+                }
             }
 
-            // Update account
-            const accountData = { ...account, imageUrl }; // Create a new object with updated imageUrl
-            console.log(JSON.stringify(accountData))
+            // Convert gender string to boolean if needed
+            if (account.gender === "male") {
+                account.gender = true;
+            } else if (account.gender === "female") {
+                account.gender = false;
+            }
 
-            accountService
-                .updateAccount(account.id, account)
-                .then((res) => {
-                    window.alert("Update Account Successfully");
-                    window.location.reload();
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            // Update account data
+            const accountData = { ...account, imageUrl };
+
+            try {
+                const res = await accountService.updateAccount(account.id, accountData);
+                console.log("Update Account Successfully:", res.data);
+                window.alert("Update Account Successfully");
+                // Assuming you have a state management system, update account details in the state here instead of reloading the page
+                window.location.reload();
+            } catch (error) {
+                console.error("Error updating account:", error);
+                // Handle account update error here, show appropriate feedback to the user
+            }
         }
     };
 
@@ -249,7 +260,7 @@ const Header = () => {
                                     {isAdmin && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p>Balance: {account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
+                                            <p>Balance: ${account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
                                         </>
                                     )}
 
@@ -257,7 +268,7 @@ const Header = () => {
                                     {isStaff && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p>Balance: {account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
+                                            <p>Balance: ${account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
 
                                         </>
                                     )}
@@ -265,7 +276,7 @@ const Header = () => {
                                     {isCenter && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p>Balance: {account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
+                                            <p>Balance: ${account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
 
                                         </>
 
@@ -306,7 +317,7 @@ const Header = () => {
             {/* end Topbar */}
             {/* My Account Modal */}
             {
-                isAdmin  && (
+                isAdmin && (
                     showModal && (
                         <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
                             <div className="modal-dialog" role="document">
@@ -331,7 +342,7 @@ const Header = () => {
                                                         accept="image/*"
                                                         multiple={false}
                                                         maxSize={5000000} // Maximum file size (5MB)
-        
+
                                                     >
                                                         {({ getRootProps, getInputProps }) => (
                                                             <div {...getRootProps()} className="fallback">
@@ -350,165 +361,17 @@ const Header = () => {
                                                                     />
                                                                 )}
                                                             </div>
-        
+
                                                         )}
                                                     </Dropzone>
-        
+
                                                     <div className="table-responsive">
                                                         <table className="table table-hover mt-3">
                                                             <tbody>
                                                                 <tr>
                                                                     <th style={{ width: '30%' }}>Full Name:</th>
                                                                     <td>
-                                                                        <input type="text" className="form-control" name="fullName" value={account.fullName} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}/>
-                                                                        {errors.fullName && <p className="text-danger">{errors.fullName}</p>}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Phone Number:</th>
-                                                                    <td>
-                                                                        <input type="number" className="form-control" name="phoneNumber" value={account.phoneNumber} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}/>
-                                                                        {errors.phoneNumber && <p className="text-danger">{errors.phoneNumber}</p>}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Address:</th>
-                                                                    <td>
-                                                                        <input type="text" className="form-control" name="address" value={account.address} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}/>
-                                                                        {errors.address && <p className="text-danger">{errors.address}</p>}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Gender:</th>
-                                                                    <td>
-                                                                        <select className="form-control" name="gender" value={account.gender} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
-                                                                            <option value="male">Male</option>
-                                                                            <option value="female">Female</option>
-                                                                        </select>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div className="modal-footer">
-                                                    <button type="submit" className="btn btn-success" style={{ borderRadius: '50px', padding: `8px 25px` }}>Save Changes</button>
-                                                    <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
-                                                </div>
-                                            </form>
-                                        </>
-        
-        
-                                    ) : (
-                                        <>
-                                            <div className="modal-body">
-        
-                                                <img src={account.imageUrl} alt="avatar" className="rounded-circle" style={{ width: '30%' }} />
-        
-                                                <div>
-                                                    <table className="table table-responsive table-hover mt-3">
-                                                        <tbody>
-                                                            <tr>
-                                                                <th style={{ width: '30%' }}>Full Name:</th>
-                                                                <td>{account.fullName}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Email:</th>
-                                                                <td>{account.email}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Phone Number:</th>
-                                                                <td>{account && account.phoneNumber ? account.phoneNumber : 'Unknown Phone Number'}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Address:</th>
-                                                                <td>{account && account.address ? account.address : 'Unknown Address'}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Gender:</th>
-                                                                <td>
-                                                                    {account.gender ? (
-                                                                        <span className="badge label-table badge-success">Male</span>
-                                                                    ) : (
-                                                                        <span className="badge label-table badge-danger">Female</span>
-                                                                    )}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-        
-                                            </div>
-                                            <div className="modal-footer">
-                                                <button type="button" className="btn btn-warning" onClick={toggleEditMode} style={{ borderRadius: '50px', padding: `8px 25px` }}>Edit</button>
-                                                <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
-                                            </div>
-                                        </>
-        
-                                    )}
-        
-                                </div>
-                            </div>
-                        </div>
-                    )
-                )
-            }
-            {
-                isStaff  && (
-                    showModal && (
-                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title">My Account</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}>
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    {/* Conditional rendering based on edit mode */}
-                                    {editMode ? (
-                                        <>
-                                            <form onSubmit={(e) => submitAccount(e)}>
-                                                <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
-                                                    {/* Input fields for editing */}
-                                                    <label htmlFor="imageUrl">
-                                                        <img src={account.imageUrl} alt="avatar" className="rounded-circle" style={{ width: '30%', cursor: 'pointer' }} />
-                                                    </label>
-                                                    <Dropzone
-                                                        onDrop={handleFileDrop}
-                                                        accept="image/*"
-                                                        multiple={false}
-                                                        maxSize={5000000} // Maximum file size (5MB)
-        
-                                                    >
-                                                        {({ getRootProps, getInputProps }) => (
-                                                            <div {...getRootProps()} className="fallback">
-                                                                <input {...getInputProps()} />
-                                                                <div className="dz-message needsclick">
-                                                                    <i className="h1 text-muted dripicons-cloud-upload" />
-                                                                </div>
-                                                                {imagePreview && (
-                                                                    <img
-                                                                        src={imagePreview}
-                                                                        alt="Preview"
-                                                                        style={{
-                                                                            width: '30%', cursor: 'pointer'
-                                                                        }}
-                                                                        className='rounded-circle'
-                                                                    />
-                                                                )}
-                                                            </div>
-        
-                                                        )}
-                                                    </Dropzone>
-        
-                                                    <div className="table-responsive">
-                                                        <table className="table table-hover mt-3">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th style={{ width: '30%' }}>Full Name:</th>
-                                                                    <td>
-                                                                        <input type="text" className="form-control" name="fullName" value={account.fullName} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}/>
+                                                                        <input type="text" className="form-control" name="fullName" value={account.fullName} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }} />
                                                                         {errors.fullName && <p className="text-danger">{errors.fullName}</p>}
                                                                     </td>
                                                                 </tr>
@@ -516,154 +379,6 @@ const Header = () => {
                                                                     <th>Phone Number:</th>
                                                                     <td>
                                                                         <input type="number" className="form-control" name="phoneNumber" value={account.phoneNumber} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }} />
-                                                                        {errors.phoneNumber && <p className="text-danger">{errors.phoneNumber}</p>}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Address:</th>
-                                                                    <td>
-                                                                        <input type="text" className="form-control" name="address" value={account.address} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}/>
-                                                                        {errors.address && <p className="text-danger">{errors.address}</p>}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Gender:</th>
-                                                                    <td>
-                                                                        <select className="form-control" name="gender" value={account.gender} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
-                                                                            <option value="male">Male</option>
-                                                                            <option value="female">Female</option>
-                                                                        </select>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div className="modal-footer">
-                                                    <button type="submit" className="btn btn-success" style={{ borderRadius: '50px', padding: `8px 25px` }}>Save Changes</button>
-                                                    <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
-                                                </div>
-                                            </form>
-                                        </>
-        
-        
-                                    ) : (
-                                        <>
-                                            <div className="modal-body">
-        
-                                                <img src={account.imageUrl} alt="avatar" className="rounded-circle" style={{ width: '30%' }} />
-        
-                                                <div>
-                                                    <table className="table table-responsive table-hover mt-3">
-                                                        <tbody>
-                                                            <tr>
-                                                                <th style={{ width: '30%' }}>Full Name:</th>
-                                                                <td>{account.fullName}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Email:</th>
-                                                                <td>{account.email}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Phone Number:</th>
-                                                                <td>{account && account.phoneNumber ? account.phoneNumber : 'Unknown Phone Number'}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Address:</th>
-                                                                <td>{account && account.address ? account.address : 'Unknown Address'}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Gender:</th>
-                                                                <td>
-                                                                    {account.gender ? (
-                                                                        <span className="badge label-table badge-success">Male</span>
-                                                                    ) : (
-                                                                        <span className="badge label-table badge-danger">Female</span>
-                                                                    )}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-        
-                                            </div>
-                                            <div className="modal-footer">
-                                                <button type="button" className="btn btn-warning" onClick={toggleEditMode} style={{ borderRadius: '50px', padding: `8px 25px` }}>Edit</button>
-                                                <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
-                                            </div>
-                                        </>
-        
-                                    )}
-        
-                                </div>
-                            </div>
-                        </div>
-                    )
-                )
-            }
-            {
-                isCenter  && (
-                    showModal && (
-                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title">Center Information</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}>
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    {/* Conditional rendering based on edit mode */}
-                                    {editMode ? (
-                                        <>
-                                            <form onSubmit={(e) => submitAccount(e)}>
-                                                <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
-                                                    {/* Input fields for editing */}
-                                                    <label htmlFor="imageUrl">
-                                                        <img src={account.imageUrl} alt="avatar" className="rounded-circle" style={{ width: '30%', cursor: 'pointer' }} />
-                                                    </label>
-                                                    <Dropzone
-                                                        onDrop={handleFileDrop}
-                                                        accept="image/*"
-                                                        multiple={false}
-                                                        maxSize={5000000} // Maximum file size (5MB)
-        
-                                                    >
-                                                        {({ getRootProps, getInputProps }) => (
-                                                            <div {...getRootProps()} className="fallback">
-                                                                <input {...getInputProps()} />
-                                                                <div className="dz-message needsclick">
-                                                                    <i className="h1 text-muted dripicons-cloud-upload" />
-                                                                </div>
-                                                                {imagePreview && (
-                                                                    <img
-                                                                        src={imagePreview}
-                                                                        alt="Preview"
-                                                                        style={{
-                                                                            width: '30%', cursor: 'pointer'
-                                                                        }}
-                                                                        className='rounded-circle'
-                                                                    />
-                                                                )}
-                                                            </div>
-        
-                                                        )}
-                                                    </Dropzone>
-        
-                                                    <div className="table-responsive">
-                                                        <table className="table table-hover mt-3">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th style={{ width: '30%' }}>Full Name:</th>
-                                                                    <td>
-                                                                        <input type="text" className="form-control" name="fullName" value={account.fullName} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}/>
-                                                                        {errors.fullName && <p className="text-danger">{errors.fullName}</p>}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Phone Number:</th>
-                                                                    <td>
-                                                                        <input type="number" className="form-control" name="phoneNumber" value={account.phoneNumber} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}/>
                                                                         {errors.phoneNumber && <p className="text-danger">{errors.phoneNumber}</p>}
                                                                     </td>
                                                                 </tr>
@@ -693,8 +408,304 @@ const Header = () => {
                                                 </div>
                                             </form>
                                         </>
-        
-        
+
+
+                                    ) : (
+                                        <>
+                                            <div className="modal-body">
+
+                                                <img src={account.imageUrl} alt="avatar" className="rounded-circle" style={{ width: '30%' }} />
+
+                                                <div>
+                                                    <table className="table table-responsive table-hover mt-3">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th style={{ width: '30%' }}>Full Name:</th>
+                                                                <td>{account.fullName}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Email:</th>
+                                                                <td>{account.email}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Phone Number:</th>
+                                                                <td>{account && account.phoneNumber ? account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Address:</th>
+                                                                <td>{account && account.address ? account.address : 'Unknown Address'}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Gender:</th>
+                                                                <td>
+                                                                    {account.gender ? (
+                                                                        <span className="badge label-table badge-success">Male</span>
+                                                                    ) : (
+                                                                        <span className="badge label-table badge-danger">Female</span>
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button type="button" className="btn btn-warning" onClick={toggleEditMode} style={{ borderRadius: '50px', padding: `8px 25px` }}>Edit</button>
+                                                <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
+                                            </div>
+                                        </>
+
+                                    )}
+
+                                </div>
+                            </div>
+                        </div>
+                    )
+                )
+            }
+            {
+                isStaff && (
+                    showModal && (
+                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                            <div className="modal-dialog" role="document">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title">My Account</h5>
+                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}>
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    {/* Conditional rendering based on edit mode */}
+                                    {editMode ? (
+                                        <>
+                                            <form onSubmit={(e) => submitAccount(e)}>
+                                                <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
+                                                    {/* Input fields for editing */}
+                                                    <label htmlFor="imageUrl">
+                                                        <img src={account.imageUrl} alt="avatar" className="rounded-circle" style={{ width: '30%', cursor: 'pointer' }} />
+                                                    </label>
+                                                    <Dropzone
+                                                        onDrop={handleFileDrop}
+                                                        accept="image/*"
+                                                        multiple={false}
+                                                        maxSize={5000000} // Maximum file size (5MB)
+
+                                                    >
+                                                        {({ getRootProps, getInputProps }) => (
+                                                            <div {...getRootProps()} className="fallback">
+                                                                <input {...getInputProps()} />
+                                                                <div className="dz-message needsclick">
+                                                                    <i className="h1 text-muted dripicons-cloud-upload" />
+                                                                </div>
+                                                                {imagePreview && (
+                                                                    <img
+                                                                        src={imagePreview}
+                                                                        alt="Preview"
+                                                                        style={{
+                                                                            width: '30%', cursor: 'pointer'
+                                                                        }}
+                                                                        className='rounded-circle'
+                                                                    />
+                                                                )}
+                                                            </div>
+
+                                                        )}
+                                                    </Dropzone>
+
+                                                    <div className="table-responsive">
+                                                        <table className="table table-hover mt-3">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th style={{ width: '30%' }}>Full Name:</th>
+                                                                    <td>
+                                                                        <input type="text" className="form-control" name="fullName" value={account.fullName} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }} />
+                                                                        {errors.fullName && <p className="text-danger">{errors.fullName}</p>}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Phone Number:</th>
+                                                                    <td>
+                                                                        <input type="number" className="form-control" name="phoneNumber" value={account.phoneNumber} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }} />
+                                                                        {errors.phoneNumber && <p className="text-danger">{errors.phoneNumber}</p>}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Address:</th>
+                                                                    <td>
+                                                                        <input type="text" className="form-control" name="address" value={account.address} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }} />
+                                                                        {errors.address && <p className="text-danger">{errors.address}</p>}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Gender:</th>
+                                                                    <td>
+                                                                        <select className="form-control" name="gender" value={account.gender} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
+                                                                            <option value="male">Male</option>
+                                                                            <option value="female">Female</option>
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <button type="submit" className="btn btn-success" style={{ borderRadius: '50px', padding: `8px 25px` }}>Save Changes</button>
+                                                    <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
+                                                </div>
+                                            </form>
+                                        </>
+
+
+                                    ) : (
+                                        <>
+                                            <div className="modal-body">
+
+                                                <img src={account.imageUrl} alt="avatar" className="rounded-circle" style={{ width: '30%' }} />
+
+                                                <div>
+                                                    <table className="table table-responsive table-hover mt-3">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th style={{ width: '30%' }}>Full Name:</th>
+                                                                <td>{account.fullName}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Email:</th>
+                                                                <td>{account.email}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Phone Number:</th>
+                                                                <td>{account && account.phoneNumber ? account.phoneNumber : 'Unknown Phone Number'}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Address:</th>
+                                                                <td>{account && account.address ? account.address : 'Unknown Address'}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Gender:</th>
+                                                                <td>
+                                                                    {account.gender ? (
+                                                                        <span className="badge label-table badge-success">Male</span>
+                                                                    ) : (
+                                                                        <span className="badge label-table badge-danger">Female</span>
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button type="button" className="btn btn-warning" onClick={toggleEditMode} style={{ borderRadius: '50px', padding: `8px 25px` }}>Edit</button>
+                                                <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
+                                            </div>
+                                        </>
+
+                                    )}
+
+                                </div>
+                            </div>
+                        </div>
+                    )
+                )
+            }
+            {
+                isCenter && (
+                    showModal && (
+                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                            <div className="modal-dialog modal-lg" role="document">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title">Center Information</h5>
+                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}>
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    {/* Conditional rendering based on edit mode */}
+                                    {editMode ? (
+                                        <>
+                                            <form onSubmit={(e) => submitAccount(e)}>
+                                                <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
+                                                    {/* Input fields for editing */}
+                                                    <label htmlFor="imageUrl">
+                                                        <img src={account.imageUrl} alt="avatar" className="rounded-circle" style={{ width: '30%', cursor: 'pointer' }} />
+                                                    </label>
+                                                    <Dropzone
+                                                        onDrop={handleFileDrop}
+                                                        accept="image/*"
+                                                        multiple={false}
+                                                        maxSize={5000000} // Maximum file size (5MB)
+
+                                                    >
+                                                        {({ getRootProps, getInputProps }) => (
+                                                            <div {...getRootProps()} className="fallback">
+                                                                <input {...getInputProps()} />
+                                                                <div className="dz-message needsclick">
+                                                                    <i className="h1 text-muted dripicons-cloud-upload" />
+                                                                </div>
+                                                                {imagePreview && (
+                                                                    <img
+                                                                        src={imagePreview}
+                                                                        alt="Preview"
+                                                                        style={{
+                                                                            width: '30%', cursor: 'pointer'
+                                                                        }}
+                                                                        className='rounded-circle'
+                                                                    />
+                                                                )}
+                                                            </div>
+
+                                                        )}
+                                                    </Dropzone>
+
+                                                    <div className="table-responsive">
+                                                        <table className="table table-hover mt-3">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th style={{ width: '30%' }}>Full Name:</th>
+                                                                    <td>
+                                                                        <input type="text" className="form-control" name="fullName" value={account.fullName} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }} />
+                                                                        {errors.fullName && <p className="text-danger">{errors.fullName}</p>}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Phone Number:</th>
+                                                                    <td>
+                                                                        <input type="number" className="form-control" name="phoneNumber" value={account.phoneNumber} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }} />
+                                                                        {errors.phoneNumber && <p className="text-danger">{errors.phoneNumber}</p>}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Address:</th>
+                                                                    <td>
+                                                                        <input type="text" className="form-control" name="address" value={account.address} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }} />
+                                                                        {errors.address && <p className="text-danger">{errors.address}</p>}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Gender:</th>
+                                                                    <td>
+                                                                        <select className="form-control" name="gender" value={account.gender} onChange={(e) => handleChange(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
+                                                                            <option value="male">Male</option>
+                                                                            <option value="female">Female</option>
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <button type="submit" className="btn btn-success" style={{ borderRadius: '50px', padding: `8px 25px` }}>Save Changes</button>
+                                                    <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
+                                                </div>
+                                            </form>
+                                        </>
+
+
                                     ) : (
                                         <>
                                             <div className="modal-body">
@@ -723,20 +734,20 @@ const Header = () => {
                                                             </tr>
                                                             <tr>
                                                                 <th>Description:</th>
-                                                                <td>{center && center.description ? center.description : 'Unknown Description'}</td>
+                                                                <td style={{textAlign: 'left'}}>{center && center.description ? center.description : 'Unknown Description'}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
-        
+
                                             </div>
                                             <div className="modal-footer">
                                                 <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                             </div>
                                         </>
-        
+
                                     )}
-        
+
                                 </div>
                             </div>
                         </div>
@@ -746,7 +757,7 @@ const Header = () => {
             {
                 showWalletHistoryModal && (
                     <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
-                        <div className="modal-dialog modal-dialog-scrollable" role="document">
+                        <div className="modal-dialog modal-dialog-scrollable modal-lg" role="document"> {/* Added modal-lg class */}
                             <div className="modal-content">
                                 <div className="modal-header">
                                     <h5 className="modal-title">Wallet History</h5>
@@ -756,7 +767,6 @@ const Header = () => {
                                 </div>
                                 <div className="modal-body">
                                     {/* Conditional rendering based on edit mode */}
-
                                     <div>
                                         {/* Input fields for editing */}
                                         <div className="table-responsive">
@@ -778,14 +788,10 @@ const Header = () => {
                                                             </tr>
                                                         ))
                                                     }
-
-
                                                 </tbody>
                                             </table>
                                         </div>
-
                                     </div>
-
                                 </div>
                                 {
                                     walletHistoryList.length === 0 && (
@@ -801,6 +807,7 @@ const Header = () => {
                     </div>
                 )
             }
+
 
         </>
     )

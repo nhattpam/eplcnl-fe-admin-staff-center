@@ -18,6 +18,7 @@ const EditAssignment = () => {
   //tao assignment
   const [assignment, setAssignment] = useState({
     questionText: "",
+    questionAudioUrl: "",
     deadline: "", // set a default value for minutes
     moduleId: ""
   });
@@ -118,8 +119,8 @@ const EditAssignment = () => {
       <div id="wrapper">
         <Header />
         <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
-                    isStaff={sessionStorage.getItem('isStaff') === 'true'}
-                    isCenter={sessionStorage.getItem('isCenter') === 'true'} /> 
+          isStaff={sessionStorage.getItem('isStaff') === 'true'}
+          isCenter={sessionStorage.getItem('isCenter') === 'true'} />
         <div className="content-page">
           <div className="content">
             {/* Start Content*/}
@@ -129,7 +130,7 @@ const EditAssignment = () => {
                 <div className="col-12">
                   <div className="card">
                     <div className="card-body">
-                    <h4 className="header-title">COURSE - <span className='text-success'>{module.course?.name}</span> | MODULE - <span className='text-success'>{module.name}</span> </h4>
+                      <h4 className="header-title">COURSE - <span className='text-success'>{module.course?.name}</span> | MODULE - <span className='text-success'>{module.name}</span> </h4>
 
                       <form
                         method="post"
@@ -140,16 +141,31 @@ const EditAssignment = () => {
                         data-upload-preview-template="#uploadPreviewTemplate"
                         data-parsley-validate
                         onSubmit={submitAssignment} >
-                        <div className="card" style={{marginTop: '-20px'}}>
+                        <div className="card" style={{ marginTop: '-20px' }}>
                           <div className='card-body'>
                             <label htmlFor="video">Time:</label>
                             <div>{assignment.deadline} minutes</div>
                           </div>
-                          <div className='card-body'>
-                            <label htmlFor="video">Question:</label>
-                            <div dangerouslySetInnerHTML={{ __html: assignment.questionText }} />
+                          {assignment.questionText !== "" && (
+                            <div className='card-body'>
+                              <label htmlFor="video">Question Text:</label>
+                              <div dangerouslySetInnerHTML={{ __html: assignment.questionText }} />
 
-                          </div>
+                            </div>
+                          )}
+
+                          {assignment.questionAudioUrl !== ""  && (
+                            <div className='card-body'>
+                              <label htmlFor="video">Question Audio:</label>
+                              <div>
+                                <audio controls>
+                                  <source src={assignment?.questionAudioUrl} type="audio/mpeg" />
+                                  Your browser does not support the audio element.
+                                </audio>
+                              </div>
+
+                            </div>
+                          )}
                         </div>
                         {/* <div className="form-group mb-0  ">
                           <button type="submit" className="btn btn-primary " style={{ marginLeft: '23px', marginTop: '10px' }} >

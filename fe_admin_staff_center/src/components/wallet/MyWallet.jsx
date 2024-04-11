@@ -509,7 +509,7 @@ const MyWallet = () => {
                         <div className="row">
                             <div className="col-12">
                                 <div className="card-box">
-                                    <h4 className="header-title">MY WALLET</h4>
+                                    <h4 className="header-title">SYSTEM WALLET</h4>
 
                                     <div className="form-group">
                                         <label htmlFor="transactionId">Wallet Balance:</label>
@@ -573,7 +573,7 @@ const MyWallet = () => {
                                     </div> {/* end .table-responsive*/}
                                     {
                                         currentCenters.length === 0 && (
-                                            <p className='text-center'>There are no centers.</p>
+                                            <p className='text-center mt-3'>No centers found.</p>
                                         )
                                     }
                                     {showModalCenter && (
@@ -745,7 +745,7 @@ const MyWallet = () => {
                                             </tbody>
                                             {
                                                 currentStaffs.length === 0 && (
-                                                    <p className='text-center'>There are no staffs.</p>
+                                                    <p className='text-center mt-3'>No staffs found.</p>
                                                 )
                                             }
                                         </table>
@@ -911,7 +911,7 @@ const MyWallet = () => {
                                             </tbody>
                                             {
                                                 currentTutors.length === 0 && (
-                                                    <p className='text-center'>There are no tutor freelancers.</p>
+                                                    <p className='text-center mt-3'>No tutor freelancers found.</p>
                                                 )
                                             }
                                         </table>

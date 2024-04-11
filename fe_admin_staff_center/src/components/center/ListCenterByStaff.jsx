@@ -45,7 +45,7 @@ const ListCenterByStaff = () => {
                 center.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
                 center.description.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
                 center.email.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-                center.address.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
+                center.address.toString().toLowerCase().includes(searchTerm.toLowerCase())
 
             );
         });
@@ -95,7 +95,7 @@ const ListCenterByStaff = () => {
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on"
                                                             value={searchTerm}
-                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }}/>
+                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -150,12 +150,13 @@ const ListCenterByStaff = () => {
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
+                                        {
+                                            currentCenters.length === 0 && (
+                                                <p className='text-center mt-3'>There are no centers.</p>
+                                            )
+                                        }
                                     </div> {/* end card-box */}
-                                    {
-                                        currentCenters.length === 0 && (
-                                            <p>There are no centers.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

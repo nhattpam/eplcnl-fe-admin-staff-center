@@ -42,8 +42,8 @@ const ListReportByStaff = () => {
     const filteredReports = ReportList
         .filter((Report) => {
             return (
-                Report.course?.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) || 
-                Report.learner?.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
+                Report.course?.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                Report.learner?.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase())
 
             );
         });
@@ -117,7 +117,7 @@ const ListReportByStaff = () => {
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on"
                                                             value={searchTerm}
-                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }}/>
+                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -155,8 +155,8 @@ const ListReportByStaff = () => {
                                                                 </tr>
                                                                 {expandedReasons[cus.id] && (
                                                                     <>
-                                                                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)'}}
->
+                                                                        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}
+                                                                        >
                                                                             <div className="modal-dialog modal-lg modal-dialog-centered" role="document"> {/* Added modal-dialog-centered class */}
 
                                                                                 <div className="modal-content" >
@@ -170,7 +170,7 @@ const ListReportByStaff = () => {
                                                                                     </div>
                                                                                     <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
                                                                                         <div dangerouslySetInnerHTML={{ __html: cus.reason }}>
-                                                                                        
+
 
                                                                                         </div>
                                                                                         <div>
@@ -200,13 +200,13 @@ const ListReportByStaff = () => {
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
-
+                                        {
+                                            currentReports.length === 0 && (
+                                                <p className='text-center mt-3'>No reports found.</p>
+                                            )
+                                        }
                                     </div> {/* end card-box */}
-                                    {
-                                        currentReports.length === 0 && (
-                                            <p>No reports found.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                             </div>
 

@@ -242,7 +242,7 @@ const CenterWallet = () => {
                                     <div className="form-group">
                                         <label htmlFor="transactionId">Wallet Balance:</label>
                                         <span style={{ fontWeight: 'bold', color: 'red' }} className='ml-1'>
-                                            {wallet.balance} $
+                                            ${wallet.balance}
                                         </span>
                                     </div>
 

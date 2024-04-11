@@ -96,19 +96,19 @@ const ListStaff = () => {
                                                 <div className="col-12 text-sm-center form-inline">
                                                     <Link to="/create-staff" >
                                                         <button className="btn btn-success mr-2" style={{ borderRadius: '50px', padding: `8px 25px` }}>
-                                                           Create
+                                                            Create
                                                         </button>
                                                     </Link>
 
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm}
-                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }}/>
+                                                            onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }} />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="table-responsive">
-                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                            <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
                                                 <thead className="thead-light">
                                                     <tr>
                                                         <th data-toggle="true">No.</th>
@@ -169,12 +169,13 @@ const ListStaff = () => {
 
                                             </table>
                                         </div> {/* end .table-responsive*/}
+                                        {
+                                            currentStaffs.length === 0 && (
+                                                <p className='text-center mt-3'>No staffs found.</p>
+                                            )
+                                        }
                                     </div> {/* end card-box */}
-                                    {
-                                        currentStaffs.length === 0 && (
-                                            <p>There are no staffs.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

@@ -194,7 +194,7 @@ const EditLesson = () => {
 
                           </div> {/* end .table-responsive*/}
                           {materialList.length === 0 && (
-                            <p className='text-center'>No materials yet</p>
+                            <p className='text-center mt-3'>No materials found.</p>
                           )}
                         </div>
                       </form>

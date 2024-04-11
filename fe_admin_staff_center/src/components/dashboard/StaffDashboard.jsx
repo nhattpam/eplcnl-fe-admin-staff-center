@@ -302,13 +302,14 @@ const StaffDashboard = () => {
                                                 </tbody>
                                             </table>
                                         </div>
+                                        {
+                                            currentTutors.length === 0 && (
+                                                <p className="text-center mt-3">No tutors yet.</p>
+                                            )
+                                        }
 
                                     </div>
-                                    {
-                                        currentTutors.length === 0 && (
-                                            <p>There are no Tutors.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                                 <div className="col-xl-6">
                                     <div className="card-box">
@@ -355,12 +356,13 @@ const StaffDashboard = () => {
                                                 </tbody>
                                             </table>
                                         </div> {/* end .table-responsive*/}
+                                        {
+                                            currentCenters.length === 0 && (
+                                                <p className="text-center mt-3">No centers yet.</p>
+                                            )
+                                        }
                                     </div> {/* end card-box*/}
-                                    {
-                                        currentCenters.length === 0 && (
-                                            <p>There are no Centers.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}
