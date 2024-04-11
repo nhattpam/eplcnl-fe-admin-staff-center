@@ -431,7 +431,7 @@ const AdminDashboard = () => {
             console.error("Error counting transactions:", error);
         }
     }
-   //count all user 
+    //count all user 
     async function countUser() {
         try {
             const res = await accountService.getAllAccount();
@@ -445,7 +445,16 @@ const AdminDashboard = () => {
             console.error("Error counting users:", error);
         }
     }
-   
+
+
+    const [currentMonthVsPreviousMonth, setCurrentMonthVsPreviousMonth] = useState(0);
+    //loi lo
+    useEffect(() => {
+        setCurrentMonthVsPreviousMonth(sumForCurrentMonth - sumForPreviousMonth);
+        console.log("THIS MONTH: " + sumForCurrentMonth)
+        console.log("LAST MONTH: " + sumForPreviousMonth)
+    }, []);
+
 
 
     return (
@@ -554,7 +563,31 @@ const AdminDashboard = () => {
                                             <div id="total-revenue" className="mt-0" data-colors="#f1556c" />
                                             <h5 className="text-muted mt-0">Total sales made today</h5>
                                             <h2>${sumForToday}</h2>
+                                            <div class="row mt-3">
+                                                {/* <div class="col-4">
+                                                    <p class="text-muted font-15 mb-1 text-truncate">Target</p>
+                                                    <h4><i class="fe-arrow-down text-danger mr-1"></i>$7.8k</h4>
+                                                </div>
+                                                <div class="col-4">
+                                                    <p class="text-muted font-15 mb-1 text-truncate">Last week</p>
+                                                    <h4><i class="fe-arrow-up text-success mr-1"></i>$1.4k</h4>
+                                                </div> */}
+                                                <div class="col-12">
+                                                    <p class="text-muted font-15 mb-1 text-truncate">Last Month</p>
+                                                    {
+                                                        currentMonthVsPreviousMonth > 0 && (
+                                                            <h4><i class="fe-arrow-up text-success mr-1"></i>${currentMonthVsPreviousMonth}</h4>
 
+                                                        )
+                                                    }
+                                                    {
+                                                        currentMonthVsPreviousMonth < 0 && (
+                                                            <h4><i class="fe-arrow-down text-danger mr-1"></i>${currentMonthVsPreviousMonth}</h4>
+
+                                                        )
+                                                    }
+                                                </div>
+                                            </div>
                                         </div>
                                     </div> {/* end card-box */}
                                 </div> {/* end col*/}
