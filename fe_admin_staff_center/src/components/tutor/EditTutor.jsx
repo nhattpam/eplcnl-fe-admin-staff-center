@@ -364,12 +364,13 @@ const EditTutor = () => {
                                                                     </table>
 
                                                                 </div>
+                                                                {
+                                                                    paperWorkList.length === 0 && (
+                                                                        <p className='text-center mt-3'>No paper works.</p>
+                                                                    )
+                                                                }
                                                             </div>
-                                                            {
-                                                                paperWorkList.length === 0 && (
-                                                                    <p className='text-center'>No paper works.</p>
-                                                                )
-                                                            }
+
                                                             <div className="modal-footer">
                                                                 <button type="button" className="btn btn-dark" onClick={closeQualificationModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                             </div>
@@ -409,7 +410,7 @@ const EditTutor = () => {
                                             <label>Created Courses:</label>
 
                                             <div className="table-responsive">
-                                                <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
                                                     <thead className="thead-light">
                                                         <tr>
                                                             <th data-toggle="true">No.</th>
@@ -440,7 +441,7 @@ const EditTutor = () => {
                                                                     <td>{cus.stockPrice}</td>
                                                                     <td>{cus.rating}</td>
                                                                     <td>#{cus.tags}</td>
-                                                                    <td>{cus.category.name}</td>
+                                                                    <td>{cus.category?.name}</td>
                                                                     <td>
                                                                         {cus.isActive ? (
                                                                             <span className="badge label-table badge-success">Active</span>

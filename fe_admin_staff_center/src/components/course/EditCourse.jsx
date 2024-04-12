@@ -353,6 +353,18 @@ const EditCourse = () => {
         });
     };
 
+
+    //MODAL NOTE
+    const [showNoteModal, setShowNoteModal] = useState(false);
+    const openNoteModal = () => {
+        setShowNoteModal(true);
+
+    };
+
+    const closeNoteModal = () => {
+        setShowNoteModal(false);
+    };
+
     return (
         <>
             <div id="wrapper">
@@ -396,10 +408,47 @@ const EditCourse = () => {
                                                             {course.tutor?.account?.fullName}
                                                         </td>
                                                     </tr>
+                                                    <tr>
+                                                        <th>Note:</th>
+                                                        <td onClick={() => openNoteModal()}>
+                                                            <i class="fa-solid fa-note-sticky"></i>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
+                                        {showNoteModal && (
+                                            <>
+                                                <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}
+                                                >
+                                                    <div className="modal-dialog modal-lg modal-dialog-centered" role="document"> {/* Added modal-dialog-centered class */}
 
+                                                        <div className="modal-content" >
+
+
+                                                            <div className="modal-header">
+                                                                <h5 className="modal-title">Note</h5>
+                                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeNoteModal}>
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
+                                                                <div dangerouslySetInnerHTML={{ __html: course.note }}>
+                                                                </div>
+
+                                                                <div className="modal-footer">
+                                                                    {/* Conditional rendering of buttons based on edit mode */}
+                                                                    <button type="button" className="btn btn-dark"  style={{ borderRadius: '50px', padding: `8px 25px` }} onClick={closeNoteModal}>Close</button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </>
+                                        )
+                                        }
                                         <div className="form-group">
                                             <h5>Modules:</h5>
                                             {!course.isOnlineClass && (
@@ -842,7 +891,7 @@ const EditCourse = () => {
                                                                 ]
                                                             }}
                                                             theme="snow"
-                                                            style={{height: '200px'}}
+                                                            style={{ height: '200px' }}
                                                         />
                                                     </div>
                                                     <div className="modal-footer mt-3">

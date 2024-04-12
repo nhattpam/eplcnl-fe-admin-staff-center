@@ -177,7 +177,7 @@ const ListReportByStaff = () => {
                                                                                         </div>
                                                                                         <div className="modal-footer">
                                                                                             {/* Conditional rendering of buttons based on edit mode */}
-                                                                                            <button type="button" className="btn btn-dark" onClick={closeReasonModal}>Close</button>
+                                                                                            <button type="button" className="btn btn-dark"  style={{ borderRadius: '50px', padding: `8px 25px` }} onClick={closeReasonModal}>Close</button>
                                                                                         </div>
                                                                                     </div>
 
