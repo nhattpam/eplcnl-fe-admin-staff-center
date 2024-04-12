@@ -90,17 +90,7 @@ const ListRefundRequest = () => {
                             <div className="row">
                                 <div className="col-12">
                                     <div className="card-box">
-                                        {/* <div className="mb-2">
-                                            <div className="row">
-                                                <div className="col-12 text-sm-center form-inline">
-
-                                                    <div className="form-group">
-                                                        <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm}
-                                                            onChange={handleSearch} />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> */}
+                                      
                                         <div className="table-responsive">
                                             <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
                                                 <thead className="thead-light">

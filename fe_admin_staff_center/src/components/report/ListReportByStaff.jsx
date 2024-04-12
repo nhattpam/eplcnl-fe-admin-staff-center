@@ -174,7 +174,7 @@ const ListReportByStaff = () => {
 
                                                                                         </div>
                                                                                         <div>
-                                                                                            <img src={cus.imageUrl}></img>
+                                                                                            <img src={cus.imageUrl} style={{width: '700px', height: '300px'}}></img>
                                                                                         </div>
                                                                                         <div className="modal-footer">
                                                                                             {/* Conditional rendering of buttons based on edit mode */}

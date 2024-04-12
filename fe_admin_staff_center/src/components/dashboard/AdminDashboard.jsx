@@ -121,7 +121,7 @@ const AdminDashboard = () => {
 
             // Check if the transaction belongs to the current month
             if (enrollmentMonth === currentMonth + 1) { // Add 1 to match the format of current month
-                sumForCurrentMonth += enrollment.transaction.amount / 24000; // Use the correct property name
+                sumForCurrentMonth += enrollment.transaction?.amount / 24000; // Use the correct property name
             }
         });
 
@@ -163,7 +163,7 @@ const AdminDashboard = () => {
 
             // Check if the transaction occurred today
             if (transactionDay === currentDay) {
-                sumForToday += enrollment.transaction.amount / 24000; // Assuming transaction.amount is the amount of the transaction
+                sumForToday += enrollment.transaction?.amount / 24000; // Assuming transaction.amount is the amount of the transaction
             }
         });
 
@@ -185,7 +185,7 @@ const AdminDashboard = () => {
 
             // Check if the transaction belongs to the current year
             if (transactionYear === currentYear) {
-                sumForCurrentYear += enrollment.transaction.amount;
+                sumForCurrentYear += enrollment.transaction?.amount;
             }
         });
 
@@ -214,7 +214,7 @@ const AdminDashboard = () => {
 
             // Check if the transaction belongs to the previous month
             if (transactionMonth === previousMonth) {
-                sumForPreviousMonth += enrollment.transaction.amount / 24000;
+                sumForPreviousMonth += enrollment.transaction?.amount / 24000;
             }
         });
 
@@ -322,7 +322,7 @@ const AdminDashboard = () => {
                 // Check if the transaction belongs to the current year
                 if (transactionYear === currentYear) {
                     // Add the transaction's total price to the corresponding month's data
-                    monthlyData[transactionMonth] += enrollment.transaction.amount / 24000;
+                    monthlyData[transactionMonth] += enrollment.transaction?.amount / 24000;
                 }
             });
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { React, useState, useEffect, useRef } from "react";
 import Header from '../Header';
 import Sidebar from '../Sidebar';
 import Footer from '../Footer';
@@ -9,6 +9,10 @@ import ReactQuill from 'react-quill';
 import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
+import enrollmentService from '../../services/enrollment.service';
+import { Chart, PieController, ArcElement, registerables } from "chart.js";
+
+
 const EditCourse = () => {
 
     // Define isAdmin and isStaff outside of the component
@@ -151,9 +155,11 @@ const EditCourse = () => {
             .getAllEnrollmentsByCourse(id)
             .then((res) => {
                 const notRefundEnrollments = res.data.filter(enrollment => enrollment.refundStatus === false);
-
-                console.log(res.data);
-                setEnrollmentList(notRefundEnrollments);
+                const sortedRefundList = [...notRefundEnrollments].sort((a, b) => {
+                    // Assuming requestedDate is a string in ISO 8601 format
+                    return new Date(b.enrolledDate) - new Date(a.enrolledDate);
+                });
+                setEnrollmentList(sortedRefundList);
 
             })
             .catch((error) => {
@@ -212,6 +218,140 @@ const EditCourse = () => {
 
     const offset2 = currentPage2 * enrollmentsPerPage2;
     const currentEnrollments2 = filteredEnrollments2.slice(offset2, offset2 + enrollmentsPerPage2);
+
+
+
+    //PAYOUT Information
+
+    Chart.register(PieController, ArcElement);
+    Chart.register(...registerables);
+    const [monthlyData, setMonthlyData] = useState([]);
+    const areaChartRef = useRef(null);
+    useEffect(() => {
+        fetchMonthlyData();
+    }, []);
+
+    useEffect(() => {
+        if (monthlyData.length > 0) {
+            createAreaChart();
+        }
+    }, [monthlyData]);
+
+    //area chart
+    const fetchMonthlyData = async () => {
+        try {
+            const res = await enrollmentService.getAllEnrollment();
+            const activeEnrollments = res.data.filter((enrollment) => enrollment.refundStatus === false && enrollment.transaction?.courseId === id);
+
+            const enrollments = activeEnrollments;
+
+            const currentYear = new Date().getFullYear();
+
+            // Initialize an array to store monthly data
+            const monthlyData = Array(12).fill(0);
+
+            // Iterate over each transaction
+            enrollments.forEach((enrollment) => {
+                const transactionDate = new Date(enrollment.enrolledDate);
+                const transactionYear = transactionDate.getFullYear();
+                const transactionMonth = transactionDate.getMonth();
+
+                // Check if the transaction belongs to the current year
+                if (transactionYear === currentYear) {
+                    // Add the transaction's total price to the corresponding month's data
+                    monthlyData[transactionMonth] += enrollment.transaction?.amount / 24000;
+                }
+            });
+
+            setMonthlyData(monthlyData);
+        } catch (error) {
+            console.error("Error fetching enrollments:", error);
+        }
+    };
+
+    const createAreaChart = () => {
+        const areaChartCanvas = areaChartRef.current.getContext("2d");
+
+        if (areaChartRef.current.chart) {
+            areaChartRef.current.chart.destroy();
+        }
+
+        const data = {
+            labels: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ],
+            datasets: [
+                {
+                    label: "Income",
+                    data: monthlyData,
+                    backgroundColor: "rgba(54, 162, 235, 0.2)",
+                    btransactionColor: "rgba(54, 162, 235, 1)",
+                    btransactionWidth: 2,
+                    pointBackgroundColor: "rgba(54, 162, 235, 1)",
+                    pointBtransactionColor: "#fff",
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                },
+            ],
+        };
+
+        const options = {
+            scales: {
+                x: {
+                    grid: {
+                        display: false,
+                    },
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        btransactionDash: [2],
+                        btransactionDashOffset: [2],
+                        drawBtransaction: false,
+                        color: "rgba(0, 0, 0, 0.05)",
+                        zeroLineColor: "rgba(0, 0, 0, 0.1)",
+                    },
+                    ticks: {
+                        callback: (value) => {
+                            if (value >= 1000) {
+                                return `$${value / 1000}k`;
+                            }
+                            return `$${value}`;
+                        },
+                    },
+                },
+            },
+            plugins: {
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: (context) => {
+                            const label = context.dataset.label;
+                            const value = context.formattedValue;
+                            return `${label}: $${value}`;
+                        },
+                    },
+                },
+            },
+        };
+
+        areaChartRef.current.chart = new Chart(areaChartCanvas, {
+            type: "line",
+            data: data,
+            options: options,
+        });
+    };
 
     return (
         <>
@@ -379,13 +519,6 @@ const EditCourse = () => {
                                                     {classModuleList.length === 0 && (
                                                         <p className='text-center'>No modules available.</p>
                                                     )}
-                                                    {/* <Link
-                                                        type="button"
-                                                        className="btn btn-success mr-2"
-                                                        to={`/tutor/courses/create/create-class-course/create-class-module/${course.id}`}
-                                                    >
-                                                        <i className="bi bi-plus"></i> Create new module
-                                                    </Link> */}
 
 
                                                     {isStaff && (
@@ -407,14 +540,7 @@ const EditCourse = () => {
                                                             <i class="fa-solid fa-thumbs-down"></i>
                                                         </button>
                                                     )}
-                                                    {/* {isStaff && (
-                                                        <button
-                                                            type="submit"
-                                                            className="btn btn-danger ml-1"
-                                                        >
-                                                            <i class="fa-solid fa-trash-can"></i>
-                                                        </button>
-                                                    )} */}
+
                                                 </>
 
 
@@ -503,16 +629,7 @@ const EditCourse = () => {
                                                                         <span className="badge label-table badge-danger">Inactive</span>
                                                                     )}
                                                                 </td>
-                                                                {/* <td>
-                                                                    <Link to={`/edit-learner/${enrollment.transaction?.learner?.account?.id}`} className='text-secondary'>
-                                                                        <i className="fa-regular fa-eye"></i>
-                                                                    </Link>
-                                                                </td> */}
-                                                                {/* <td>
-                                                                            <Link to={`/list-course-by-tutor/${tutor.id}`} className='text-dark'>
-                                                                                <i class="ti-more-alt"></i>
-                                                                            </Link>
-                                                                        </td> */}
+
                                                             </tr>
                                                         ))
                                                     }
@@ -576,8 +693,7 @@ const EditCourse = () => {
                                                         <th data-hide="phone">Gender</th>
                                                         <th data-hide="phone, tablet">DOB</th>
                                                         <th data-hide="phone, tablet">Status</th>
-                                                        {/* <th>Action</th> */}
-                                                        {/* <th>Courses</th> */}
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -605,16 +721,7 @@ const EditCourse = () => {
                                                                         <span className="badge label-table badge-danger">Inactive</span>
                                                                     )}
                                                                 </td>
-                                                                {/* <td>
-                                                                    <Link to={`/edit-learner/${enrollment.transaction?.learner?.account?.id}`} className='text-secondary'>
-                                                                        <i className="fa-regular fa-eye"></i>
-                                                                    </Link>
-                                                                </td> */}
-                                                                {/* <td>
-                                                                            <Link to={`/list-course-by-tutor/${tutor.id}`} className='text-dark'>
-                                                                                <i class="ti-more-alt"></i>
-                                                                            </Link>
-                                                                        </td> */}
+
                                                             </tr>
                                                         ))
                                                     }
@@ -663,10 +770,52 @@ const EditCourse = () => {
                                         </div>
 
                                     </div>
+                                    <div className="form-group mt-4">
+                                        <h5>Payout Comparation:</h5>
+                                        <div className="col-lg-12">
+                                            <div className="card-box pb-2">
+                                                <div dir="ltr">
+                                                    <div className="card-body">
+                                                        <div className="chart-area">
+                                                            <canvas ref={areaChartRef} id="myAreaChart" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> {/* end card-box */}
+                                            <div className="table-responsive text-center">
+                                                <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                    <thead className="thead-light">
+                                                        <tr>
+                                                            <th data-toggle="true">No.</th>
+                                                            <th data-toggle="true">Full Name</th>
+                                                            <th>Amount</th>
+                                                            <th>Transaction Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            currentEnrollments.length > 0 && currentEnrollments.map((enrollment, index) => (
+                                                                <tr key={enrollment.id}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.fullName ? enrollment.transaction?.learner?.account?.fullName : 'Unknown Name'}</td>
+                                                                    <td>${enrollment.transaction?.amount / 24000}</td>
+                                                                    <td>{enrollment.enrolledDate}</td>
+                                                                </tr>
+                                                            ))
+                                                        }
+
+                                                    </tbody>
+                                                </table>
+
+
+                                            </div>
+                                        </div> {/* end col*/}
+
+                                    </div>
 
                                     {showModal && (
                                         <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
-                                            <div className="modal-dialog">
+                                            <div className="modal-dialog modal-lg">
                                                 <div className="modal-content">
                                                     <div className="modal-header">
                                                         <h5 className="modal-title">Provide Note</h5>
@@ -693,9 +842,10 @@ const EditCourse = () => {
                                                                 ]
                                                             }}
                                                             theme="snow"
+                                                            style={{height: '200px'}}
                                                         />
                                                     </div>
-                                                    <div className="modal-footer">
+                                                    <div className="modal-footer mt-3">
                                                         <button type="button" className="btn btn-dark" onClick={() => setShowModal(false)} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                         <button type="button" className="btn btn-danger" onClick={(e) => submitCourse(e)} style={{ borderRadius: '50px', padding: `8px 25px` }}>Submit</button>
                                                     </div>
