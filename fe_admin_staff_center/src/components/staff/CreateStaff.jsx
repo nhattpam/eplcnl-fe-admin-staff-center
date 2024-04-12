@@ -163,17 +163,17 @@ const CreateStaff = () => {
                                     <form id="demo-form" data-parsley-validate onSubmit={(e) => submitAccount(e)}>
                                         <div className="form-group">
                                             <label htmlFor="fullName">Full Name * :</label>
-                                            <input type="text" className="form-control" name="fullName" id="fullName"   required
+                                            <input type="text" className="form-control" name="fullName" id="fullName"   
                                             value={account.fullName} onChange={(e) => handleChange(e)} style={{ width: '70%', borderRadius: '50px', padding: `8px 25px` }}/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="email">Email * :</label>
-                                            <input type="email" id="email" className="form-control" name="email" data-parsley-trigger="change"  required
+                                            <input type="email" id="email" className="form-control" name="email" data-parsley-trigger="change"  
                                             value={account.email} onChange={(e) => handleChange(e)} style={{ width: '70%', borderRadius: '50px', padding: `8px 25px` }}/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="password">Password * :</label>
-                                            <input type="password" className="form-control" name="password" id="password" required
+                                            <input type="password" className="form-control" name="password" id="password" 
                                              value={account.password} onChange={(e) => handleChange(e)} style={{ width: '70%', borderRadius: '50px', padding: `8px 25px` }}/>
                                         </div>
                                         <div className="form-group">

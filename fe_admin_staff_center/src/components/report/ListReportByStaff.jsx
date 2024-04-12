@@ -171,7 +171,6 @@ const ListReportByStaff = () => {
                                                                                     <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
                                                                                         <div dangerouslySetInnerHTML={{ __html: cus.reason }}>
 
-
                                                                                         </div>
                                                                                         <div>
                                                                                             <img src={cus.imageUrl} style={{width: '700px', height: '300px'}}></img>
