@@ -68,6 +68,31 @@ const EditLearner = () => {
           console.log("LENGH: " + learnerEnrollments.length)
           setEnrollmentList(learnerEnrollments);
 
+          const learnersCounts = {}; // Object to store number of learners for each course
+          const scores = {}; // Object to store scores for each enrollment
+
+          for (const enrollment of learnerEnrollments) {
+            try {
+
+              //CHECK PROGRESSING
+              if (!enrollment.transaction?.course?.isOnlineClass) {
+                const courseScoreResponse = await enrollmentService.getCourseScoreByEnrollmentId(enrollment.id);
+                const learningScoreResponse = await enrollmentService.getLearningScoreByEnrollmentId(enrollment.id);
+
+                scores[enrollment.id] = {
+                  courseScore: courseScoreResponse.data,
+                  learningScore: learningScoreResponse.data
+                };
+
+                // console.log("Course score for enrollment ID " + enrollment.id + ": " + courseScoreResponse.data);
+              }
+            } catch (error) {
+              console.error(`Error fetching learners for course ${enrollment.course?.name}:`, error);
+            }
+          }
+
+          setEnrollmentScores(scores); // Update state with scores for each enrollment
+
         }
       } catch (error) {
         console.log(error);
@@ -114,7 +139,7 @@ const EditLearner = () => {
       .updateAccount(account.id, account)
       .then((res) => {
         navigate("/list-learner/");
-        if(account.isActive===false){
+        if (account.isActive === false) {
           accountService.sendMailBanAccount(account.id);
         }
       })
@@ -141,6 +166,10 @@ const EditLearner = () => {
   const handleActiveClick = () => {
     setAccount({ ...account, isActive: true, isDeleted: false }); // Set isActive to false
   };
+
+
+  //ENROLLMENT SCORE
+  const [enrollmentScores, setEnrollmentScores] = useState({});
 
 
   return (
@@ -207,7 +236,7 @@ const EditLearner = () => {
                               <tr>
                                 <th>Total Payout:</th>
                                 <td>
-                                ${payout} 
+                                  ${payout}
                                 </td>
                               </tr>
                             </tbody>
@@ -268,8 +297,8 @@ const EditLearner = () => {
                               />
                             </div>
                             <div className="modal-footer">
-                              <button type="button" className="btn btn-dark" style={{  color: '#fff', borderRadius: '50px', padding: `8px 25px`}} onClick={() => setShowModal(false)}>Close</button>
-                              <button type="button" className="btn btn-danger" style={{ color: '#fff', borderRadius: '50px', padding: `8px 25px`}} onClick={(e) => submitAccount(e)}>Disable</button>
+                              <button type="button" className="btn btn-dark" style={{ color: '#fff', borderRadius: '50px', padding: `8px 25px` }} onClick={() => setShowModal(false)}>Close</button>
+                              <button type="button" className="btn btn-danger" style={{ color: '#fff', borderRadius: '50px', padding: `8px 25px` }} onClick={(e) => submitAccount(e)}>Disable</button>
                             </div>
                           </div>
                         </div>
@@ -287,7 +316,7 @@ const EditLearner = () => {
                               <th data-toggle="true">Course Name</th>
                               <th data-toggle="true">Enrolled Date</th>
                               <th data-hide="phone">Status</th>
-                              <th data-hide="phone, tablet">Total Grade</th>
+                              <th data-hide="phone, tablet">Progressing Grade</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -298,19 +327,35 @@ const EditLearner = () => {
                                 <tr>
                                   <td>{index + 1}</td>
                                   <td>
-                                    <img src={cus.transaction.course.imageUrl} style={{ height: '70px', width: '100px' }}>
+                                    <img src={cus.transaction?.course?.imageUrl} style={{ height: '70px', width: '100px' }}>
 
                                     </img>
                                   </td>
                                   <td>
-                                    <Link to={`/edit-course/${cus.transaction.courseId}`} className='text-success'>
-                                      {cus.transaction.course.name}
+                                    <Link to={`/edit-course/${cus.transaction?.courseId}`} className='text-success'>
+                                      {cus.transaction?.course?.name}
                                     </Link>
                                   </td>
                                   {/* <td>{cus.name}</td> */}
                                   <td>{cus.enrolledDate}</td>
                                   <td>{cus.transaction.status}</td>
-                                  <td>{cus.totalGrade}</td>
+
+                                  {!cus.transaction?.course?.isOnlineClass && (
+                                    <>
+                                      {!cus.transaction?.course?.isOnlineClass && enrollmentScores[cus.id] && (
+                                        <>
+                                          <td>{enrollmentScores[cus.id]?.learningScore} scores</td>
+                                        </>
+                                      )}
+                                    </>
+                                  )}
+                                  {!cus.transaction?.course?.isOnlineClass && (
+                                    <>
+
+                                    </>
+                                  )}
+
+
                                 </tr>
                               ))
                             }
