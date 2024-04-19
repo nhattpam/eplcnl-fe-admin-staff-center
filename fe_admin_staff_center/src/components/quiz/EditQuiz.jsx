@@ -93,7 +93,7 @@ const EditQuiz = () => {
                           </tr>
                           <tr>
                             <th>Times:</th>
-                            <td>{quiz.deadline}</td>
+                            <td>{quiz.deadline} mins</td>
                           </tr>
                           <tr>
                             <th>Created Date:</th>

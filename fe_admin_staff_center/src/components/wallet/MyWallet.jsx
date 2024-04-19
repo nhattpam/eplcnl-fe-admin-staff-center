@@ -623,7 +623,7 @@ const MyWallet = () => {
                                                                 </div>
                                                                 <div className="col-md-12">
                                                                     <h4>Revenue this month: ${totalAmountCenter}</h4>
-                                                                    <p>Amount to transfer: ${totalAmountCenter} x 80% = ${amountToTransfer}</p>
+                                                                    <p>Amount to transfer: ${totalAmountCenter} x 80% = ${amountToTransfer.toFixed(2)}</p>
                                                                 </div>
                                                                 <div className="col-md-12">
                                                                     <input type='hidden' name='amount' value={totalAmountCenter} className='form-control' />
@@ -966,7 +966,7 @@ const MyWallet = () => {
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <h4>Revenue this month: ${totalAmountTutor}</h4>
-                                                                <p>Amount to transfer: ${totalAmountTutor} x 80% = ${amountToTransfer}</p>
+                                                                <p>Amount to transfer: ${totalAmountTutor} x 80% = ${amountToTransfer.toFixed(2)}</p>
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <input type='hidden' name='amount' value={totalAmountTutor} className='form-control' />

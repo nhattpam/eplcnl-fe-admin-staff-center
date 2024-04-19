@@ -89,7 +89,7 @@ const EditClassModule = () => {
                                             <h5>Topics:</h5>
                                             <>
                                                 <div className="table-responsive">
-                                                    <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                                    <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
                                                         <thead className="thead-light">
                                                             <tr>
                                                                 <th data-toggle="true">No.</th>
