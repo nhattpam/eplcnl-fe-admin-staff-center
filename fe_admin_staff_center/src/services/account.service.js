@@ -90,5 +90,14 @@ class AccountService {
       }
     });
   }
+
+  getAllSalariesByAccount(id) {
+    return axios.get(`${API_URL}/accounts/${id}/salaries`, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
+
 }
 export default new AccountService;

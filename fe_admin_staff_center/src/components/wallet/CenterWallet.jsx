@@ -16,6 +16,7 @@ import tutorService from '../../services/tutor.service';
 import enrollmentService from '../../services/enrollment.service';
 import walletHistoryService from '../../services/wallet-history.service';
 import walletService from '../../services/wallet.service';
+import salaryService from '../../services/salary.service';
 
 const CenterWallet = () => {
 
@@ -33,6 +34,11 @@ const CenterWallet = () => {
     const [staffsPerPage] = useState(2);
     const [tutorList, setTutorList] = useState([]);
     const [tutorsPerPage] = useState(5);
+
+
+    const [tutorSalaryList, setTutorSalaryList] = useState([]);
+
+    const [checkTransferred, setCheckTransferred] = useState(false);
 
     const { centerId } = useParams();
 
@@ -124,6 +130,26 @@ const CenterWallet = () => {
                 .getAccountById(accountId)
                 .then((res) => {
                     setAccount(res.data);
+                    // CHECK ALREADY TRANSFERRED SALARY
+                    accountService
+                        .getAllSalariesByAccount(res.data.id)
+                        .then((res) => {
+                            const salaries = res.data;
+                            const currentDateTime = new Date();
+                            const isTransferred = salaries.some((salary) => {
+                                return (
+                                    currentDateTime.getMonth() + 1 === salary.month &&
+                                    currentDateTime.getFullYear() === salary.year
+                                );
+                            });
+                            setCheckTransferred(isTransferred);
+                            setTutorSalaryList(salaries);
+
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                    // CHECK ALREADY TRANSFERRED SALARY
                 })
                 .catch((error) => {
                     console.log(error);
@@ -209,6 +235,23 @@ const CenterWallet = () => {
 
             };
             await walletHistoryService.saveWalletHistory(walletHistoryTutor);
+
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthIndex = currentDateTime.getMonth();
+            const monthName = months[monthIndex];
+            const year = currentDateTime.getFullYear();
+
+
+            const tutorSalary = {
+                accountId: account.id,
+                month: currentDateTime.getMonth() + 1,
+                year: year,
+                amount: amount,
+                note: "Salary for " + monthName + ", " + year + ` is $${amount}`
+            };
+
+            await salaryService.saveSalary(tutorSalary);
+
 
             closeModal();
             window.alert("Transfer successfully!");
@@ -374,11 +417,12 @@ const CenterWallet = () => {
 
                                                     </div>
                                                     <div className="modal-footer">
-                                                        {
-                                                            wallet.balance > totalAmount && (
-                                                                <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
-                                                            )
-                                                        }
+                                                        {!checkTransferred && wallet.balance > totalAmount && (
+                                                            <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
+                                                        )}
+                                                        {checkTransferred && wallet.balance > totalAmount && (
+                                                            <button type="button" className="btn btn-warning" disabled style={{ borderRadius: '50px', padding: `8px 25px` }}>Transferred!</button>
+                                                        )}
                                                         <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                     </div>
                                                 </form>

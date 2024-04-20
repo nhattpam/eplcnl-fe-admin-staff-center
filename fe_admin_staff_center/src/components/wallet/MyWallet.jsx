@@ -16,6 +16,7 @@ import tutorService from '../../services/tutor.service';
 import enrollmentService from '../../services/enrollment.service';
 import walletHistoryService from '../../services/wallet-history.service';
 import walletService from '../../services/wallet.service';
+import salaryService from '../../services/salary.service';
 
 const MyWallet = () => {
 
@@ -33,6 +34,12 @@ const MyWallet = () => {
     const [staffsPerPage] = useState(2);
     const [tutorList, setTutorList] = useState([]);
     const [tutorsPerPage] = useState(2);
+
+    const [centerSalaryList, setCenterSalaryList] = useState([]);
+    const [tutorSalaryList, setTutorSalaryList] = useState([]);
+    const [staffSalaryList, setStaffSalaryList] = useState([]);
+
+    const [checkTransferred, setCheckTransferred] = useState(false);
 
     const { accountId } = useParams();
 
@@ -104,7 +111,6 @@ const MyWallet = () => {
         staffService
             .getAllStaff()
             .then((res) => {
-                console.log(res.data);
                 setStaffList(res.data);
 
             })
@@ -142,7 +148,6 @@ const MyWallet = () => {
             .then((res) => {
                 const tutorFreelancers = res.data.filter((tutor) => tutor.isFreelancer === true);
 
-                console.log(tutorFreelancers);
                 setTutorList(tutorFreelancers);
             })
             .catch((error) => {
@@ -218,14 +223,12 @@ const MyWallet = () => {
                     const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
 
                     if (differenceInDays > 7) {
-                        console.log("Enrollment", enrollment.id, "exceeds 7 days from enrolled date.");
 
                         if (tutor.id === enrollment.transaction?.course?.tutorId) {
                             const updatedTutorWallet = {
                                 balance: tutor?.account?.wallet?.balance + (((enrollment.transaction?.amount / 24000) * 20) / 100),
                                 accountId: tutor.accountId,
                             };
-                            console.log(updatedTutorWallet.balance)
                             await walletService.updateWallet(tutor.account?.wallet?.id, updatedTutorWallet);
 
                             const tutorWalletHistory = {
@@ -267,6 +270,26 @@ const MyWallet = () => {
                 .getAccountById(accountId)
                 .then((res) => {
                     setAccount(res.data);
+                    // CHECK ALREADY TRANSFERRED SALARY
+                    accountService
+                        .getAllSalariesByAccount(res.data.id)
+                        .then((res) => {
+                            const salaries = res.data;
+                            const currentDateTime = new Date();
+                            const isTransferred = salaries.some((salary) => {
+                                return (
+                                    currentDateTime.getMonth() + 1 === salary.month &&
+                                    currentDateTime.getFullYear() === salary.year
+                                );
+                            });
+                            setCheckTransferred(isTransferred);
+                            setTutorSalaryList(salaries);
+
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                    // CHECK ALREADY TRANSFERRED SALARY
                 })
                 .catch((error) => {
                     console.log(error);
@@ -323,6 +346,21 @@ const MyWallet = () => {
             };
             await walletHistoryService.saveWalletHistory(walletHistoryTutor);
 
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthIndex = currentDateTime.getMonth();
+            const monthName = months[monthIndex];
+            const year = currentDateTime.getFullYear();
+
+            const tutorSalary = {
+                accountId: account.id,
+                month: currentDateTime.getMonth() + 1,
+                year: year,
+                amount: amount,
+                note: "Salary for " + monthName + ", " + year + ` is $${amount}`
+            };
+
+            await salaryService.saveSalary(tutorSalary);
+
             closeModalTutor();
             window.alert("Transfer successfully!");
 
@@ -353,6 +391,25 @@ const MyWallet = () => {
                 .getCenterById(centerId)
                 .then((res) => {
                     setCenter(res.data);
+                    // CHECK ALREADY TRANSFERRED SALARY
+                    accountService
+                        .getAllSalariesByAccount(res.data.accountId)
+                        .then((res) => {
+                            const salaries = res.data;
+                            const currentDateTime = new Date();
+                            const isTransferred = salaries.some((salary) => {
+                                return (
+                                    currentDateTime.getMonth() + 1 === salary.month &&
+                                    currentDateTime.getFullYear() === salary.year
+                                );
+                            });
+                            setCheckTransferred(isTransferred);
+                            setCenterSalaryList(salaries);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                    // CHECK ALREADY TRANSFERRED SALARY
                 })
                 .catch((error) => {
                     console.log(error);
@@ -364,6 +421,8 @@ const MyWallet = () => {
                 setTotalAmountCenter(res.data);
                 setAmountToTransfer(res.data * 0.8);
             })
+
+
     };
 
     const closeModalCenter = () => {
@@ -409,7 +468,22 @@ const MyWallet = () => {
             };
             await walletHistoryService.saveWalletHistory(walletHistoryCenter);
 
-            closeModalTutor();
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthIndex = currentDateTime.getMonth();
+            const monthName = months[monthIndex];
+            const year = currentDateTime.getFullYear();
+
+            const centerSalary = {
+                accountId: center.accountId,
+                month: currentDateTime.getMonth() + 1,
+                year: year,
+                amount: amount,
+                note: "Salary for " + monthName + ", " + year + ` is $${amount}`
+            };
+
+            await salaryService.saveSalary(centerSalary);
+
+            closeModalCenter();
             window.alert("Transfer successfully!");
 
             // Reload the page
@@ -430,6 +504,26 @@ const MyWallet = () => {
                 .getAccountById(accountId)
                 .then((res) => {
                     setAccount(res.data);
+                    // CHECK ALREADY TRANSFERRED SALARY
+                    accountService
+                        .getAllSalariesByAccount(res.data.id)
+                        .then((res) => {
+                            const salaries = res.data;
+                            const currentDateTime = new Date();
+                            const isTransferred = salaries.some((salary) => {
+                                return (
+                                    currentDateTime.getMonth() + 1 === salary.month &&
+                                    currentDateTime.getFullYear() === salary.year
+                                );
+                            });
+                            setCheckTransferred(isTransferred);
+                            setStaffSalaryList(salaries);
+
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                    // CHECK ALREADY TRANSFERRED SALARY
                 })
                 .catch((error) => {
                     console.log(error);
@@ -482,7 +576,23 @@ const MyWallet = () => {
             };
             await walletHistoryService.saveWalletHistory(walletHistoryStaff);
 
-            closeModalTutor();
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthIndex = currentDateTime.getMonth();
+            const monthName = months[monthIndex];
+            const year = currentDateTime.getFullYear();
+
+
+            const staffSalary = {
+                accountId: account.id,
+                month: currentDateTime.getMonth() + 1,
+                year: year,
+                amount: amount,
+                note: "Salary for " + monthName + ", " + year + ` is $${amount}`
+            };
+
+            await salaryService.saveSalary(staffSalary);
+
+            closeModalStaff();
             window.alert("Transfer successfully!");
 
             // Reload the page
@@ -493,6 +603,9 @@ const MyWallet = () => {
         }
     };
     //TRANSFER
+
+
+
 
 
 
@@ -588,7 +701,7 @@ const MyWallet = () => {
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
-                                                        <div className="modal-body">
+                                                        <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
 
                                                             <div className='row'>
                                                                 <div className="col-md-12">
@@ -632,11 +745,12 @@ const MyWallet = () => {
 
                                                         </div>
                                                         <div className="modal-footer">
-                                                            {
-                                                                wallet.balance > totalAmountCenter && (
-                                                                    <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
-                                                                )
-                                                            }
+                                                            {!checkTransferred && wallet.balance > totalAmountCenter && (
+                                                                <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
+                                                            )}
+                                                            {checkTransferred && wallet.balance > totalAmountCenter && (
+                                                                <button type="button" className="btn btn-warning" disabled style={{ borderRadius: '50px', padding: `8px 25px` }}>Transferred!</button>
+                                                            )}
                                                             <button type="button" className="btn btn-dark" onClick={closeModalCenter} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                         </div>
                                                     </form>
@@ -762,7 +876,7 @@ const MyWallet = () => {
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
-                                                        <div className="modal-body">
+                                                        <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
 
                                                             <div className='row'>
                                                                 <div className="col-md-4">
@@ -798,16 +912,17 @@ const MyWallet = () => {
                                                                     </table>
                                                                 </div>
                                                                 <div className="col-md-12">
-                                                                    <input type='number' name='amount' placeholder='Enter the amount' className='form-control' style={{ borderRadius: '50px', padding: `8px 25px` }}/>                                                                </div>
+                                                                    <input type='number' name='amount' placeholder='Enter the amount' className='form-control' style={{ borderRadius: '50px', padding: `8px 25px` }} />                                                                </div>
                                                             </div>
 
                                                         </div>
                                                         <div className="modal-footer">
-                                                            {
-                                                                wallet.balance > totalAmountTutor && (
-                                                                    <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
-                                                                )
-                                                            }
+                                                            {!checkTransferred && wallet.balance > totalAmountStaff && (
+                                                                <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
+                                                            )}
+                                                            {checkTransferred && wallet.balance > totalAmountStaff && (
+                                                                <button type="button" className="btn btn-warning" disabled style={{ borderRadius: '50px', padding: `8px 25px` }}>Transferred!</button>
+                                                            )}
                                                             <button type="button" className="btn btn-dark" onClick={closeModalStaff} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                         </div>
                                                     </form>
@@ -929,7 +1044,7 @@ const MyWallet = () => {
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <div className="modal-body">
+                                                    <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
 
                                                         <div className='row'>
                                                             <div className="col-md-4">
@@ -975,11 +1090,12 @@ const MyWallet = () => {
 
                                                     </div>
                                                     <div className="modal-footer">
-                                                        {
-                                                            wallet.balance > totalAmountTutor && (
-                                                                <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
-                                                            )
-                                                        }
+                                                        {!checkTransferred && wallet.balance > totalAmountTutor && (
+                                                            <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
+                                                        )}
+                                                        {checkTransferred && wallet.balance > totalAmountTutor && (
+                                                            <button type="button" className="btn btn-warning" disabled style={{ borderRadius: '50px', padding: `8px 25px` }}>Transferred!</button>
+                                                        )}
                                                         <button type="button" className="btn btn-dark" onClick={closeModalTutor} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
                                                     </div>
                                                 </form>
