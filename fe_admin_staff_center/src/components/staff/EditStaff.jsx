@@ -46,6 +46,8 @@ const EditStaff = () => {
   const [centersPerPage] = useState(2);
   const [tutorsPerPage] = useState(2);
 
+  const [salaryList, setSalaryList] = useState([]);
+
 
   const { id } = useParams();
 
@@ -55,6 +57,14 @@ const EditStaff = () => {
         .getAccountById(id)
         .then((res) => {
           setAccount(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      accountService
+        .getAllSalariesByAccount(id)
+        .then((res) => {
+          setSalaryList(res.data);
         })
         .catch((error) => {
           console.log(error);
@@ -169,13 +179,57 @@ const EditStaff = () => {
       .updateAccount(account.id, account)
       .then((res) => {
         navigate(`/list-staff`);
-        if(account.isActive===false){
+        if (account.isActive === false) {
           accountService.sendMailBanAccount(account.id);
         }
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  //SALARY
+  const [showSalaryModal, setShowSalaryModal] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  const openSalaryModal = () => {
+    setShowSalaryModal(true);
+  };
+
+  const closeSalaryModal = () => {
+    setShowSalaryModal(false);
+  };
+
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  const renderSalaryTable = () => {
+    // Filter salary list for the selected year
+    const filteredSalaries = salaryList.filter(salary => salary.year === selectedYear);
+
+    return (
+      <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
+        <thead className="thead-light">
+          <tr>
+            {months.map((month, index) => (
+              <th key={index}>{month}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {months.map((month, index) => {
+              // Find the salary for the current month
+              const salaryForMonth = filteredSalaries.find(salary => salary.month === index + 1);
+              return (
+                <td key={index}>
+                  {salaryForMonth ? `$${salaryForMonth.amount.toFixed(2)}` : '-'}
+                </td>
+              );
+            })}
+          </tr>
+        </tbody>
+      </table>
+    );
   };
 
   return (
@@ -347,7 +401,7 @@ const EditStaff = () => {
                                       <i className="fa-regular fa-eye"></i>
                                     </Link>
                                   </td>
-                                 
+
                                 </tr>
                               ))
                             }
@@ -437,7 +491,7 @@ const EditStaff = () => {
                                       <i className="fa-regular fa-eye"></i>
                                     </Link>
                                   </td>
-                                 
+
                                 </tr>
                               ))
                             }
@@ -448,7 +502,7 @@ const EditStaff = () => {
                     </div>
                     {
                       currentTutors.length === 0 && (
-                        <p className='text-center'>There are no tutors.</p>
+                        <p className='text-center'>No tutors found.</p>
                       )
                     }
                     {/* Pagination */}
@@ -484,6 +538,21 @@ const EditStaff = () => {
                       </div>
 
                     </div>
+                    <label>Salaries:</label>
+
+                    <div className='form-group'>
+                      {/* Salary */}
+                      <div style={{ float: 'left', marginRight: '20px', marginBottom: '5px' }}>
+                        {/* Year selection dropdown */}
+                        <select className="form-select" value={selectedYear} onChange={(e) => setSelectedYear(parseInt(e.target.value))}>
+                          {[...Array(5).keys()].map((_, index) => (
+                            <option key={index} value={new Date().getFullYear() - index}>{new Date().getFullYear() - index}</option>
+                          ))}
+                        </select>
+                      </div>
+                      {/* Render salary table based on selected year */}
+                      {renderSalaryTable()}
+                    </div>
                   </form>
                 </div> {/* end card-box*/}
               </div> {/* end col*/}
@@ -516,6 +585,27 @@ const EditStaff = () => {
                     .page-item.active .page-link{
                       background-color: #20c997;
                       border-color: #20c997;
+                  }
+
+                  .form-select {
+                    display: block;
+                    width: 100%;
+                    padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+                    font-size: 1rem;
+                    font-weight: 400;
+                    line-height: 1.5;
+                    color: #495057;
+                    background-color: #fff;
+                    background-clip: padding-box;
+                    border: 1px solid #ced4da;
+                    border-radius: 0.25rem;
+                    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+                  }
+                  
+                  .form-select:focus {
+                    border-color: #80bdff;
+                    outline: 0;
+                    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
                   }
                 `}
       </style>

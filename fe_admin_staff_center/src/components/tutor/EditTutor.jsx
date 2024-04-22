@@ -49,6 +49,9 @@ const EditTutor = () => {
     const [coursesPerPage] = useState(2);
 
     const [staffList, setStaffList] = useState([]);
+    const [salaryList, setSalaryList] = useState([]);
+
+
     useEffect(() => {
         staffService
             .getAllStaff()
@@ -71,6 +74,14 @@ const EditTutor = () => {
                 .getAccountById(id)
                 .then((res) => {
                     setAccount(res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            accountService
+                .getAllSalariesByAccount(id)
+                .then((res) => {
+                    setSalaryList(res.data);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -188,6 +199,51 @@ const EditTutor = () => {
                 console.log(error);
             });
     }, [tutor.id]);
+
+
+    //SALARY
+    const [showSalaryModal, setShowSalaryModal] = useState(false);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+    const openSalaryModal = () => {
+        setShowSalaryModal(true);
+    };
+
+    const closeSalaryModal = () => {
+        setShowSalaryModal(false);
+    };
+
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    const renderSalaryTable = () => {
+        // Filter salary list for the selected year
+        const filteredSalaries = salaryList.filter(salary => salary.year === selectedYear);
+
+        return (
+            <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
+                <thead className="thead-light">
+                    <tr>
+                        {months.map((month, index) => (
+                            <th key={index}>{month}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {months.map((month, index) => {
+                            // Find the salary for the current month
+                            const salaryForMonth = filteredSalaries.find(salary => salary.month === index + 1);
+                            return (
+                                <td key={index}>
+                                    {salaryForMonth ? `$${salaryForMonth.amount.toFixed(2)}` : '-'}
+                                </td>
+                            );
+                        })}
+                    </tr>
+                </tbody>
+            </table>
+        );
+    };
 
 
     return (
@@ -471,44 +527,60 @@ const EditTutor = () => {
                                             <p className='text-center'>No courses found.</p>
                                         )
                                     }
+                                    {/* Pagination */}
+                                    <div className='container-fluid'>
+                                        {/* Pagination */}
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <ReactPaginate
+                                                previousLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretLeft />
+                                                    </IconContext.Provider>
+                                                }
+                                                nextLabel={
+                                                    <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                        <AiFillCaretRight />
+                                                    </IconContext.Provider>
+                                                } breakLabel={'...'}
+                                                breakClassName={'page-item'}
+                                                breakLinkClassName={'page-link'}
+                                                pageCount={pageCount}
+                                                marginPagesDisplayed={2}
+                                                pageRangeDisplayed={5}
+                                                onPageChange={handlePageClick}
+                                                containerClassName={'pagination'}
+                                                activeClassName={'active'}
+                                                previousClassName={'page-item'}
+                                                nextClassName={'page-item'}
+                                                pageClassName={'page-item'}
+                                                previousLinkClassName={'page-link'}
+                                                nextLinkClassName={'page-link'}
+                                                pageLinkClassName={'page-link'}
+                                            />
+                                        </div>
+
+                                    </div>
+                                    <label>Salaries:</label>
+
+                                    <div className='form-group'>
+                                        {/* Salary */}
+                                        <div style={{ float: 'left', marginRight: '20px', marginBottom: '5px' }}>
+                                            {/* Year selection dropdown */}
+                                            <select className="form-select" value={selectedYear} onChange={(e) => setSelectedYear(parseInt(e.target.value))}>
+                                                {[...Array(5).keys()].map((_, index) => (
+                                                    <option key={index} value={new Date().getFullYear() - index}>{new Date().getFullYear() - index}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        {/* Render salary table based on selected year */}
+                                        {renderSalaryTable()}
+                                    </div>
                                 </div> {/* end card-box*/}
 
                             </div> {/* end col*/}
                         </div>
                         {/* end row*/}
-                        {/* Pagination */}
-                        <div className='container-fluid'>
-                            {/* Pagination */}
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <ReactPaginate
-                                    previousLabel={
-                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
-                                            <AiFillCaretLeft />
-                                        </IconContext.Provider>
-                                    }
-                                    nextLabel={
-                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
-                                            <AiFillCaretRight />
-                                        </IconContext.Provider>
-                                    } breakLabel={'...'}
-                                    breakClassName={'page-item'}
-                                    breakLinkClassName={'page-link'}
-                                    pageCount={pageCount}
-                                    marginPagesDisplayed={2}
-                                    pageRangeDisplayed={5}
-                                    onPageChange={handlePageClick}
-                                    containerClassName={'pagination'}
-                                    activeClassName={'active'}
-                                    previousClassName={'page-item'}
-                                    nextClassName={'page-item'}
-                                    pageClassName={'page-item'}
-                                    previousLinkClassName={'page-link'}
-                                    nextLinkClassName={'page-link'}
-                                    pageLinkClassName={'page-link'}
-                                />
-                            </div>
 
-                        </div>
 
                     </div> {/* container */}
                 </div>
@@ -535,6 +607,27 @@ const EditTutor = () => {
                         background-color: #20c997;
                         border-color: #20c997;
                     }
+
+                    .form-select {
+                        display: block;
+                        width: 100%;
+                        padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+                        font-size: 1rem;
+                        font-weight: 400;
+                        line-height: 1.5;
+                        color: #495057;
+                        background-color: #fff;
+                        background-clip: padding-box;
+                        border: 1px solid #ced4da;
+                        border-radius: 0.25rem;
+                        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+                      }
+                      
+                      .form-select:focus {
+                        border-color: #80bdff;
+                        outline: 0;
+                        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+                      }
                 `}
             </style>
         </>
