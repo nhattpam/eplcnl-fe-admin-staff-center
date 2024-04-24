@@ -9,6 +9,10 @@ import accountService from "../../services/account.service";
 
 const StaffDashboard = () => {
 
+    Chart.register(PieController, ArcElement);
+    Chart.register(...registerables);
+    const pieChartRef = useRef(null);
+    const areaChartRef = useRef(null);
 
     const [tutorCount, setTutorCount] = useState(0);
     const [centerCount, setCenterCount] = useState(0);
@@ -217,6 +221,112 @@ const StaffDashboard = () => {
                 </tbody>
             </table>
         );
+    };
+
+
+    //COMPARE
+    useEffect(() => {
+        // Call createAreaChart whenever selectedYear changes or modal is shown
+        createAreaChart();
+    }, [selectedYear, renderSalaryTable]);
+
+
+
+    const createAreaChart = () => {
+        if (areaChartRef.current) {
+            const areaChartCanvas = areaChartRef.current.getContext("2d");
+
+            if (areaChartRef.current.chart) {
+                areaChartRef.current.chart.destroy();
+            }
+
+            // Filter salary data for the selected year
+            const filteredSalaries = salaryList.filter(salary => salary.year === selectedYear);
+
+            // Extract salary for each month
+            const salaryByMonth = Array.from({ length: 12 }, (_, index) => {
+                const salaryForMonth = filteredSalaries.find(salary => salary.month === index + 1);
+                return salaryForMonth ? salaryForMonth.amount : 0;
+            });
+
+            const data = {
+                labels: [
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
+                ],
+                datasets: [
+                    {
+                        label: "Income",
+                        data: salaryByMonth, // Use salary data for each month
+                        backgroundColor: "rgba(54, 162, 235, 0.2)",
+                        borderColor: "rgba(54, 162, 235, 1)",
+                        borderWidth: 2,
+                        pointBackgroundColor: "rgba(54, 162, 235, 1)",
+                        pointBorderColor: "#fff",
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                    },
+                ],
+            };
+
+            const options = {
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            borderWidth: 1,
+                            borderDash: [2],
+                            borderDashOffset: [2],
+                            drawBorder: false,
+                            color: "rgba(0, 0, 0, 0.05)",
+                            zeroLineColor: "rgba(0, 0, 0, 0.1)",
+                        },
+                        ticks: {
+                            callback: (value) => {
+                                if (value >= 1000) {
+                                    return `$${value / 1000}k`;
+                                }
+                                return `$${value}`;
+                            },
+                        },
+                    },
+                },
+                plugins: {
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: (context) => {
+                                const label = context.dataset.label;
+                                const value = context.formattedValue;
+                                return `${label}: $${value}`;
+                            },
+                        },
+                    },
+                },
+            };
+
+            areaChartRef.current.chart = new Chart(areaChartCanvas, {
+                type: "line",
+                data: data,
+                options: options,
+            });
+        }
+
     };
 
     return (
@@ -454,6 +564,9 @@ const StaffDashboard = () => {
                                 </div>
                                 {/* Render salary table based on selected year */}
                                 {renderSalaryTable()}
+                                <div className="chart-area">
+                                    <canvas ref={areaChartRef} id="myAreaChart" />
+                                </div>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-dark" onClick={closeSalaryModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
