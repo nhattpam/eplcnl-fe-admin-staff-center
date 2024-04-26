@@ -532,9 +532,9 @@ const EditTutor = () => {
 
                                                                                 <tr>
                                                                                     <th scope="row">{index + 1}</th>
-                                                                                    <td>{paperWork.paperWorkType.name}</td>
+                                                                                    <td>{paperWork.paperWorkType?.name}</td>
                                                                                     <td className='text-truncate' style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                                                        <a href={paperWork.paperWorkUrl} target="_blank" rel="noopener noreferrer" >{paperWork.paperWorkUrl}</a>
+                                                                                        <a href={paperWork.paperWorkUrl} className="text-success" target="_blank" rel="noopener noreferrer" >View</a>
                                                                                     </td>
                                                                                 </tr>
                                                                             ))}

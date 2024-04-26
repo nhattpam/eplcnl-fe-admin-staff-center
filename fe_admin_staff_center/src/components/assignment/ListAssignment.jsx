@@ -127,20 +127,32 @@ const ListAssignment = () => {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                    currentAssignments.length > 0 && currentAssignments.map((assignment, index) => (
-                                                        <tr key={assignment.id}>
-                                                            <td>{index + 1}</td>
-                                                            <td>{assignment.deadline}</td>
-                                                            <td>{assignment.questionText}</td>
-                                                            <td>{assignment.createdDate}</td>
-                                                            <td>{assignment.updatedDate}</td>
-                                                            <td>
-                                                                <Link to={`/edit-assignment/${assignment.id}`} className='text-secondary'>
-                                                                    <i class="fa-regular fa-eye"></i>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
+                                                        currentAssignments.length > 0 && currentAssignments.map((assignment, index) => (
+                                                            <tr key={assignment.id}>
+                                                                <td>{index + 1}</td>
+                                                                <td>{assignment.deadline}</td>
+                                                                <td>{assignment.questionText}</td>
+                                                                <td>{assignment.createdDate}</td>
+                                                                <td>{assignment.updatedDate}</td>
+                                                                <td>
+                                                                    {
+                                                                        assignment.moduleId && (
+                                                                            <Link to={`/edit-assignment/${assignment.id}`} className='text-secondary'>
+                                                                                <i class="fa-regular fa-eye"></i>
+                                                                            </Link>
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        assignment.topicId && (
+                                                                            <Link to={`/edit-topic-assignment/${assignment.id}`} className='text-secondary'>
+                                                                                <i class="fa-regular fa-eye"></i>
+                                                                            </Link>
+                                                                        )
+                                                                    }
+
+                                                                </td>
+                                                            </tr>
+                                                        ))}
                                                 </tbody>
 
                                             </table>

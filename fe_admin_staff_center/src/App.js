@@ -42,6 +42,7 @@ import ListReportByStaff from './components/report/ListReportByStaff';
 import ListTransaction from './components/transaction/ListTransaction';
 import MyWallet from './components/wallet/MyWallet';
 import CenterWallet from './components/wallet/CenterWallet';
+import EditTopicAssignment from './components/assignment/EditTopicAssignment';
 
 function App() {
 
@@ -96,6 +97,7 @@ function App() {
         {/* assignment */}
         <Route path="/list-assignment/:storedModuleId" element={<ListAssignment />} />
         <Route path="/edit-assignment/:assignmentId" element={<EditAssignment />} />
+        <Route path="/edit-topic-assignment/:assignmentId" element={<EditTopicAssignment />} />
         {/* topic */}
         <Route path="/edit-topic/:storedClassTopicId" element={<EditTopic />} />
         <Route path="/list-topic/:storedClassLessonId" element={<ListTopic />} />

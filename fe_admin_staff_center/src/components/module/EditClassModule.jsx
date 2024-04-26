@@ -42,17 +42,20 @@ const EditClassModule = () => {
     }, [moduleId]);
 
     useEffect(() => {
-        classLessonService
-            .getAllClassTopicsByClassLesson(module.classLesson.id)
-            .then((res) => {
-                // console.log(res.data);
-                setClassTopicList(res.data);
+        if (module.classLesson?.id) {
+            classLessonService
+                .getAllClassTopicsByClassLesson(module.classLesson?.id)
+                .then((res) => {
+                    // console.log(res.data);
+                    setClassTopicList(res.data);
 
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [module.classLesson.id]);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+    }, [module.classLesson?.id]);
 
     return (
         <>
@@ -142,12 +145,18 @@ const EditClassModule = () => {
                                         </div>
                                         {
                                             classTopicList.length === 0 && (
-                                                <p className='text-center'>There are no topics.</p>
+                                                <p className='text-center'>No topics found.</p>
                                             )
                                         }
                                     </form>
                                 </div> {/* end card-box*/}
-
+                                <Link
+                                    type="button"
+                                    className="btn btn-black mr-2"
+                                    to={`/edit-course/${module.courseId}`}
+                                >
+                                    <i class="fas fa-long-arrow-alt-left"></i> Back to Course Infomation
+                                </Link>
                             </div> {/* end col*/}
                         </div>
                         {/* end row*/}

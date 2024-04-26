@@ -47,7 +47,10 @@ const EditTopic = () => {
     startDate: '',
   });
 
+  //LOADING
+  const [loading, setLoading] = useState(true); // State to track loading
 
+  //LOADING
 
 
   useEffect(() => {
@@ -85,6 +88,7 @@ const EditTopic = () => {
         .catch((error) => {
           console.log(error);
         });
+      setLoading(false);
     }
   }, [storedClassTopicId]);
 
@@ -217,6 +221,11 @@ const EditTopic = () => {
                       <h4 className="header-title">
                         DATE - <span className='text-success'>{classModule.startDate ? new Date(classModule.startDate).toLocaleDateString('en-US') : "No class time"}</span> | TOPIC INFORMATION
                       </h4>
+                      {loading && (
+                        <div className="loading-overlay">
+                          <div className="loading-spinner" />
+                        </div>
+                      )}
                       <form
                         method="post"
                         className="mt-3"
@@ -254,7 +263,7 @@ const EditTopic = () => {
                         <div className='mt-2'>
                           <div className="row">
                             <div className="col-md-2">
-                              <h4>Created Quizzes:</h4>
+                              <h4>List of Quizzes:</h4>
                             </div>
 
                           </div>
@@ -329,7 +338,7 @@ const EditTopic = () => {
                         <div className='mt-2'>
                           <div className="row">
                             <div className="col-md-2">
-                              <h4>Created Assignments:</h4>
+                              <h4>List of Assignments:</h4>
                             </div>
                           </div>
 
@@ -355,9 +364,9 @@ const EditTopic = () => {
                                       <td>{assignment.createdDate}</td>
                                       <td>{assignment.updatedDate}</td>
                                       <td>
-                                      <Link to={`/edit-assignment/${assignment.id}`} className='text-secondary'>
-                                        <i className="fa-regular fa-eye"></i>
-                                      </Link>
+                                        <Link to={`/edit-topic-assignment/${assignment.id}`} className='text-secondary'>
+                                          <i className="fa-regular fa-eye"></i>
+                                        </Link>
                                       </td>
                                     </tr>
                                   ))
@@ -398,7 +407,7 @@ const EditTopic = () => {
                         <div>
                           <div className="row">
                             <div className="col-md-2">
-                              <h4>Created Materials:</h4>
+                              <h4>List of Materials:</h4>
                             </div>
 
                           </div>
@@ -411,18 +420,18 @@ const EditTopic = () => {
                                   {/* <th>Url</th> */}
                                   <th data-hide="phone">Created Date</th>
                                   <th data-hide="phone, tablet">Updated Date</th>
-                                  
+
                                 </tr>
                               </thead>
                               <tbody>
                                 {
                                   currentLessonMaterials.length > 0 && currentLessonMaterials.map((material) => (
                                     <tr key={material.id}>
-                                      <td>{material.name}</td>
+                                      <td><Link   target="_blank" rel="noopener noreferrer" to={material.materialUrl} className='text-success'>{material.name}</Link></td>
                                       {/* <td>{material.materialUrl}</td> */}
                                       <td>{material.createdDate}</td>
                                       <td>{material.updatedDate}</td>
-                                     
+
                                     </tr>
 
                                   ))
@@ -471,17 +480,18 @@ const EditTopic = () => {
                       </div>
 
                       <div className="form-group mb-0">
-                        <Link
-                          type="button"
-                          className="btn btn-black mr-2"
-                          to={`/edit-class-module/${classTopic.classLesson?.classModuleId}`}
-                        >
-                          <i class="fas fa-long-arrow-alt-left"></i> Back to Class Infomation
-                        </Link>
+
                       </div>
                     </div>
 
                   </div>
+                  <Link
+                    type="button"
+                    className="btn btn-black mr-2"
+                    to={`/edit-class-module/${classTopic.classLesson?.classModuleId}`}
+                  >
+                    <i class="fas fa-long-arrow-alt-left"></i> Back to Class Infomation
+                  </Link>
                 </div>
               </div>
             </div>
@@ -511,6 +521,41 @@ const EditTopic = () => {
             background-color: #20c997;
             border-color: #20c997;
         }
+
+        .loading-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          backdrop-filter: blur(10px); /* Apply blur effect */
+          -webkit-backdrop-filter: blur(10px); /* For Safari */
+          background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999; /* Ensure it's on top of other content */
+      }
+      
+      .loading-spinner {
+          border: 8px solid rgba(245, 141, 4, 0.1); /* Transparent border to create the circle */
+          border-top: 8px solid #f58d04; /* Orange color */
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          animation: spin 1s linear infinite; /* Rotate animation */
+      }
+      
+      @keyframes spin {
+          0% {
+              transform: rotate(0deg);
+          }
+          100% {
+              transform: rotate(360deg);
+          }
+      }
+
+
         `}
       </style>
     </>
