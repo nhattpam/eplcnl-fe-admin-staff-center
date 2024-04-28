@@ -157,15 +157,15 @@ const ListCenter = () => {
 
 
                                             </table>
-
+                                            {
+                                                currentCenters.length === 0 && (
+                                                    <p className='text-center mt-3'>No centers found.</p>
+                                                )
+                                            }
                                         </div> {/* end .table-responsive*/}
 
                                     </div> {/* end card-box */}
-                                    {
-                                        currentCenters.length === 0 && (
-                                            <p>There are no centers.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

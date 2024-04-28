@@ -857,12 +857,13 @@ const MyWallet = () => {
                                                 }
 
                                             </tbody>
-                                            {
-                                                currentStaffs.length === 0 && (
-                                                    <p className='text-center mt-3'>No staffs found.</p>
-                                                )
-                                            }
+
                                         </table>
+                                        {
+                                            currentStaffs.length === 0 && (
+                                                <p className='text-center mt-3'>No staffs found.</p>
+                                            )
+                                        }
                                     </div> {/* end .table-responsive*/}
                                     {showModalStaff && (
                                         <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
@@ -1024,12 +1025,13 @@ const MyWallet = () => {
                                                 }
 
                                             </tbody>
-                                            {
+                                            
+                                        </table>
+                                        {
                                                 currentTutors.length === 0 && (
                                                     <p className='text-center mt-3'>No tutor freelancers found.</p>
                                                 )
                                             }
-                                        </table>
                                     </div> {/* end .table-responsive*/}
                                 </div> {/* end card-box*/}
                                 {showModalTutor && (
