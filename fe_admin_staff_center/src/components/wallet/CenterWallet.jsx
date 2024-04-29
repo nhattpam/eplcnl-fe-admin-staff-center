@@ -175,7 +175,7 @@ const CenterWallet = () => {
         tutorService.getTotalAmountByTutor(tutorId)
             .then((res) => {
                 setTotalAmount(res.data);
-                setAmountToTransfer(res.data * 0.8);
+                setAmountToTransfer(res.data * 0.7);
             })
     };
 
@@ -215,7 +215,7 @@ const CenterWallet = () => {
     const submitWallet = async (e) => {
         e.preventDefault();
         // Capture the amount from the input field and calculate 20% of it in one step
-        const amount = parseFloat(e.target.amount.value * 0.8);
+        const amount = parseFloat(e.target.amount.value * 0.7);
 
         try {
             const centerWallet = { // Use object syntax {} instead of array syntax []
@@ -430,7 +430,7 @@ const CenterWallet = () => {
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <h4>Revenue this month: ${totalAmount}</h4>
-                                                                <p>Amount to transfer: ${totalAmount} x 80% = ${amountToTransfer}</p>
+                                                                <p>Amount to transfer: ${totalAmount} x 70% = ${amountToTransfer}</p>
                                                             </div>
                                                             <div className="col-md-12">
                                                                 <input type='hidden' name='amount' value={totalAmount} className='form-control' />
@@ -439,10 +439,10 @@ const CenterWallet = () => {
 
                                                     </div>
                                                     <div className="modal-footer">
-                                                        {!checkTransferred && wallet.balance > totalAmount && (
+                                                        {!checkTransferred && wallet.balance >= amountToTransfer && (
                                                             <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
                                                         )}
-                                                        {checkTransferred && wallet.balance > totalAmount && (
+                                                        {checkTransferred && wallet.balance >= amountToTransfer && (
                                                             <button type="button" className="btn btn-warning" disabled style={{ borderRadius: '50px', padding: `8px 25px` }}>Transferred!</button>
                                                         )}
                                                         <button type="button" className="btn btn-dark" onClick={closeModal} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>

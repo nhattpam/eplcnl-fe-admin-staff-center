@@ -752,10 +752,10 @@ const MyWallet = () => {
 
                                                         </div>
                                                         <div className="modal-footer">
-                                                            {!checkTransferred && wallet.balance > totalAmountCenter && (
+                                                            {!checkTransferred && wallet.balance >= amountToTransfer && (
                                                                 <button type="submit" className="btn btn-warning" style={{ borderRadius: '50px', padding: `8px 25px` }}>Transfer</button>
                                                             )}
-                                                            {checkTransferred && wallet.balance > totalAmountCenter && (
+                                                            {checkTransferred && wallet.balance >= amountToTransfer && (
                                                                 <button type="button" className="btn btn-warning" disabled style={{ borderRadius: '50px', padding: `8px 25px` }}>Transferred!</button>
                                                             )}
                                                             <button type="button" className="btn btn-dark" onClick={closeModalCenter} style={{ borderRadius: '50px', padding: `8px 25px` }}>Close</button>
