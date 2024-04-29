@@ -9,7 +9,7 @@ import * as XLSX from 'xlsx';
 
 const CreateStaff = () => {
 
-    const centerId = localStorage.getItem('centerId');
+    const centerId = sessionStorage.getItem('centerId');
     const navigate = useNavigate();
 
 

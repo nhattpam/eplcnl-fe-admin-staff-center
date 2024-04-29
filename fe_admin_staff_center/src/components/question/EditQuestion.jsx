@@ -18,8 +18,12 @@ const EditQuestion = () => {
 
     const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
     const navigate = useNavigate();
-
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
     const [questionAnswerList, setQuestionAnswerList] = useState([]);
 
 

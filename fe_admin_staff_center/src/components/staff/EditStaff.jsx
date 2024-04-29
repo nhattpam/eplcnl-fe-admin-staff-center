@@ -40,8 +40,12 @@ const EditStaff = () => {
 
   const [errors, setErrors] = useState({});
   const [msg, setMsg] = useState('');
+  const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+  console.log("STatus: " + storedLoginStatus)
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false); // State variable for modal visibility
+  if (!storedLoginStatus) {
+      navigate(`/login`)
+  }  const [showModal, setShowModal] = useState(false); // State variable for modal visibility
   const [centerList, setCenterList] = useState([]);
   const [tutorList, setTutorList] = useState([]);
 

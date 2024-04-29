@@ -8,9 +8,13 @@ import tutorService from '../../services/tutor.service'
 
 const CreateTutor = () => {
 
-    const centerId = localStorage.getItem('centerId');
+    const centerId = sessionStorage.getItem('centerId');
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
     const navigate = useNavigate();
-
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
 
 
     const [account, setAccount] = useState({

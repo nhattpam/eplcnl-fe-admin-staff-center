@@ -45,7 +45,7 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                 const decodedToken = JSON.parse(atob(response.data.data.split('.')[1])); // Decoding the JWT token
 
                 console.log('this is role: ' + decodedToken.role);
-                localStorage.setItem('accountId', decodedToken.Id);
+                sessionStorage.setItem('accountId', decodedToken.Id);
 
                 if (decodedToken.role.toString() === "5f9a0e31-e7b2-417b-917d-111468a18a53"
                     || decodedToken.role.toString() === "887428d0-9ded-449c-94ee-7c8a489ab763"
@@ -53,7 +53,7 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                     setIsLoggedIn(true);
 
                     // Store the JWT token in localStorage
-                    localStorage.setItem('token', response.data.data);
+                    sessionStorage.setItem('token', response.data.data);
                     // Pass the token to the module
                     console.log('this is token: ' + response.data.data);
                     centerService.setToken(response.data.data);
@@ -72,10 +72,11 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                         sessionStorage.setItem('isCenter', false);
 
                         // Access adminId from localStorage
-                        localStorage.setItem('adminId', decodedToken.Id);
-                        const storedAdminId = localStorage.getItem('centerId');
+                        sessionStorage.setItem('adminId', decodedToken.Id);
+                        const storedAdminId = sessionStorage.getItem('centerId');
                         console.log("This is adminId from localStorage:", storedAdminId);
 
+                        sessionStorage.setItem('isLoggedIn', true);
 
                     }
                     // Navigate to the home page
@@ -98,9 +99,11 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                             console.log("This is staffId:", matchedStaff.id);
 
                             // Access centerId from localStorage
-                            localStorage.setItem('staffId', matchedStaff.id);
-                            const storedStaffId = localStorage.getItem('staffId');
+                            sessionStorage.setItem('staffId', matchedStaff.id);
+                            const storedStaffId = sessionStorage.getItem('staffId');
                             console.log("This is staffId from localStorage:", storedStaffId);
+
+                            sessionStorage.setItem('isLoggedIn', true);
                         } else {
                             console.log("No matching center found for the given accountId");
                         }
@@ -125,9 +128,11 @@ const SignIn = ({ setIsLoggedIn, setRole }) => {
                             console.log("This is centerId:", matchedCenter.id);
 
                             // Access centerId from localStorage
-                            localStorage.setItem('centerId', matchedCenter.id);
-                            const storedCenterId = localStorage.getItem('centerId');
+                            sessionStorage.setItem('centerId', matchedCenter.id);
+                            const storedCenterId = sessionStorage.getItem('centerId');
                             console.log("This is centerId from localStorage:", storedCenterId);
+
+                            sessionStorage.setItem('isLoggedIn', true);
                         } else {
                             console.log("No matching center found for the given accountId");
                         }

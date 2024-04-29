@@ -15,7 +15,13 @@ const EditRefundRequest = () => {
 
     const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
     const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
+    
     const [isDoneOrNot, setIsDoneOrNot] = useState(false);
 
     const { refundId } = useParams();

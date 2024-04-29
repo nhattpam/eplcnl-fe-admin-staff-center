@@ -19,7 +19,7 @@ const EditCourse = () => {
     const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
     const isStaff = sessionStorage.getItem('isStaff') === 'true';
 
-    const staffId = localStorage.getItem('staffId');
+    const staffId = sessionStorage.getItem('staffId');
 
 
     const [course, setCourse] = useState({
@@ -41,8 +41,12 @@ const EditCourse = () => {
 
     const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
     const navigate = useNavigate();
-    const [showModal, setShowModal] = useState(false); // State variable for modal visibility
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }    const [showModal, setShowModal] = useState(false); // State variable for modal visibility
 
     const [moduleList, setModuleList] = useState([]);
     const [classModuleList, setClassModuleList] = useState([]);

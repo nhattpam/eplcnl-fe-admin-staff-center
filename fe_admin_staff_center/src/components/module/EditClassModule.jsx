@@ -8,6 +8,7 @@ import Sidebar from '../Sidebar';
 import Footer from '../Footer';
 
 const EditClassModule = () => {
+    
     const [module, setModule] = useState({
         startDate: "",
         classHours: "",
@@ -18,8 +19,12 @@ const EditClassModule = () => {
     const [classTopicList, setClassTopicList] = useState([]);
 
     const [msg, setMsg] = useState('');
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
     const navigate = useNavigate();
-    const { moduleId } = useParams();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }    const { moduleId } = useParams();
 
     //LOADING
     const [loading, setLoading] = useState(true); // State to track loading

@@ -2,14 +2,19 @@ import React, { useEffect, useState } from 'react';
 import Footer from '../Footer'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai"; // icons form react-icons
 import learnerService from '../../services/learner.service';
 
 const ListLearner = () => {
-
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
     const [learnerList, setLearnerList] = useState([]);
     const [msg, setMsg] = useState('');
     const [searchTerm, setSearchTerm] = useState('');

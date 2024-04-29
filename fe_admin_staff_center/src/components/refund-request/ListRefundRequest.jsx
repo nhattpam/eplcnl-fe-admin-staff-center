@@ -9,7 +9,13 @@ import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai"; // icons for
 import refundRequestService from '../../services/refund-request.service';
 
 const ListRefundRequest = () => {
-
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
+    
     const [refundList, setRefundList] = useState([]);
     const [msg, setMsg] = useState('');
     const [searchTerm, setSearchTerm] = useState('');

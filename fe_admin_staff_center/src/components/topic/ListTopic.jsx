@@ -10,7 +10,13 @@ import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 
 const ListTopic = () => {
-
+  const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+  console.log("STatus: " + storedLoginStatus)
+  const navigate = useNavigate();
+  if (!storedLoginStatus) {
+      navigate(`/login`)
+  }
+  
   const { storedClassLessonId } = useParams();
   const [classTopicList, setClassTopicList] = useState([]);
 

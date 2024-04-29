@@ -39,8 +39,12 @@ const EditLearner = () => {
 
   const [errors, setErrors] = useState({});
   const [msg, setMsg] = useState('');
+  const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+  console.log("STatus: " + storedLoginStatus)
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false); // State variable for modal visibility
+  if (!storedLoginStatus) {
+      navigate(`/login`)
+  }  const [showModal, setShowModal] = useState(false); // State variable for modal visibility
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [enrollmentsPerPage] = useState(5);

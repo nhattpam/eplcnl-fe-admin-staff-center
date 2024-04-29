@@ -6,9 +6,15 @@ import { Chart, PieController, ArcElement, registerables } from "chart.js";
 import transactionService from "../../services/transaction.service";
 import enrollmentService from "../../services/enrollment.service";
 import accountService from "../../services/account.service";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
-
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
     Chart.register(PieController, ArcElement);
     Chart.register(...registerables);
     const pieChartRef = useRef(null);

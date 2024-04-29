@@ -9,8 +9,12 @@ import moduleService from '../../services/module.service';
 import assignmentService from '../../services/assignment.service';
 
 const EditTopicAssignment = () => {
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
     const navigate = useNavigate();
-    const [errors, setErrors] = useState({});
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }    const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
     // const { storedModuleId } = useParams();
     const { assignmentId } = useParams();

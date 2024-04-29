@@ -9,7 +9,13 @@ import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai"; // icons for
 import transactionService from '../../services/transaction.service';
 
 const ListTransaction = () => {
-
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
+    
     const [transactionList, setTransactionList] = useState([]);
     const [msg, setMsg] = useState('');
     const [searchTerm, setSearchTerm] = useState('');

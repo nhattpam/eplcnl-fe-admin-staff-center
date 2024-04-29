@@ -9,8 +9,12 @@ import moduleService from '../../services/module.service';
 import assignmentService from '../../services/assignment.service';
 
 const EditAssignment = () => {
+  const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+  console.log("STatus: " + storedLoginStatus)
   const navigate = useNavigate();
-  const [errors, setErrors] = useState({});
+  if (!storedLoginStatus) {
+    navigate(`/login`)
+  } const [errors, setErrors] = useState({});
   const [msg, setMsg] = useState('');
   // const { storedModuleId } = useParams();
   const { assignmentId } = useParams();
@@ -139,12 +143,12 @@ const EditAssignment = () => {
                   <div className="">
                     <div className="card-body">
                       <h4 className="header-title">COURSE - <span className='text-success'>{module.course?.name}</span> | MODULE - <span className='text-success'>{module.name}</span> </h4>
- 
+
                       {loading && (
-                                <div className="loading-overlay">
-                                    <div className="loading-spinner" />
-                                </div>
-                            )}
+                        <div className="loading-overlay">
+                          <div className="loading-spinner" />
+                        </div>
+                      )}
                       <form
                         method="post"
                         className="mt-3"

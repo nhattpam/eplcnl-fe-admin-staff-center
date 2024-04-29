@@ -11,7 +11,12 @@ import staffService from '../../services/staff.service';
 
 
 const ListCenterByStaff = () => {
-
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
     const [centerList, setCenterList] = useState([]);
     const [msg, setMsg] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
@@ -163,7 +168,7 @@ const ListCenterByStaff = () => {
                                         </div> {/* end .table-responsive*/}
                                         {
                                             currentCenters.length === 0 && (
-                                                <p className='text-center mt-3'>There are no centers.</p>
+                                                <p className='text-center mt-3'>No centers found.</p>
                                             )
                                         }
                                     </div> {/* end card-box */}

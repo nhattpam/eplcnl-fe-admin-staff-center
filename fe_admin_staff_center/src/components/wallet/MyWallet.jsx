@@ -20,6 +20,13 @@ import salaryService from '../../services/salary.service';
 
 const MyWallet = () => {
 
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
+
     const [errors, setErrors] = useState({});
     const [centerList, setCenterList] = useState([]);
     const [msg, setMsg] = useState('');
@@ -1025,13 +1032,13 @@ const MyWallet = () => {
                                                 }
 
                                             </tbody>
-                                            
+
                                         </table>
                                         {
-                                                currentTutors.length === 0 && (
-                                                    <p className='text-center mt-3'>No tutor freelancers found.</p>
-                                                )
-                                            }
+                                            currentTutors.length === 0 && (
+                                                <p className='text-center mt-3'>No tutor freelancers found.</p>
+                                            )
+                                        }
                                     </div> {/* end .table-responsive*/}
                                 </div> {/* end card-box*/}
                                 {showModalTutor && (

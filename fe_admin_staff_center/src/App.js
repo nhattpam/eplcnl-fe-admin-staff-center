@@ -43,6 +43,7 @@ import ListTransaction from './components/transaction/ListTransaction';
 import MyWallet from './components/wallet/MyWallet';
 import CenterWallet from './components/wallet/CenterWallet';
 import EditTopicAssignment from './components/assignment/EditTopicAssignment';
+import UnKnownPage from './components/UnKnownPage';
 
 function App() {
 
@@ -50,7 +51,7 @@ function App() {
 
   useEffect(() => {
     // Check if the user is already logged in by retrieving the login status from local storage
-    const storedLoginStatus = localStorage.getItem('isLoggedIn');
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
     setIsLoggedIn(storedLoginStatus === 'true');
 
   }, []);
@@ -113,11 +114,14 @@ function App() {
         <Route path="/list-report/:staffId" element={<ListReportByStaff />} />
         {/* transaction */}
         <Route path="/list-transaction" element={<ListTransaction />} />
-         {/* wallet */}
-         <Route path="/my-wallet/:accountId" element={<MyWallet />} />
-         <Route path="/center-wallet/:centerId" element={<CenterWallet />} />
+        {/* wallet */}
+        <Route path="/my-wallet/:accountId" element={<MyWallet />} />
+        <Route path="/center-wallet/:centerId" element={<CenterWallet />} />
 
+        <Route path="/404" element={<UnKnownPage />} />
 
+        {/* Catch-all route */}
+        <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     </div>
   );

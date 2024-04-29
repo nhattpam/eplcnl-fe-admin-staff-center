@@ -20,6 +20,13 @@ import salaryService from '../../services/salary.service';
 
 const CenterWallet = () => {
 
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
+
     const [errors, setErrors] = useState({});
     const [centerList, setCenterList] = useState([]);
     const [msg, setMsg] = useState('');

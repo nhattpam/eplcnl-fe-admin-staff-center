@@ -10,7 +10,12 @@ import courseService from '../../services/course.service';
 import tutorService from '../../services/tutor.service';
 
 const ListCourseByTutor = () => {
-
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
     const [courseList, setCourseList] = useState([]);
     const [msg, setMsg] = useState('');
     const [searchTerm, setSearchTerm] = useState('');

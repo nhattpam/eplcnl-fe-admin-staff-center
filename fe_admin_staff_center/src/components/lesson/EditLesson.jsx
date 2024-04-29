@@ -9,7 +9,13 @@ import moduleService from '../../services/module.service';
 import lessonService from '../../services/lesson.service';
 
 const EditLesson = () => {
+  const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+  console.log("STatus: " + storedLoginStatus)
   const navigate = useNavigate();
+  if (!storedLoginStatus) {
+      navigate(`/login`)
+  }
+  
   const [errors, setErrors] = useState({});
   const [msg, setMsg] = useState('');
   const { lessonId } = useParams();

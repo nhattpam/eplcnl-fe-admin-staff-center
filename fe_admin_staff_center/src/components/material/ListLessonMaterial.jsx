@@ -9,7 +9,12 @@ import topicService from '../../services/topic.service';
 import lessonService from '../../services/lesson.service';
 
 const ListLessonMaterial = () => {
-
+  const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+  console.log("STatus: " + storedLoginStatus)
+  const navigate = useNavigate();
+  if (!storedLoginStatus) {
+      navigate(`/login`)
+  }
   const { storedLessonId } = useParams();
   const [materialList, setMaterialList] = useState([]);
 

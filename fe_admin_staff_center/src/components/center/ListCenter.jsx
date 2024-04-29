@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Footer from '../Footer'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import centerService from '../../services/center.service';
 import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
@@ -21,7 +21,12 @@ const ListCenter = () => {
     const [loading, setLoading] = useState(true); // State to track loading
 
     //LOADING
-
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
 
     useEffect(() => {
         centerService

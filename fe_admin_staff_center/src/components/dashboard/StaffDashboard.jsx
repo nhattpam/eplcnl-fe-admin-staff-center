@@ -4,11 +4,16 @@ import Footer from '../Footer'
 import Sidebar from '../Sidebar'
 import { Chart, PieController, ArcElement, registerables } from "chart.js";
 import staffService from "../../services/staff.service";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import accountService from "../../services/account.service";
 
 const StaffDashboard = () => {
-
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
     Chart.register(PieController, ArcElement);
     Chart.register(...registerables);
     const pieChartRef = useRef(null);
@@ -17,8 +22,8 @@ const StaffDashboard = () => {
     const [tutorCount, setTutorCount] = useState(0);
     const [centerCount, setCenterCount] = useState(0);
 
-    const storedStaffId = localStorage.getItem('staffId');
-    const storedAccountId = localStorage.getItem('accountId');
+    const storedStaffId = sessionStorage.getItem('staffId');
+    const storedAccountId = sessionStorage.getItem('accountId');
 
     const [salaryList, setSalaryList] = useState([]);
 

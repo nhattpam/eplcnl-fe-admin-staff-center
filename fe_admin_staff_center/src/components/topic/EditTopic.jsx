@@ -12,7 +12,12 @@ import ReactPaginate from 'react-paginate';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 
 const EditTopic = () => {
+  const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+  console.log("STatus: " + storedLoginStatus)
   const navigate = useNavigate();
+  if (!storedLoginStatus) {
+      navigate(`/login`)
+  }
 
   const { storedClassTopicId } = useParams();
   const [createdTopics, setCreatedTopics] = useState([]);

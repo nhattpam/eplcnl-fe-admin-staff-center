@@ -8,6 +8,7 @@ import ReactPaginate from 'react-paginate';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 
 const EditModule = () => {
+    
     const [module, setModule] = useState({
         name: "",
         assignments: [],
@@ -17,8 +18,12 @@ const EditModule = () => {
 
     const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
     const navigate = useNavigate();
-    const { moduleId } = useParams();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }    const { moduleId } = useParams();
     //get number of lessons, assignments, quizzes
     const [lessonList, setLessonList] = useState([]);
     const [quizList, setQuizList] = useState([]);

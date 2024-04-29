@@ -7,7 +7,12 @@ import { Link } from 'react-router-dom'
 import moduleService from '../../services/module.service';
 
 const ListAssignment = () => {
-
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
     const { storedModuleId } = useParams();
     const [assignmentList, setAssignmentList] = useState([]);
 

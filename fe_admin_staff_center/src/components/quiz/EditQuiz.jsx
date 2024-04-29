@@ -22,8 +22,12 @@ const EditQuiz = () => {
 
   const [errors, setErrors] = useState({});
   const [msg, setMsg] = useState('');
+  const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+  console.log("STatus: " + storedLoginStatus)
   const navigate = useNavigate();
-
+  if (!storedLoginStatus) {
+      navigate(`/login`)
+  }
   const [questionList, setQuestionList] = useState([]);
 
 
@@ -50,16 +54,19 @@ const EditQuiz = () => {
   }, [quizId]);
 
   useEffect(() => {
-    quizService
-      .getAllQuestionsByQuiz(quizId)
-      .then((res) => {
-        console.log(res.data);
-        setQuestionList(res.data);
+    if (quizId) {
+      quizService
+        .getAllQuestionsByQuiz(quizId)
+        .then((res) => {
+          console.log(res.data);
+          setQuestionList(res.data);
 
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
   }, [quizId]);
 
 

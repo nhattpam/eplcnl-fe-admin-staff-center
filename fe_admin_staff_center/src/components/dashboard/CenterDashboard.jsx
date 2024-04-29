@@ -15,19 +15,23 @@ const CenterDashboard = () => {
     const pieChartRef = useRef(null);
     const areaChartRef = useRef(null);
 
-    const centerId = localStorage.getItem('centerId');
+    const centerId = sessionStorage.getItem('centerId');
 
     const [tutorList, setTutorList] = useState([]);
     const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
     const navigate = useNavigate();
-    const [searchTerm, setSearchTerm] = useState('');
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }    const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [tutorsPerPage] = useState(5);
     const [currentPage2, setCurrentPage2] = useState(0);
     const [historiesPerPage] = useState(5);
 
-    const storedAccountId = localStorage.getItem('accountId');
+    const storedAccountId = sessionStorage.getItem('accountId');
 
     const [tutorCount, setTutorCount] = useState(0);
     const [salaryList, setSalaryList] = useState([]);

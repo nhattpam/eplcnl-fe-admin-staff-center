@@ -11,7 +11,12 @@ import { IconContext } from 'react-icons';
 
 
 const ListLesson = () => {
-
+    const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
+    console.log("STatus: " + storedLoginStatus)
+    const navigate = useNavigate();
+    if (!storedLoginStatus) {
+        navigate(`/login`)
+    }
     const { storedModuleId } = useParams();
     const [lessonList, setLessonList] = useState([]);
 

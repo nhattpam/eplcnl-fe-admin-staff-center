@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 
 const Sidebar = ({ isAdmin, isStaff, isCenter }) => {
 
-    const centerId = localStorage.getItem('centerId');
-    const staffId = localStorage.getItem('staffId');
-    const adminId = localStorage.getItem('adminId');
+    const centerId = sessionStorage.getItem('centerId');
+    const staffId = sessionStorage.getItem('staffId');
+    const adminId = sessionStorage.getItem('adminId');
 
     return (
         <>

@@ -8,7 +8,7 @@ import centerService from '../services/center.service';
 
 const Header = () => {
 
-    const accountId = localStorage.getItem('accountId');
+    const accountId = sessionStorage.getItem('accountId');
     const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
     const isStaff = sessionStorage.getItem('isStaff') === 'true';
     const isCenter = sessionStorage.getItem('isCenter') === 'true';
@@ -50,7 +50,7 @@ const Header = () => {
         }
     }, [accountId]);
 
-    const storedCenterId = localStorage.getItem('centerId');
+    const storedCenterId = sessionStorage.getItem('centerId');
     useEffect(() => {
         if (storedCenterId) {
             centerService
@@ -67,7 +67,14 @@ const Header = () => {
     const handleLogout = () => {
         // Clear user session or perform any necessary logout actions
         // For example, you can use localStorage or sessionStorage to store authentication status
-        localStorage.removeItem('authToken'); // Assuming you store authentication token in localStorage
+        sessionStorage.removeItem('authToken'); // Assuming you store authentication token in localStorage
+        sessionStorage.removeItem('accountId');
+        sessionStorage.removeItem('isLearner');
+        sessionStorage.removeItem('isTutor');
+        sessionStorage.removeItem('learnerId'); // Assuming you store authentication token in localStorage
+        sessionStorage.removeItem('tutorId'); // Assuming you store authentication token in localStorage
+        sessionStorage.removeItem('token'); // Assuming you store authentication token in localStorage
+        sessionStorage.removeItem('isLoggedIn');
 
         // Redirect to the login page or any other page after logout
         navigate('/login');
