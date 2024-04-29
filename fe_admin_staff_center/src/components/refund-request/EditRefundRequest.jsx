@@ -202,6 +202,10 @@ const EditRefundRequest = () => {
                                                     <div>
                                                         <span>{(refund.enrollment?.transaction?.amount / 24000).toFixed(2)} dollars</span>
                                                     </div>
+                                                    <label htmlFor="transactionId" className='mt-1'>Enrolled Date:</label>
+                                                    <div>
+                                                        <span>{refund.enrollment?.enrolledDate}</span>
+                                                    </div>
                                                     <label htmlFor="transactionId" className='mt-1'>Requested Date:</label>
                                                     <div>
                                                         <span>{refund.requestedDate} </span>
