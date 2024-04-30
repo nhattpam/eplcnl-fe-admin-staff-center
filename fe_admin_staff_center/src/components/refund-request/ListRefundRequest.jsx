@@ -15,7 +15,7 @@ const ListRefundRequest = () => {
     if (!storedLoginStatus) {
         navigate(`/login`)
     }
-    
+
     const [refundList, setRefundList] = useState([]);
     const [msg, setMsg] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
@@ -126,8 +126,18 @@ const ListRefundRequest = () => {
                                                                 <td>{index + 1}</td>
                                                                 <td>{new Date(cus.requestedDate).toLocaleString('en-US')}</td>
 
-                                                                <td>{new Date(cus.approvedDate).toLocaleString('en-US')}</td>
+                                                                {
+                                                                    cus.approvedDate && (
+                                                                        <td>{new Date(cus.approvedDate).toLocaleString('en-US')}</td>
 
+                                                                    )
+                                                                }
+                                                                {
+                                                                    !cus.approvedDate && (
+                                                                        <td><i class="fa-solid fa-ban"></i></td>
+
+                                                                    )
+                                                                }
                                                                 <td>
                                                                     {cus.status === "APPROVED" && (
                                                                         <span className="badge label-table badge-success">APPROVED</span>

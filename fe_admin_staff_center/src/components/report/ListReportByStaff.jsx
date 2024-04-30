@@ -35,8 +35,9 @@ const ListReportByStaff = () => {
         staffService
             .getAllReportsByStaff(staffId)
             .then((res) => {
-                // console.log(res.data);
-                setReportList(res.data);
+                // Assuming res.data is an array of reports with a createdDate field
+                const sortedReports = res.data.sort((a, b) => new Date(b.reportedDate) - new Date(a.reportedDate));
+                setReportList(sortedReports);
                 setLoading(false);
             })
             .catch((error) => {
@@ -44,6 +45,7 @@ const ListReportByStaff = () => {
                 setLoading(false);
             });
     }, []);
+    
 
 
     const handleSearch = (event) => {
