@@ -30,7 +30,7 @@ const EditStaff = () => {
     isActive: "",
     createdDate: "",
     note: "",
-    isDeleted: ""
+    isDeleted: "",
   });
 
   const [staff, setStaff] = useState({
@@ -422,6 +422,10 @@ const EditStaff = () => {
                                 <th>Note:</th>
                                 <td dangerouslySetInnerHTML={{ __html: account.note }} />
                               </tr>
+                              <tr>
+                                <th>Joined Date:</th>
+                                <td>{new Date(account.createdDate).toLocaleString('en-US')}</td>
+                              </tr>
                             </tbody>
                           </table>
                         </div>
@@ -517,7 +521,7 @@ const EditStaff = () => {
                                   <td>{cus.email}</td>
                                   <td>{cus.description}</td>
                                   <td>{cus.address}</td>
-                                  <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
+                                  <td>{cus.staff && cus.staff?.account ? cus.staff?.account?.fullName : 'Unknown Name'}</td>
                                   <td>
                                     {cus.isActive ? (
                                       <span className="badge label-table badge-success">Active</span>

@@ -21,7 +21,7 @@ const ListTutorByStaff = () => {
     if (!storedLoginStatus) {
         navigate(`/login`)
     }
-    
+
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [tutorsPerPage] = useState(5);
@@ -156,21 +156,21 @@ const ListTutorByStaff = () => {
 
                                                                     </img>
                                                                 </td>
-                                                                <td>{tutor.account && tutor.account.fullName ? tutor.account.fullName : 'Unknown Name'}</td>
-                                                                <td>{tutor.account && tutor.account.phoneNumber ? tutor.account.phoneNumber : 'Unknown Phone Number'}</td>
-                                                                <td>{tutor.account && tutor.account.gender !== undefined ? (tutor.account.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
+                                                                <td>{tutor.account && tutor.account?.fullName ? tutor.account?.fullName : 'Unknown Name'}</td>
+                                                                <td>{tutor.account && tutor.account?.phoneNumber ? tutor.account?.phoneNumber : 'Unknown Phone Number'}</td>
+                                                                <td>{tutor.account && tutor.account?.gender !== undefined ? (tutor.account?.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>                                                            <td>{tutor.account && tutor.account.dateOfBirth ? tutor.account.dateOfBirth : 'Unknown DOB'}</td>
                                                                 <td>
-                                                                    {tutor.account.isActive ? (
+                                                                    {tutor.account?.isActive ? (
                                                                         <span className="badge label-table badge-success">Active</span>
                                                                     ) : (
                                                                         <span className="badge label-table badge-danger">Inactive</span>
                                                                     )}
                                                                 </td>
                                                                 <td>
-                                                                    {tutor.account?.createdDate}
+                                                                    {new Date(tutor.account?.createdDate).toLocaleString('en-US')}
                                                                 </td>
                                                                 <td>
-                                                                    <Link to={`/edit-tutor/${tutor.account.id}`} className='text-secondary'>
+                                                                    <Link to={`/edit-tutor/${tutor.account?.id}`} className='text-secondary'>
                                                                         <i className="fa-regular fa-eye"></i>
                                                                     </Link>
                                                                 </td>

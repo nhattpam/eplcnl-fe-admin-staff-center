@@ -175,9 +175,8 @@ const ListTutor = () => {
                                                                         <span className="badge label-table badge-danger">Inactive</span>
                                                                     )}
                                                                 </td>
-                                                                <td>
-                                                                    {tutor.account?.createdDate}
-                                                                </td>
+                                                                <td>{new Date(tutor.account?.createdDate).toLocaleString('en-US')}</td>
+
                                                                 <td>
                                                                     <Link to={`/edit-tutor/${tutor.account?.id}`} className='text-secondary'>
                                                                         <i className="fa-regular fa-eye"></i>

@@ -444,6 +444,11 @@ const EditTutor = () => {
                                                                     <button type="button" onClick={openQualificationModal}> <i class="fas fa-folder-open"> </i></button>
                                                                 </td>
                                                             </tr>
+                                                            <tr>
+                                                                <th>Joined Date:</th>
+                                                                <td>{new Date(account.createdDate).toLocaleString('en-US')}</td>
+
+                                                            </tr>
                                                         </tbody>
 
                                                     </table>
@@ -624,7 +629,7 @@ const EditTutor = () => {
                                                                     </td>
                                                                     <td>{cus.code}</td>
                                                                     <td>{cus.name}</td>
-                                                                    <td>{cus.stockPrice}</td>
+                                                                    <td>${cus.stockPrice}</td>
                                                                     <td>{cus.rating}</td>
                                                                     <td>#{cus.tags}</td>
                                                                     <td>{cus.category?.name}</td>

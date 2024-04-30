@@ -8,7 +8,7 @@ import ReactPaginate from 'react-paginate';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 
 const EditModule = () => {
-    
+
     const [module, setModule] = useState({
         name: "",
         assignments: [],
@@ -23,7 +23,7 @@ const EditModule = () => {
     const navigate = useNavigate();
     if (!storedLoginStatus) {
         navigate(`/login`)
-    }    const { moduleId } = useParams();
+    } const { moduleId } = useParams();
     //get number of lessons, assignments, quizzes
     const [lessonList, setLessonList] = useState([]);
     const [quizList, setQuizList] = useState([]);
@@ -213,8 +213,19 @@ const EditModule = () => {
                                                                     <td>{index + 1}</td>
                                                                     <td>{lesson.name}</td>
                                                                     {/* <td>{lesson.videoUrl}</td> */}
-                                                                    <td>{lesson.createdDate}</td>
-                                                                    <td>{lesson.updatedDate}</td>
+                                                                    <td>{new Date(lesson.createdDate).toLocaleString('en-US')}</td>
+                                                                    {
+                                                                        lesson.updatedDate && (
+                                                                            <td>{new Date(lesson.updatedDate).toLocaleString('en-US')}</td>
+
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        !lesson.updatedDate && (
+                                                                            <td className=''><i class="fa-solid fa-ban"></i></td>
+
+                                                                        )
+                                                                    }
                                                                     <td>
                                                                         <Link to={`/edit-lesson/${lesson.id}`} className='text-dark'>
                                                                             <i class="fa-regular fa-eye"></i>
@@ -282,11 +293,22 @@ const EditModule = () => {
                                                                 currentAssignments.map((assignment, index) => (
                                                                     <tr key={assignment.id}>
                                                                         <td>{index + 1}</td>
-                                                                        <td>{assignment.deadline}</td>
+                                                                        <td>{assignment.deadline} mins</td>
                                                                         <td>{assignment.gradeToPass}</td>
-                                                                        <td>{assignment.createdDate}</td>
-                                                                        <td>{assignment.updatedDate}</td>
-                                                                        <td>
+
+                                                                        <td>{new Date(assignment.createdDate).toLocaleString('en-US')}</td>
+                                                                        {
+                                                                            assignment.updatedDate && (
+                                                                                <td>{new Date(assignment.updatedDate).toLocaleString('en-US')}</td>
+
+                                                                            )
+                                                                        }
+                                                                        {
+                                                                            !assignment.updatedDate && (
+                                                                                <td className=''><i class="fa-solid fa-ban"></i></td>
+
+                                                                            )
+                                                                        }                                                                        <td>
                                                                             <Link to={`/edit-assignment/${assignment.id}`} className='text-secondary'>
                                                                                 <i class="fa-regular fa-eye"></i>
                                                                             </Link>
@@ -356,10 +378,20 @@ const EditModule = () => {
                                                                         <td>{index + 1}</td>
                                                                         <td>{quiz.name}</td>
                                                                         <td>{quiz.gradeToPass}</td>
-                                                                        <td>{quiz.deadline}</td>
-                                                                        <td>{quiz.createdDate}</td>
-                                                                        <td>{quiz.updatedDate}</td>
-                                                                        <td>
+                                                                        <td>{quiz.deadline} mins</td>
+                                                                        <td>{new Date(quiz.createdDate).toLocaleString('en-US')}</td>
+                                                                        {
+                                                                            quiz.updatedDate && (
+                                                                                <td>{new Date(quiz.updatedDate).toLocaleString('en-US')}</td>
+
+                                                                            )
+                                                                        }
+                                                                        {
+                                                                            !quiz.updatedDate && (
+                                                                                <td className=''><i class="fa-solid fa-ban"></i></td>
+
+                                                                            )
+                                                                        }                                                                        <td>
                                                                             <Link to={`/edit-quiz/${quiz.id}`} className='text-secondary'>
                                                                                 <i class="fa-regular fa-eye"></i>
                                                                             </Link>

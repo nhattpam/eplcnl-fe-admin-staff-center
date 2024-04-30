@@ -46,7 +46,7 @@ const EditCourse = () => {
     const navigate = useNavigate();
     if (!storedLoginStatus) {
         navigate(`/login`)
-    }    const [showModal, setShowModal] = useState(false); // State variable for modal visibility
+    } const [showModal, setShowModal] = useState(false); // State variable for modal visibility
 
     const [moduleList, setModuleList] = useState([]);
     const [classModuleList, setClassModuleList] = useState([]);
@@ -430,6 +430,12 @@ const EditCourse = () => {
                                                             <i class="fa-solid fa-note-sticky"></i>
                                                         </td>
                                                     </tr>
+                                                    <tr>
+                                                        <th>Created Date:</th>
+                                                        <td>
+                                                            {new Date(course.createdDate).toLocaleString('en-US')}
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -484,7 +490,8 @@ const EditCourse = () => {
                                                                     <tr key={index}>
                                                                         <td>{index + 1}</td>
                                                                         <td>{module.name}</td>
-                                                                        <td>{module.createdDate}</td>
+                                                                        <td>{new Date(module.createdDate).toLocaleString('en-US')}</td>
+
                                                                         <td>
                                                                             <Link to={`/edit-module/${module.id}`} className='text-secondary'>
                                                                                 <i className="fa-regular fa-eye"></i>
@@ -515,7 +522,8 @@ const EditCourse = () => {
                                                                         <td>{index + 1}</td>
                                                                         <td>
                                                                             {module.startDate ? new Date(module.startDate).toLocaleDateString('en-US') : "No class time"}
-                                                                        </td>                                                                        <td>{module.createdDate}</td>
+                                                                        </td>
+                                                                        <td>{new Date(module.createdDate).toLocaleString('en-US')}</td>
                                                                         <td>
                                                                             <Link to={`/edit-class-module/${module.id}`} className='text-secondary'>
                                                                                 <i className="fa-regular fa-eye"></i>
@@ -629,7 +637,7 @@ const EditCourse = () => {
                                                             <div className="d-flex flex-row p-3"> <img src={feedback.learner?.account?.imageUrl} width={40} height={40} className="rounded-circle mr-3" />
                                                                 <div className="w-100">
                                                                     <div className="d-flex justify-content-between align-items-center">
-                                                                        <div className="d-flex flex-row align-items-center"> <span className="mr-2" style={{ fontWeight: 'bold' }}>{feedback.learner?.account?.fullName}</span> <small className="c-badge">Top Comment</small> </div> <small>{feedback.createdDate}</small>
+                                                                        <div className="d-flex flex-row align-items-center"> <span className="mr-2" style={{ fontWeight: 'bold' }}>{feedback.learner?.account?.fullName}</span> <small className="c-badge">Top Comment</small> </div> <small>{new Date(feedback.createdDate).toLocaleString('en-US')}</small>
                                                                     </div>
                                                                     <p className="text-justify comment-text mb-0" dangerouslySetInnerHTML={{ __html: feedback.feedbackContent }}></p>
                                                                 </div>
@@ -683,7 +691,7 @@ const EditCourse = () => {
                                                                 <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.phoneNumber ? enrollment.transaction?.learner?.account?.phoneNumber : 'Unknown Phone Number'}</td>
                                                                 <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.gender !== undefined ? (enrollment.transaction?.learner?.account?.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>
                                                                 <td>
-                                                                    {enrollment.transaction?.learner?.account?.dateOfBirth && typeof enrollment.transaction.learner.account.dateOfBirth === 'string' ?
+                                                                    {enrollment.transaction?.learner?.account?.dateOfBirth && typeof enrollment.transaction?.learner?.account?.dateOfBirth === 'string' ?
                                                                         enrollment.transaction.learner.account.dateOfBirth.substring(0, 10) :
                                                                         'Unknown DOB'}
                                                                 </td>
@@ -775,8 +783,8 @@ const EditCourse = () => {
                                                                 <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.phoneNumber ? enrollment.transaction?.learner?.account?.phoneNumber : 'Unknown Phone Number'}</td>
                                                                 <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.gender !== undefined ? (enrollment.transaction?.learner?.account?.gender ? 'Male' : 'Female') : 'Unknown Gender'}</td>
                                                                 <td>
-                                                                    {enrollment.transaction?.learner?.account?.dateOfBirth && typeof enrollment.transaction.learner.account.dateOfBirth === 'string' ?
-                                                                        enrollment.transaction.learner.account.dateOfBirth.substring(0, 10) :
+                                                                    {enrollment.transaction?.learner?.account?.dateOfBirth && typeof enrollment.transaction?.learner?.account?.dateOfBirth === 'string' ?
+                                                                        enrollment.transaction?.learner?.account?.dateOfBirth.substring(0, 10) :
                                                                         'Unknown DOB'}
                                                                 </td>
                                                                 <td>
@@ -864,7 +872,9 @@ const EditCourse = () => {
                                                                     <td>{index + 1}</td>
                                                                     <td>{enrollment.transaction?.learner?.account && enrollment.transaction?.learner?.account?.fullName ? enrollment.transaction?.learner?.account?.fullName : 'Unknown Name'}</td>
                                                                     <td>${enrollment.transaction?.amount / 24000}</td>
-                                                                    <td>{enrollment.enrolledDate}</td>
+                                                                    <td>
+                                                                        {new Date(enrollment.enrolledDate).toLocaleString('en-US')}
+                                                                    </td>
                                                                 </tr>
                                                             ))
                                                         }

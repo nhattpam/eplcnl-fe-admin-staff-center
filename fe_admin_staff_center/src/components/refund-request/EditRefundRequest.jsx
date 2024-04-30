@@ -21,7 +21,7 @@ const EditRefundRequest = () => {
     if (!storedLoginStatus) {
         navigate(`/login`)
     }
-    
+
     const [isDoneOrNot, setIsDoneOrNot] = useState(false);
 
     const { refundId } = useParams();
@@ -204,11 +204,15 @@ const EditRefundRequest = () => {
                                                     </div>
                                                     <label htmlFor="transactionId" className='mt-1'>Enrolled Date:</label>
                                                     <div>
-                                                        <span>{refund.enrollment?.enrolledDate}</span>
+                                                        <span>
+                                                            {new Date(refund.enrollment?.enrolledDate).toLocaleString('en-US')}
+                                                        </span>
                                                     </div>
                                                     <label htmlFor="transactionId" className='mt-1'>Requested Date:</label>
                                                     <div>
-                                                        <span>{refund.requestedDate} </span>
+                                                        <span>
+                                                            {new Date(refund.requestedDate).toLocaleString('en-US')}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>

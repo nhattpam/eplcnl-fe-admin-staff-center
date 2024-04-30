@@ -171,9 +171,8 @@ const ListStaff = () => {
                                                                         <span className="badge label-table badge-danger">Inactive</span>
                                                                     )}
                                                                 </td>
-                                                                <td>
-                                                                    {cus.account?.createdDate}
-                                                                </td>
+                                                                <td>{new Date(cus.account?.createdDate).toLocaleString('en-US')}</td>
+
                                                                 <td>
                                                                     <Link to={`/edit-staff/${cus.account?.id}`} className='text-secondary'>
                                                                         <i class="fa-regular fa-eye"></i>

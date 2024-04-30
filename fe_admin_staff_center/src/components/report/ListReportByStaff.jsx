@@ -157,12 +157,12 @@ const ListReportByStaff = () => {
                                                                 <tr key={cus.id}>
                                                                     <td>{index + 1}</td>
                                                                     <td>
-                                                                        <Link to={`/edit-course/${cus.course.id}`} className='text-success'>
-                                                                            {cus.course && cus.course.name ? cus.course.name : 'Unknown Name'}
+                                                                        <Link to={`/edit-course/${cus.course?.id}`} className='text-success'>
+                                                                            {cus.course && cus.course?.name ? cus.course.name : 'Unknown Name'}
                                                                         </Link>
                                                                     </td>
-                                                                    <td>{cus.learner && cus.learner.account.fullName ? cus.learner.account.fullName : 'Unknown Name'}</td>
-                                                                    <td>{cus.reportedDate}</td>
+                                                                    <td>{cus.learner && cus.learner?.account?.fullName ? cus.learner?.account?.fullName : 'Unknown Name'}</td>
+                                                                    <td>{new Date(cus.reportedDate).toLocaleString('en-US')}</td>
 
                                                                     <td onClick={() => toggleReason(cus.id)}>
                                                                         <i className="far fa-eye"></i>

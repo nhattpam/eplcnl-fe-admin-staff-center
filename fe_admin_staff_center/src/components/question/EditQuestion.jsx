@@ -123,10 +123,7 @@ const EditQuestion = () => {
                                                             <span className="badge label-table badge-danger">{question.defaultGrade}</span>
                                                         </td>
                                                     </tr>
-                                                    <tr>
-                                                        <th>Created Date</th>
-                                                        <td>{question.createdDate}</td>
-                                                    </tr>
+                                                  
                                                 </tbody>
                                             </table>
                                         </div>

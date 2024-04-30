@@ -658,7 +658,7 @@ const AdminDashboard = () => {
                                                                     <td>
                                                                         <h5 className="m-0 font-weight-normal">{cus.learner.account.fullName}</h5>
                                                                     </td>
-                                                                    <td>{cus.transactionDate}</td>
+                                                                    <td>{new Date(cus.transactionDate).toLocaleString('en-US')}</td>
                                                                     <td>
                                                                         ${cus.amount / 24000}
                                                                     </td>

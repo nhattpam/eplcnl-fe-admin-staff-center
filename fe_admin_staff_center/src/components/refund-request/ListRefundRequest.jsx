@@ -124,8 +124,10 @@ const ListRefundRequest = () => {
 
                                                             <tr>
                                                                 <td>{index + 1}</td>
-                                                                <td>{cus.requestedDate}</td>
-                                                                <td >{cus.approvedDate}</td>
+                                                                <td>{new Date(cus.requestedDate).toLocaleString('en-US')}</td>
+
+                                                                <td>{new Date(cus.approvedDate).toLocaleString('en-US')}</td>
+
                                                                 <td>
                                                                     {cus.status === "APPROVED" && (
                                                                         <span className="badge label-table badge-success">APPROVED</span>

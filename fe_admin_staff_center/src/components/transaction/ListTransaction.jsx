@@ -15,7 +15,7 @@ const ListTransaction = () => {
     if (!storedLoginStatus) {
         navigate(`/login`)
     }
-    
+
     const [transactionList, setTransactionList] = useState([]);
     const [msg, setMsg] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
@@ -224,7 +224,8 @@ const ListTransaction = () => {
                                                                     <Link to={`/edit-learner/${cus.learner?.account?.id}`} className='text-secondary'>
                                                                         {cus.learner?.account?.fullName}
                                                                     </Link></td>
-                                                                <td>{cus.transactionDate}</td>
+                                                                <td>{new Date(cus.transactionDate).toLocaleString('en-US')}</td>
+
                                                                 <td>{cus.paymentMethod?.name}</td>
                                                                 <td>{cus.status}</td>
 

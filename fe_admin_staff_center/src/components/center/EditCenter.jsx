@@ -30,7 +30,8 @@ const EditCenter = () => {
         description: "",
         isActive: true,
         staffId: "",
-        accountId: ""
+        accountId: "",
+        account :[]
     });
 
 
@@ -396,7 +397,10 @@ const EditCenter = () => {
                                                                 <th>Tax Number:</th>
                                                                 <td>{center.taxIdentificationNumber}</td>
                                                             </tr>
-
+                                                            <tr>
+                                                                <th>Joined Date:</th>
+                                                                <td>{new Date(center.account?.createdDate).toLocaleString('en-US')}</td>
+                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>

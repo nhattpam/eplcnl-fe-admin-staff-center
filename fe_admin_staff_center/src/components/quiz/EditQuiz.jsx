@@ -130,10 +130,7 @@ const EditQuiz = () => {
                             <th>Times:</th>
                             <td>{quiz.deadline} mins</td>
                           </tr>
-                          <tr>
-                            <th>Created Date:</th>
-                            <td>{quiz.createdDate}</td>
-                          </tr>
+                         
                         </tbody>
                       </table>
                     </div>
@@ -162,7 +159,7 @@ const EditQuiz = () => {
                                     Question {index + 1}
                                   </td>
                                   <td>{question.defaultGrade}</td>
-                                  <td>{question.createdDate}</td>
+                                  <td>{new Date(question.createdDate).toLocaleString('en-US')}</td>
                                   <td>
                                     <button
                                       type="button"

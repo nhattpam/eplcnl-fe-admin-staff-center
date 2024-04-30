@@ -428,7 +428,7 @@ const CenterDashboard = () => {
                                                         currentHistories.length > 0 && currentHistories.map((history, index) => (
                                                             <tr>
                                                                 <td>
-                                                                    <h5 className="m-0 font-weight-normal">{history.transactionDate}</h5>
+                                                                    <h5 className="m-0 font-weight-normal">{new Date(history.transactionDate).toLocaleString('en-US')}</h5>
                                                                 </td>
                                                                 <td>
                                                                     {history.note}

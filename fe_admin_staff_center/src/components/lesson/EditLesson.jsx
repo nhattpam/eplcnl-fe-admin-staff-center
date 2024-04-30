@@ -13,9 +13,9 @@ const EditLesson = () => {
   console.log("STatus: " + storedLoginStatus)
   const navigate = useNavigate();
   if (!storedLoginStatus) {
-      navigate(`/login`)
+    navigate(`/login`)
   }
-  
+
   const [errors, setErrors] = useState({});
   const [msg, setMsg] = useState('');
   const { lessonId } = useParams();
@@ -202,9 +202,19 @@ const EditLesson = () => {
                                         <a href={material.materialUrl} target="_blank" rel="noopener noreferrer" className='text-success'>{material.name}</a>
                                       </td>
                                       {/* <td>{material.materialUrl}</td> */}
-                                      <td>{material.createdDate}</td>
-                                      <td>{material.updatedDate}</td>
-                                    </tr>
+                                      <td>{new Date(material.createdDate).toLocaleString('en-US')}</td>
+                                      {
+                                        material.updatedDate && (
+                                          <td>{new Date(material.updatedDate).toLocaleString('en-US')}</td>
+
+                                        )
+                                      }
+                                      {
+                                        !material.updatedDate && (
+                                          <td className=''><i class="fa-solid fa-ban"></i></td>
+
+                                        )
+                                      }                                    </tr>
                                   ))
                                 }
 
