@@ -17,7 +17,7 @@ const ListReportByStaff = () => {
     if (!storedLoginStatus) {
         navigate(`/login`)
     }
-    
+
     const [ReportList, setReportList] = useState([]);
     const [msg, setMsg] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
@@ -45,7 +45,7 @@ const ListReportByStaff = () => {
                 setLoading(false);
             });
     }, []);
-    
+
 
 
     const handleSearch = (event) => {
@@ -187,12 +187,25 @@ const ListReportByStaff = () => {
                                                                                         </button>
                                                                                     </div>
                                                                                     <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}> {/* Added style for scrolling */}
-                                                                                        <div dangerouslySetInnerHTML={{ __html: cus.reason }}>
+                                                                                        {
+                                                                                            cus.reason && (
+                                                                                                <>
+                                                                                                    <div dangerouslySetInnerHTML={{ __html: cus.reason }}>
 
-                                                                                        </div>
-                                                                                        <div>
-                                                                                            <img src={cus.imageUrl} style={{ width: '700px', height: '300px' }}></img>
-                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </>
+                                                                                            )
+                                                                                        }
+                                                                                        {
+                                                                                            cus.imageUrl && (
+                                                                                                <>
+                                                                                                    <div>
+                                                                                                        <img src={cus.imageUrl} style={{ width: '700px', height: '300px' }}></img>
+                                                                                                    </div>
+                                                                                                </>
+                                                                                            )
+                                                                                        }
+
                                                                                         <div className="modal-footer">
                                                                                             {/* Conditional rendering of buttons based on edit mode */}
                                                                                             <button type="button" className="btn btn-dark" style={{ borderRadius: '50px', padding: `8px 25px` }} onClick={closeReasonModal}>Close</button>
