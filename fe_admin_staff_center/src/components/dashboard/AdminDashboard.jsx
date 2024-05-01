@@ -662,10 +662,23 @@ const AdminDashboard = () => {
                                                                     <td>
                                                                         ${cus.amount / 24000}
                                                                     </td>
-                                                                    <td>
-                                                                        <span className="badge bg-soft-warning text-warning">{cus.status}</span>
-                                                                    </td>
 
+                                                                    {
+                                                                        cus.status === "DONE" && (
+                                                                            <td>
+                                                                                <span className="badge bg-soft-warning text-warning">DONE</span>
+
+                                                                            </td>
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        cus.status === "PROCESSING" && (
+                                                                            <td>
+                                                                                <span className="badge bg-soft-warning text-warning">FAILED</span>
+
+                                                                            </td>
+                                                                        )
+                                                                    }
                                                                 </tr>
 
                                                             </>
@@ -675,13 +688,14 @@ const AdminDashboard = () => {
 
                                                 </tbody>
                                             </table>
+                                            {
+                                                currentTransactions.length === 0 && (
+                                                    <p className="mt-3">No transactions found.</p>
+                                                )
+                                            }
                                         </div> {/* end .table-responsive*/}
                                     </div> {/* end card-box*/}
-                                    {
-                                        currentTransactions.length === 0 && (
-                                            <p>There are no Transactions.</p>
-                                        )
-                                    }
+
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}

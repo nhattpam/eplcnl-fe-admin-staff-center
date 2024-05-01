@@ -227,8 +227,16 @@ const ListTransaction = () => {
                                                                 <td>{new Date(cus.transactionDate).toLocaleString('en-US')}</td>
 
                                                                 <td>{cus.paymentMethod?.name}</td>
-                                                                <td>{cus.status}</td>
-
+                                                                {
+                                                                    cus.status === "DONE" && (
+                                                                        <td>DONE</td>
+                                                                    )
+                                                                }
+                                                                {
+                                                                    cus.status === "PROCESSING" && (
+                                                                        <td>FAILED</td>
+                                                                    )
+                                                                }
                                                                 {
                                                                     cus.course !== null && (
                                                                         <>
