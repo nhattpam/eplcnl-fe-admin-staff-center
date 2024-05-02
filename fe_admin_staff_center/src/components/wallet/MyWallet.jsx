@@ -36,11 +36,11 @@ const MyWallet = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [currentPage2, setCurrentPage2] = useState(0);
     const [currentPage3, setCurrentPage3] = useState(0);
-    const [centersPerPage] = useState(2);
+    const [centersPerPage] = useState(4);
     const [staffList, setStaffList] = useState([]);
-    const [staffsPerPage] = useState(2);
+    const [staffsPerPage] = useState(4);
     const [tutorList, setTutorList] = useState([]);
-    const [tutorsPerPage] = useState(2);
+    const [tutorsPerPage] = useState(4);
 
     const [centerSalaryList, setCenterSalaryList] = useState([]);
     const [tutorSalaryList, setTutorSalaryList] = useState([]);
@@ -49,6 +49,11 @@ const MyWallet = () => {
     const [checkTransferred, setCheckTransferred] = useState(false);
 
     const { accountId } = useParams();
+
+    //LOADING
+    const [loading, setLoading] = useState(true); // State to track loading
+
+    //LOADING
 
     const [wallet, setWallet] = useState({
         id: "",
@@ -63,9 +68,11 @@ const MyWallet = () => {
                 .getWalletByAccount(accountId)
                 .then((res) => {
                     setWallet(res.data);
+                    setLoading(false);
                 })
                 .catch((error) => {
                     console.log(error);
+                    setLoading(false);
                 });
         }
     }, [accountId]);
@@ -78,7 +85,12 @@ const MyWallet = () => {
                 // console.log(res.data);
                 const activeCenters = res.data.filter((center) => center.isActive === true);
 
-                setCenterList(activeCenters);
+                // Sort refundList by requestedDate
+                const sortedCenters = [...activeCenters].sort((a, b) => {
+                    // Assuming requestedDate is a string in ISO 8601 format
+                    return new Date(b.account?.createdDate) - new Date(a.account?.createdDate);
+                });
+                setCenterList(sortedCenters);
 
             })
             .catch((error) => {
@@ -118,8 +130,12 @@ const MyWallet = () => {
         staffService
             .getAllStaff()
             .then((res) => {
-                setStaffList(res.data);
-
+                // Sort refundList by requestedDate
+                const sortedStaffs = [...res.data].sort((a, b) => {
+                    // Assuming requestedDate is a string in ISO 8601 format
+                    return new Date(b.account?.createdDate) - new Date(a.account?.createdDate);
+                });
+                setStaffList(sortedStaffs);
             })
             .catch((error) => {
                 console.log(error);
@@ -155,7 +171,12 @@ const MyWallet = () => {
             .then((res) => {
                 const tutorFreelancers = res.data.filter((tutor) => tutor.isFreelancer === true);
 
-                setTutorList(tutorFreelancers);
+                // Sort refundList by requestedDate
+                const sortedTutors = [...tutorFreelancers].sort((a, b) => {
+                    // Assuming requestedDate is a string in ISO 8601 format
+                    return new Date(b.account?.createdDate) - new Date(a.account?.createdDate);
+                });
+                setTutorList(sortedTutors);
             })
             .catch((error) => {
                 console.log(error);
@@ -630,7 +651,11 @@ const MyWallet = () => {
                             <div className="col-12">
                                 <div className="card-box">
                                     <h4 className="header-title">SYSTEM WALLET</h4>
-
+                                    {loading && (
+                                        <div className="loading-overlay">
+                                            <div className="loading-spinner" />
+                                        </div>
+                                    )}
                                     <div className="form-group">
                                         <label htmlFor="transactionId">Wallet Balance:</label>
                                         <span style={{ fontWeight: 'bold', color: 'red' }} className='ml-1'>
@@ -661,7 +686,7 @@ const MyWallet = () => {
                                                             <td>{index + 1}</td>
                                                             <td>{cus.name}</td>
                                                             <td>{cus.email}</td>
-                                                            <td>{cus.description}</td>
+                                                            <td className='truncate-text'>{cus.description}</td>
                                                             <td>{cus.address}</td>
                                                             <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
                                                             <td>
@@ -805,7 +830,7 @@ const MyWallet = () => {
 
                                     <label htmlFor="transactionId" >Staff Information:</label>
                                     <div className="table-responsive">
-                                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
                                             <thead className="thead-light">
                                                 <tr>
                                                     <th data-toggle="true">No.</th>
@@ -973,7 +998,7 @@ const MyWallet = () => {
                                     </div>
                                     <label htmlFor="transactionId" >Tutor Freelancer Information:</label>
                                     <div className="table-responsive">
-                                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
+                                        <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
                                             <thead className="thead-light">
                                                 <tr>
                                                     <th data-toggle="true">No.</th>
@@ -1178,6 +1203,46 @@ const MyWallet = () => {
                     .page-item.active .page-link{
                         background-color: #20c997;
                         border-color: #20c997;
+                    }
+
+                    .loading-overlay {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        backdrop-filter: blur(10px); /* Apply blur effect */
+                        -webkit-backdrop-filter: blur(10px); /* For Safari */
+                        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999; /* Ensure it's on top of other content */
+                    }
+                    
+                    .loading-spinner {
+                        border: 8px solid rgba(245, 141, 4, 0.1); /* Transparent border to create the circle */
+                        border-top: 8px solid #f58d04; /* Orange color */
+                        border-radius: 50%;
+                        width: 50px;
+                        height: 50px;
+                        animation: spin 1s linear infinite; /* Rotate animation */
+                    }
+                    
+                    @keyframes spin {
+                        0% {
+                            transform: rotate(0deg);
+                        }
+                        100% {
+                            transform: rotate(360deg);
+                        }
+                    }
+
+                    .truncate-text {
+                        max-width: 200px; /* Adjust max-width as needed */
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 `}
             </style>

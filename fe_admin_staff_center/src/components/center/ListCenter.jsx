@@ -33,7 +33,13 @@ const ListCenter = () => {
             .getAllCenter()
             .then((res) => {
                 // console.log(res.data);
-                setCenterList(res.data);
+                // Sort refundList by requestedDate
+                const sortedCenters = [...res.data].sort((a, b) => {
+                    // Assuming requestedDate is a string in ISO 8601 format
+                    return new Date(b.account?.createdDate) - new Date(a.account?.createdDate);
+                });
+                setCenterList(sortedCenters);
+
                 setLoading(false);
             })
             .catch((error) => {
@@ -138,7 +144,7 @@ const ListCenter = () => {
                                                                 <td>{index + 1}</td>
                                                                 <td>{cus.name}</td>
                                                                 <td>{cus.email}</td>
-                                                                <td>{cus.description}</td>
+                                                                <td className='truncate-text'>{cus.description}</td>
                                                                 <td>{cus.address}</td>
                                                                 <td>{cus.staff && cus.staff.account ? cus.staff.account.fullName : 'Unknown Name'}</td>
                                                                 <td>
@@ -221,6 +227,13 @@ const ListCenter = () => {
             </div>
             <style>
                 {`
+
+.truncate-text {
+    max-width: 200px; /* Adjust max-width as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
                 .page-item.active .page-link{
                     background-color: #20c997;
                     border-color: #20c997;
