@@ -37,8 +37,11 @@ const ListCourseInActive = () => {
             .then((res) => {
                 // Filter the courses where isActive is true
                 const activeCourses = res.data.filter(course => course.isActive === false);
-                console.log(activeCourses);
-                setCourseList(activeCourses);
+                const sortedCourseList = [...activeCourses].sort((a, b) => {
+                    // Assuming requestedDate is a string in ISO 8601 format
+                    return new Date(b.createdDate) - new Date(a.createdDate);
+                });
+                setCourseList(sortedCourseList);
                 setLoading(false);
             })
             .catch((error) => {
