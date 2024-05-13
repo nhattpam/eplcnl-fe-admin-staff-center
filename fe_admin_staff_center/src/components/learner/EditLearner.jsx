@@ -360,7 +360,7 @@ const EditLearner = () => {
                                       )}
                                     </>
                                   )}
-                                  {!cus.transaction?.course?.isOnlineClass && (
+                                  {cus.transaction?.course?.isOnlineClass && (
                                     <>
 
                                     </>

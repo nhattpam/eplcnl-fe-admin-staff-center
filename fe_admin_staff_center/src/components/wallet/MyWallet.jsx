@@ -676,7 +676,7 @@ const MyWallet = () => {
                                                     <th>Managed By</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
-                                                    <th></th>
+                                                    {/* <th></th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -701,11 +701,11 @@ const MyWallet = () => {
                                                                     <i className="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
-                                                            <td>
+                                                            {/* <td>
                                                                 <button className='btn btn-success' onClick={() => openModalCenter(cus.id)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
                                                                     Transfer
                                                                 </button>
-                                                            </td>
+                                                            </td> */}
                                                         </tr>
                                                     ))
                                                 }
@@ -1010,7 +1010,7 @@ const MyWallet = () => {
                                                     <th data-hide="phone, tablet">Phone Number</th>
                                                     <th data-hide="phone, tablet">Status</th>
                                                     <th>Action</th>
-                                                    <th></th>
+                                                    {/* <th></th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1047,11 +1047,11 @@ const MyWallet = () => {
                                                                     <i class="fa-regular fa-eye"></i>
                                                                 </Link>
                                                             </td>
-                                                            <td>
+                                                            {/* <td>
                                                                 <button className='btn btn-success' onClick={() => openModalTutor(cus.account?.id, cus.id)} style={{ borderRadius: '50px', padding: `8px 25px` }}>
                                                                     Transfer
                                                                 </button>
-                                                            </td>
+                                                            </td> */}
                                                         </tr>
                                                     ))
                                                 }
