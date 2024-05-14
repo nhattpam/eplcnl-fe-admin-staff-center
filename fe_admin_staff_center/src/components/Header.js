@@ -253,7 +253,12 @@ const Header = () => {
 
     const [selectedAmount, setSelectedAmount] = useState(null);
     const handleAmountChange = (event) => {
-        setSelectedAmount(event.target.value);
+        const value = parseFloat(event.target.value);
+        if (value <= account.wallet?.balance) {
+            setSelectedAmount(value);
+        } else {
+            window.alert(`The selected amount exceeds your wallet balance of $${account.wallet?.balance}`);
+        }
     };
 
 
