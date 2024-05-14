@@ -240,6 +240,70 @@ const Header = () => {
     //UPDATE ACCOUNT
 
 
+    //DEPOSIT
+    const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+
+    const openWithdrawModal = () => {
+        setShowWithdrawModal(true);
+    };
+
+    const closeWithdrawModal = () => {
+        setShowWithdrawModal(false);
+    };
+
+    const [selectedAmount, setSelectedAmount] = useState(null);
+    const handleAmountChange = (event) => {
+        setSelectedAmount(event.target.value);
+    };
+
+
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+    useEffect(() => {
+        // Function to update currentDateTime every second
+        const interval = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000);
+
+        // Clean-up function to clear the interval when the component unmounts
+        return () => clearInterval(interval);
+    }, []);
+
+    const submitWithdraw = async (event) => {
+        event.preventDefault();
+
+        if (!selectedAmount) {
+            console.log("Please select an amount.");
+            return;
+        }
+
+        const amount = parseFloat(selectedAmount); // Capture the selected amount
+
+        try {
+            const withdrawWallet = {
+                id: account.wallet?.id,
+                balance: account.wallet?.balance - amount,
+                accountId: account.id
+            };
+            console.log(JSON.stringify(withdrawWallet))
+
+            await walletService.updateWallet(withdrawWallet.id, withdrawWallet);
+
+            const walletHistoryWithdraw = {
+                transactionDate: currentDateTime,
+                walletId: withdrawWallet.id,
+                note: `- ${amount}$ for withdrawing balance at ${currentDateTime}`
+            };
+            await walletHistoryService.saveWalletHistory(walletHistoryWithdraw);
+
+            window.alert("Withdraw successfully!");
+
+            // Reload the page
+            window.location.reload();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <>
             {/* Topbar Start */}
@@ -275,7 +339,9 @@ const Header = () => {
                                     {isStaff && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p>Balance: ${account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
+                                            <p>Balance: ${account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i>
+                                                <i class="fas fa-funnel-dollar text-danger" onClick={openWithdrawModal}></i>
+                                            </p>
 
                                         </>
                                     )}
@@ -283,7 +349,9 @@ const Header = () => {
                                     {isCenter && (
                                         <>
                                             <h6 className="text-overflow m-0">Welcome {account.fullName}!</h6>
-                                            <p>Balance: ${account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i></p>
+                                            <p>Balance: ${account.wallet?.balance} <i class="far fa-eye" onClick={openWalletHistoryModal}></i>
+                                                <i class="fas fa-funnel-dollar text-danger" onClick={openWithdrawModal}></i>
+                                            </p>
 
                                         </>
 
@@ -741,7 +809,7 @@ const Header = () => {
                                                             </tr>
                                                             <tr>
                                                                 <th>Description:</th>
-                                                                <td style={{textAlign: 'left'}}>{center && center.description ? center.description : 'Unknown Description'}</td>
+                                                                <td style={{ textAlign: 'left' }}>{center && center.description ? center.description : 'Unknown Description'}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -815,7 +883,313 @@ const Header = () => {
                 )
             }
 
+            {
+                showWithdrawModal && (
+                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                        <div className="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Withdraw</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeWithdrawModal}>
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form onSubmit={submitWithdraw}>
+                                    <div className="modal-body">
+                                        <div>
+                                            <h3>Enter the amount you want to withdraw:</h3>
+                                            <input className='form-control' placeholder='USD accepted' type='number' name='amount' style={{ borderRadius: '50px', padding: `8px 25px` }} onChange={handleAmountChange}/>
+                                            <p>Powered by <img src={process.env.PUBLIC_URL + '/logo-vnpay.png'} alt="VnPay Logo" style={{ width: '10%', marginTop: '20px' }} /></p>
+                                            <div className="game-options-container">
+                                                {[100, 200, 300, 400, 500].map((amount) => (
+                                                    <span className='span1' key={amount}>
+                                                        <input
+                                                            type="radio"
+                                                            name="amount"
+                                                            className="radio"
+                                                            value={amount}
+                                                            id={`amount-${amount}`}
+                                                            onChange={handleAmountChange}
+                                                        />
+                                                        <label
+                                                            htmlFor={`amount-${amount}`}
+                                                            className={`option ${selectedAmount == amount ? "selected" : ""}`}
+                                                        >
+                                                            ${amount}
+                                                        </label>
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="modal-footer" style={{ marginTop: '100px' }}>
+                                        {
+                                            account.wallet?.balance > 0 ? (
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-primary btn-lg btn-block"
+                                                    style={{ backgroundColor: '#f58d04', borderRadius: '50px', padding: `8px 25px` }}
+                                                >
+                                                    Continue
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    disabled
+                                                    className="btn btn-primary btn-lg btn-block"
+                                                    style={{ backgroundColor: '#f58d04', borderRadius: '50px', padding: `8px 25px` }}
+                                                >
+                                                    Your balance is not enough to withdraw right now!
+                                                </button>
+                                            )
+                                        }
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
 
+
+
+
+            <style>
+                {`
+                
+                .module-title:hover {
+                    background-color: #333;
+                    color: #fff;
+                    cursor: pointer;
+                }
+                
+                .module-list li:hover {
+                    background-color: #f0f0f0;
+                    cursor: pointer;
+                }
+                
+                .card.module-title {
+    background-color: #FFF0D6; /* Darker background color */
+    color: #000; /* White text color */
+    transition: background-color 0.3s ease; /* Smooth transition effect */
+}
+
+.card.module-title:hover {
+    background-color: #E7E3DC; /* Darker background color on hover */
+    color: #fff
+}
+.game-options-container{
+    width: 100%;
+    height: 12rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.game-options-container span{
+    width: 45%;
+    height: 3rem;
+    border: 2px solid darkgray;
+    border-radius: 20px;
+    overflow: hidden;
+}
+span label{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s;
+    font-weight: 600;
+    color: rgb(22, 22, 22);
+}
+
+
+.span1 label:hover{
+    -ms-transform: scale(1.12);
+    -webkit-transform: scale(1.12);
+    transform: scale(1.12);
+    color: #f58d04;
+    background-color: #FFF0D6
+}
+
+input[type="radio"] {
+    position: relative;
+    display: none;
+}
+
+
+
+.next-button-container{
+    width: 50%;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+}
+.next-button-container button{
+    width: 8rem;
+    height: 2rem;
+    border-radius: 10px;
+    background: none;
+    color: rgb(25, 25, 25);
+    font-weight: 600;
+    border: 2px solid gray;
+    cursor: pointer;
+    outline: none;
+}
+.next-button-container button:hover{
+    background-color: rgb(143, 93, 93);
+}
+
+.modal-container{
+    display: none;
+    position: fixed;
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    -webkit-animation: fadeIn 1.2s ease-in-out;
+    animation: fadeIn 1.2s ease-in-out;
+}
+
+.modal-content-container{
+    height: 20rem;
+    width: 25rem;
+    background-color: rgb(43, 42, 42);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 25px;
+}
+
+.modal-content-container h1{
+    font-size: 1.3rem;
+    height: 3rem;
+    color: lightgray;
+    text-align: center;
+}
+
+.grade-details{
+    width: 15rem;
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.grade-details p{
+    color: white;
+    text-align: center;
+}
+
+.modal-button-container{
+    height: 2rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-button-container button{
+    width: 10rem;
+    height: 2rem;
+    background: none;
+    outline: none;
+    border: 1px solid rgb(252, 242, 241);
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 20px;
+}
+.modal-button-container button:hover{
+    background-color: rgb(83, 82, 82);
+}
+
+@media(min-width : 300px) and (max-width : 350px){
+    .game-quiz-container{
+        width: 90%;
+        height: 80vh;
+     }
+     .game-details-container h1{
+        font-size: 0.8rem;
+     }
+
+     .game-question-container{
+        height: 6rem;
+     }
+     .game-question-container h1{
+       font-size: 0.9rem;
+    }
+
+    .game-options-container span{
+        width: 90%;
+        height: 2.5rem;
+    }
+    .game-options-container span label{
+        font-size: 0.8rem;
+    }
+    .modal-content-container{
+        width: 90%;
+        height: 25rem;
+    }
+
+    .modal-content-container h1{
+        font-size: 1.2rem;
+    }
+}
+.correct-answer {
+    background-color: green;
+}
+
+.incorrect-answer {
+    background-color: red;
+}
+.fixed-course-name {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #333;
+    padding: 10px 0;
+}
+
+.iitem {
+    transition: transform 0.3s ease;
+}
+
+.iitem:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.truncate-text {
+    max-width: 200px; /* Adjust max-width as needed */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.option.selected {
+    color: #f58d04; // Change the color to your desired color
+    background-color: #FFF0D6; // Change the background color to your desired color
+}
+
+.game-options-container span input[type="radio"]:checked + label {
+    background-color: #f58d04; /* Change to your desired color */
+    color: #fff; /* Change to your desired text color */
+}
+
+  
+            `}
+            </style>
         </>
     )
 }
