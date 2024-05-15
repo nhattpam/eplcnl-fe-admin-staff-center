@@ -132,7 +132,7 @@ const AdminDashboard = () => {
 
             // Check if the transaction belongs to the current month
             if (enrollmentMonth === currentMonth + 1) { // Add 1 to match the format of current month
-                sumForCurrentMonth += (enrollment.transaction?.amount / 24000) * 0.8; // Use the correct property name
+                sumForCurrentMonth += (enrollment.transaction?.amount / 24000) * 0.2; // Use the correct property name
             }
         });
 
@@ -174,7 +174,7 @@ const AdminDashboard = () => {
 
             // Check if the transaction occurred today
             if (transactionDay === currentDay) {
-                sumForToday += (enrollment.transaction?.amount / 24000) * 0.8; // Assuming transaction.amount is the amount of the transaction
+                sumForToday += (enrollment.transaction?.amount / 24000) * 0.2; // Assuming transaction.amount is the amount of the transaction
             }
         });
 
@@ -225,7 +225,7 @@ const AdminDashboard = () => {
 
             // Check if the transaction belongs to the previous month
             if (transactionMonth === previousMonth) {
-                sumForPreviousMonth += (enrollment.transaction?.amount / 24000) * 0.8;
+                sumForPreviousMonth += (enrollment.transaction?.amount / 24000) * 0.2;
             }
         });
 
@@ -333,7 +333,7 @@ const AdminDashboard = () => {
                 // Check if the transaction belongs to the current year
                 if (transactionYear === currentYear) {
                     // Add the transaction's total price to the corresponding month's data
-                    monthlyData[transactionMonth] += (enrollment.transaction?.amount / 24000) * 0.8;
+                    monthlyData[transactionMonth] += (enrollment.transaction?.amount / 24000) * 0.2;
                 }
             });
 
