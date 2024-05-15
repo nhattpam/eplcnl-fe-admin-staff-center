@@ -67,14 +67,17 @@ const AdminDashboard = () => {
     const fetchTransactions = async () => {
         try {
             const res = await transactionService.getAllTransaction();
-
             const transactions = res.data;
+    
+            // Sort transactions by transactionDate
+            transactions.sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate));
+    
             setTransactionList(transactions);
-
         } catch (error) {
             console.error("Error fetching transactions:", error);
         }
     }
+    
 
     //paginate list transaction
     const handleSearch = (event) => {
