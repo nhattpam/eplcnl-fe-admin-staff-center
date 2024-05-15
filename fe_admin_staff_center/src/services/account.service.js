@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://nhatpmse.twentytwo.asia/api";
+import { API_URL } from './apiConfig';  // Adjust the path as necessary
 
 
 class AccountService {
