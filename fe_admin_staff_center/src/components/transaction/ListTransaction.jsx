@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import Footer from '../Footer'
-import Header from '../Header'
-import Sidebar from '../Sidebar'
+import Footer from '../Footer';
+import Header from '../Header';
+import Sidebar from '../Sidebar';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
-import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai"; // icons form react-icons
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import transactionService from '../../services/transaction.service';
 
 const ListTransaction = () => {
     const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
-    console.log("STatus: " + storedLoginStatus)
+    console.log("Status: " + storedLoginStatus);
     const navigate = useNavigate();
     if (!storedLoginStatus) {
-        navigate(`/login`)
+        navigate(`/login`);
     }
 
     const [transactionList, setTransactionList] = useState([]);
@@ -21,25 +21,20 @@ const ListTransaction = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [transactionsPerPage] = useState(5);
+    const [selectedYear, setSelectedYear] = useState('');
+    const [selectedMonth, setSelectedMonth] = useState('');
 
     const { staffId } = useParams();
 
-
-    //LOADING
-    const [loading, setLoading] = useState(true); // State to track loading
-
-    //LOADING
-
+    // Loading state
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         transactionService
             .getAllTransaction()
             .then((res) => {
-                // Filter the transactions where isActive is true
                 const filteredTransactionList = res.data;
-                // Sort refundList by requestedDate
                 const sortedTransactionList = [...filteredTransactionList].sort((a, b) => {
-                    // Assuming requestedDate is a string in ISO 8601 format
                     return new Date(b.transactionDate) - new Date(a.transactionDate);
                 });
                 setTransactionList(sortedTransactionList);
@@ -51,20 +46,30 @@ const ListTransaction = () => {
             });
     }, []);
 
-
-
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
     };
 
+    const handleYearChange = (event) => {
+        setSelectedYear(event.target.value);
+    };
+
+    const handleMonthChange = (event) => {
+        setSelectedMonth(event.target.value);
+    };
+
     const filteredTransactions = transactionList
         .filter((transaction) => {
-            return (
-                transaction.course?.name.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-                transaction.course?.code.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-                transaction.learner?.account?.fullName.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-                transaction.learner?.account?.email.toString().toLowerCase().includes(searchTerm.toLowerCase())
-
+            const transactionDate = new Date(transaction.transactionDate);
+            const transactionYear = transactionDate.getFullYear();
+            const transactionMonth = transactionDate.getMonth() + 1; // getMonth() returns 0-11
+            const matchesYear = selectedYear ? transactionYear.toString() === selectedYear : true;
+            const matchesMonth = selectedMonth ? transactionMonth.toString() === selectedMonth : true;
+            return matchesYear && matchesMonth && (
+                transaction.course?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                transaction.course?.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                transaction.learner?.account?.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                transaction.learner?.account?.email.toLowerCase().includes(searchTerm.toLowerCase())
             );
         });
 
@@ -84,14 +89,9 @@ const ListTransaction = () => {
                 <Sidebar isAdmin={sessionStorage.getItem('isAdmin') === 'true'}
                     isStaff={sessionStorage.getItem('isStaff') === 'true'}
                     isCenter={sessionStorage.getItem('isCenter') === 'true'} />
-                {/* ============================================================== */}
-                {/* Start Page Content here */}
-                {/* ============================================================== */}
                 <div className="content-page">
                     <div className="content">
-                        {/* Start Content*/}
                         <div className="container-fluid">
-                            {/* start page title */}
                             <div className="row">
                                 <div className="col-12">
                                     <div className="page-title-box">
@@ -103,7 +103,6 @@ const ListTransaction = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* end page title */}
                             <div className="row">
                                 <div className="col-12">
                                     <div className="card-box">
@@ -113,6 +112,22 @@ const ListTransaction = () => {
                                                     <div className="form-group">
                                                         <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm}
                                                             onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }} />
+                                                    </div>
+                                                    <div className="form-group ml-2">
+                                                        <select className="form-control" value={selectedYear} onChange={handleYearChange} style={{ borderRadius: '50px' }}>
+                                                            <option value="">Select Year</option>
+                                                            {[2022, 2023, 2024].map(year => (
+                                                                <option key={year} value={year}>{year}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                    <div className="form-group ml-2">
+                                                        <select className="form-control" value={selectedMonth} onChange={handleMonthChange} style={{ borderRadius: '50px' }}>
+                                                            <option value="">Select Month</option>
+                                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(month => (
+                                                                <option key={month} value={month}>{month}</option>
+                                                            ))}
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -129,7 +144,6 @@ const ListTransaction = () => {
                                                         <th data-toggle="true">Image</th>
                                                         <th data-toggle="true">Name</th>
                                                         <th data-hide="phone">Price</th>
-
                                                         <th data-hide="phone, tablet">Type</th>
                                                         <th data-hide="phone, tablet">Learner</th>
                                                         <th data-hide="phone, tablet">Transaction Date</th>
@@ -141,15 +155,12 @@ const ListTransaction = () => {
                                                 <tbody>
                                                     {
                                                         currentTransactions.length > 0 && currentTransactions.map((cus) => (
-
-                                                            <tr>
+                                                            <tr key={cus.id}>
                                                                 {
                                                                     cus.course !== null && (
                                                                         <>
                                                                             <td>
-                                                                                <img src={cus.course?.imageUrl} style={{ height: '70px', width: '100px' }}>
-
-                                                                                </img>
+                                                                                <img src={cus.course?.imageUrl} style={{ height: '70px', width: '100px' }} alt="course" />
                                                                             </td>
                                                                         </>
                                                                     )
@@ -157,9 +168,7 @@ const ListTransaction = () => {
                                                                 {
                                                                     cus.course === null && (
                                                                         <>
-                                                                            <td>
-
-                                                                            </td>
+                                                                            <td></td>
                                                                         </>
                                                                     )
                                                                 }
@@ -177,9 +186,7 @@ const ListTransaction = () => {
                                                                 {
                                                                     cus.course === null && (
                                                                         <>
-                                                                            <td>
-                                                                                Deposit to system
-                                                                            </td>
+                                                                            <td>Deposit to system</td>
                                                                         </>
                                                                     )
                                                                 }
@@ -187,20 +194,16 @@ const ListTransaction = () => {
                                                                     cus.course !== null && (
                                                                         <>
                                                                             <td>${cus.course?.stockPrice}</td>
-
                                                                         </>
                                                                     )
                                                                 }
                                                                 {
                                                                     cus.course === null && (
                                                                         <>
-                                                                            <td>
-                                                                                ${cus.amount / 24000}
-                                                                            </td>
+                                                                            <td>${cus.amount / 24000}</td>
                                                                         </>
                                                                     )
                                                                 }
-
                                                                 {
                                                                     cus.course !== null && (
                                                                         <>
@@ -213,72 +216,38 @@ const ListTransaction = () => {
                                                                 {
                                                                     cus.course === null && (
                                                                         <>
-                                                                            <td>
-
-                                                                            </td>
+                                                                            <td></td>
                                                                         </>
                                                                     )
                                                                 }
-
                                                                 <td>
                                                                     <Link to={`/edit-learner/${cus.learner?.account?.id}`} className='text-secondary'>
                                                                         {cus.learner?.account?.fullName}
-                                                                    </Link></td>
+                                                                    </Link>
+                                                                </td>
                                                                 <td>{new Date(cus.transactionDate).toLocaleString('en-US')}</td>
-
                                                                 <td>{cus.paymentMethod?.name}</td>
-                                                                {
-                                                                    cus.status === "DONE" && (
-                                                                        <td>DONE</td>
-                                                                    )
-                                                                }
-                                                                {
-                                                                    cus.status === "PROCESSING" && (
-                                                                        <td>FAILED</td>
-                                                                    )
-                                                                }
-                                                                {
-                                                                    cus.course !== null && (
-                                                                        <>
-                                                                            <td>
-                                                                                <Link to={`/edit-course/${cus.course?.id}`} className='text-secondary'>
-                                                                                    <i class="fa-regular fa-eye"></i>
-                                                                                </Link>
-                                                                            </td>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                                {
-                                                                    cus.course === null && (
-                                                                        <>
-                                                                            <td>
-
-                                                                            </td>
-                                                                        </>
-                                                                    )
-                                                                }
-
+                                                                <td>{cus.status === "DONE" ? 'DONE' : 'FAILED'}</td>
+                                                                <td>
+                                                                    <Link to={`/edit-course/${cus.course?.id}`} className='text-secondary'>
+                                                                        <i className="fa-regular fa-eye"></i>
+                                                                    </Link>
+                                                                </td>
                                                             </tr>
                                                         ))
                                                     }
-
                                                 </tbody>
-
                                             </table>
-                                        </div> {/* end .table-responsive*/}
+                                        </div>
                                         {
                                             currentTransactions.length === 0 && (
                                                 <p className='mt-2'>There are no transactions.</p>
                                             )
                                         }
-                                    </div> {/* end card-box */}
-
-                                </div> {/* end col */}
+                                    </div>
+                                </div>
                             </div>
-                            {/* end row */}
-                            {/* Pagination */}
                             <div className='container-fluid'>
-                                {/* Pagination */}
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <ReactPaginate
                                         previousLabel={
@@ -307,17 +276,10 @@ const ListTransaction = () => {
                                         pageLinkClassName={'page-link'}
                                     />
                                 </div>
-
                             </div>
-
-
-                        </div> {/* container */}
-                    </div> {/* content */}
+                        </div>
+                    </div>
                 </div>
-                {/* ============================================================== */}
-                {/* End Page content */}
-                {/* ============================================================== */}
-
             </div>
             <style>
                 {`
@@ -332,22 +294,22 @@ const ListTransaction = () => {
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    backdrop-filter: blur(10px); /* Apply blur effect */
-                    -webkit-backdrop-filter: blur(10px); /* For Safari */
-                    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
+                    background-color: rgba(0, 0, 0, 0.5);
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    z-index: 9999; /* Ensure it's on top of other content */
+                    z-index: 9999;
                 }
                 
                 .loading-spinner {
-                    border: 8px solid rgba(245, 141, 4, 0.1); /* Transparent border to create the circle */
-                    border-top: 8px solid #f58d04; /* Orange color */
+                    border: 8px solid rgba(245, 141, 4, 0.1);
+                    border-top: 8px solid #f58d04;
                     border-radius: 50%;
                     width: 50px;
                     height: 50px;
-                    animation: spin 1s linear infinite; /* Rotate animation */
+                    animation: spin 1s linear infinite;
                 }
                 
                 @keyframes spin {
@@ -361,7 +323,7 @@ const ListTransaction = () => {
             `}
             </style>
         </>
-    )
-}
+    );
+};
 
-export default ListTransaction
+export default ListTransaction;
