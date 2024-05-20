@@ -7,6 +7,8 @@ import ReactPaginate from 'react-paginate';
 import { IconContext } from 'react-icons';
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import transactionService from '../../services/transaction.service';
+import courseService from '../../services/course.service';
+import centerService from '../../services/center.service';
 
 const ListTransaction = () => {
     const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
@@ -82,6 +84,46 @@ const ListTransaction = () => {
     const offset = currentPage * transactionsPerPage;
     const currentTransactions = filteredTransactions.slice(offset, offset + transactionsPerPage);
 
+
+    //DETAIL MONEY TRANSACTION
+    const [center, setCenter] = useState({
+        id: "",
+        name: ""
+    });
+
+    const [course, setCourse] = useState({
+        id: "",
+        tutor: []
+    });
+    const [expandedDetail, setExpandedDetail] = useState({});
+
+
+    const closeTransactionDetailModal = () => {
+        setExpandedDetail(false);
+    };
+
+    const toggleDetail = (id) => {
+        transactionService.getTransactionById(id)
+            .then((transactionRes) => {
+                courseService.getCourseById(transactionRes.data.courseId)
+                    .then((courseRes) => {
+                        setCourse(courseRes.data);
+                        if (!courseRes.data.tutor?.isFreelancer) {
+                            centerService.getCenterById(courseRes.data.tutor?.centerId)
+                                .then((centerRes) => {
+                                    setCenter(centerRes.data);
+                                })
+                        }
+
+                        setExpandedDetail(prevState => ({
+                            ...prevState,
+                            [id]: !prevState[id]
+                        }));
+                    });
+            });
+    };
+
+
     return (
         <>
             <div id="wrapper">
@@ -149,91 +191,133 @@ const ListTransaction = () => {
                                                         <th data-hide="phone, tablet">Transaction Date</th>
                                                         <th data-hide="phone, tablet">Payment Method</th>
                                                         <th data-hide="phone, tablet">Status</th>
-                                                        <th>Action</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {
                                                         currentTransactions.length > 0 && currentTransactions.map((cus) => (
-                                                            <tr key={cus.id}>
-                                                                {
-                                                                    cus.course !== null && (
-                                                                        <>
+                                                            <>
+                                                                <tr key={cus.id}>
+                                                                    {
+                                                                        cus.course !== null && (
+                                                                            <>
+                                                                                <td>
+                                                                                    <img src={cus.course?.imageUrl} style={{ height: '70px', width: '100px' }} alt="course" />
+                                                                                </td>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        cus.course === null && (
+                                                                            <>
+                                                                                <td></td>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        cus.course !== null && (
+                                                                            <>
+                                                                                <td>
+                                                                                    <Link to={`/edit-course/${cus.course?.id}`} className='text-secondary'>
+                                                                                        {cus.course?.name}
+                                                                                    </Link>
+                                                                                </td>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        cus.course === null && (
+                                                                            <>
+                                                                                <td>Deposit to system</td>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        cus.course !== null && (
+                                                                            <>
+                                                                                <td>${cus.course?.stockPrice}</td>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        cus.course === null && (
+                                                                            <>
+                                                                                <td>${cus.amount / 24000}</td>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        cus.course !== null && (
+                                                                            <>
+                                                                                <td>
+                                                                                    <span className={`badge ${cus.course?.isOnlineClass ? 'badge-success' : 'badge-danger'}`}>{cus.isOnlineClass ? 'Class' : 'Video'}</span>
+                                                                                </td>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                    {
+                                                                        cus.course === null && (
+                                                                            <>
+                                                                                <td></td>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                    <td>
+                                                                        <Link to={`/edit-learner/${cus.learner?.account?.id}`} className='text-secondary'>
+                                                                            {cus.learner?.account?.fullName}
+                                                                        </Link>
+                                                                    </td>
+                                                                    <td>{new Date(cus.transactionDate).toLocaleString('en-US')}</td>
+                                                                    <td>{cus.paymentMethod?.name}</td>
+                                                                    <td>{cus.status === "DONE" ? 'DONE' : 'FAILED'}</td>
+                                                                    {
+                                                                        cus.course !== null && cus.status === "DONE" && (
                                                                             <td>
-                                                                                <img src={cus.course?.imageUrl} style={{ height: '70px', width: '100px' }} alt="course" />
+                                                                                <i className="fa-regular fa-eye" style={{cursor: 'pointer'}} onTouchMove={() => toggleDetail(cus.id)}></i>
                                                                             </td>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                                {
-                                                                    cus.course === null && (
-                                                                        <>
-                                                                            <td></td>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                                {
-                                                                    cus.course !== null && (
-                                                                        <>
-                                                                            <td>
-                                                                                <Link to={`/edit-course/${cus.course?.id}`} className='text-secondary'>
-                                                                                    {cus.course?.name}
-                                                                                </Link>
-                                                                            </td>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                                {
-                                                                    cus.course === null && (
-                                                                        <>
-                                                                            <td>Deposit to system</td>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                                {
-                                                                    cus.course !== null && (
-                                                                        <>
-                                                                            <td>${cus.course?.stockPrice}</td>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                                {
-                                                                    cus.course === null && (
-                                                                        <>
-                                                                            <td>${cus.amount / 24000}</td>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                                {
-                                                                    cus.course !== null && (
-                                                                        <>
-                                                                            <td>
-                                                                                <span className={`badge ${cus.course?.isOnlineClass ? 'badge-success' : 'badge-danger'}`}>{cus.isOnlineClass ? 'Class' : 'Video'}</span>
-                                                                            </td>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                                {
-                                                                    cus.course === null && (
-                                                                        <>
-                                                                            <td></td>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                                <td>
-                                                                    <Link to={`/edit-learner/${cus.learner?.account?.id}`} className='text-secondary'>
-                                                                        {cus.learner?.account?.fullName}
-                                                                    </Link>
-                                                                </td>
-                                                                <td>{new Date(cus.transactionDate).toLocaleString('en-US')}</td>
-                                                                <td>{cus.paymentMethod?.name}</td>
-                                                                <td>{cus.status === "DONE" ? 'DONE' : 'FAILED'}</td>
-                                                                <td>
-                                                                    <Link to={`/edit-course/${cus.course?.id}`} className='text-secondary'>
-                                                                        <i className="fa-regular fa-eye"></i>
-                                                                    </Link>
-                                                                </td>
-                                                            </tr>
+                                                                        )
+                                                                    }
+
+                                                                </tr>
+                                                                {expandedDetail[cus.id] && (
+                                                                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                                                                        <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                                                            <div className="modal-content">
+                                                                                <div className="modal-header">
+                                                                                    <h5 className="modal-title">Transaction Detail</h5>
+                                                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeTransactionDetailModal}>
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
+                                                                                    <h4>Amount: <span className='text-danger'>${cus.amount / 24000}</span></h4>
+                                                                                    {course.tutor?.isFreelancer && (
+                                                                                        <>
+                                                                                            <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
+                                                                                            <h4>Tutor {course.tutor?.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
+
+                                                                                        </>
+                                                                                    )}
+                                                                                    {!course.tutor?.isFreelancer && (
+                                                                                        <>
+                                                                                            <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
+                                                                                            <h4>Center {center.name} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
+
+                                                                                        </>
+
+                                                                                    )}
+                                                                                </div>
+                                                                                <div className="modal-footer">
+                                                                                    <button type="button" className="btn btn-dark" style={{ borderRadius: '50px', padding: '8px 25px' }} onClick={closeTransactionDetailModal}>Close</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </>
+
+
                                                         ))
                                                     }
                                                 </tbody>

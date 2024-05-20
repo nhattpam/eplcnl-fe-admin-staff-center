@@ -7,6 +7,8 @@ import transactionService from "../../services/transaction.service";
 import enrollmentService from "../../services/enrollment.service";
 import accountService from "../../services/account.service";
 import { useNavigate } from "react-router-dom";
+import courseService from "../../services/course.service";
+import centerService from "../../services/center.service";
 
 const AdminDashboard = () => {
     const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
@@ -68,16 +70,16 @@ const AdminDashboard = () => {
         try {
             const res = await transactionService.getAllTransaction();
             const transactions = res.data;
-    
+
             // Sort transactions by transactionDate
             transactions.sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate));
-    
+
             setTransactionList(transactions);
         } catch (error) {
             console.error("Error fetching transactions:", error);
         }
     }
-    
+
 
     //paginate list transaction
     const handleSearch = (event) => {
@@ -469,6 +471,45 @@ const AdminDashboard = () => {
 
 
 
+    //DETAIL MONEY TRANSACTION
+    const [center, setCenter] = useState({
+        id: "",
+        name: ""
+    });
+
+    const [course, setCourse] = useState({
+        id: "",
+        tutor: []
+    });
+    const [expandedDetail, setExpandedDetail] = useState({});
+
+
+    const closeTransactionDetailModal = () => {
+        setExpandedDetail(false);
+    };
+
+    const toggleDetail = (id) => {
+        transactionService.getTransactionById(id)
+            .then((transactionRes) => {
+                courseService.getCourseById(transactionRes.data.courseId)
+                    .then((courseRes) => {
+                        setCourse(courseRes.data);
+                        if (!courseRes.data.tutor?.isFreelancer) {
+                            centerService.getCenterById(courseRes.data.tutor?.centerId)
+                                .then((centerRes) => {
+                                    setCenter(centerRes.data);
+                                })
+                        }
+
+                        setExpandedDetail(prevState => ({
+                            ...prevState,
+                            [id]: !prevState[id]
+                        }));
+                    });
+            });
+    };
+
+
     return (
         <>
             <div id="wrapper">
@@ -651,6 +692,7 @@ const AdminDashboard = () => {
                                                         <th>Date</th>
                                                         <th>Payouts</th>
                                                         <th>Status</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -682,8 +724,49 @@ const AdminDashboard = () => {
                                                                             </td>
                                                                         )
                                                                     }
+                                                                    {
+                                                                        cus.course !== null && cus.status === "DONE" && (
+                                                                            <td>
+                                                                                <i className="fa-regular fa-eye" style={{ cursor: 'pointer' }} onClick={() => toggleDetail(cus.id)}></i>
+                                                                            </td>
+                                                                        )
+                                                                    }
                                                                 </tr>
+                                                                {expandedDetail[cus.id] && (
+                                                                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                                                                        <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                                                            <div className="modal-content">
+                                                                                <div className="modal-header">
+                                                                                    <h5 className="modal-title">Transaction Detail</h5>
+                                                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeTransactionDetailModal}>
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
+                                                                                    <h4>Amount: <span className='text-danger'>${cus.amount / 24000}</span></h4>
+                                                                                    {course.tutor?.isFreelancer && (
+                                                                                        <>
+                                                                                            <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
+                                                                                            <h4>Tutor {course.tutor?.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
 
+                                                                                        </>
+                                                                                    )}
+                                                                                    {!course.tutor?.isFreelancer && (
+                                                                                        <>
+                                                                                            <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
+                                                                                            <h4>Center {center.name} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
+
+                                                                                        </>
+
+                                                                                    )}
+                                                                                </div>
+                                                                                <div className="modal-footer">
+                                                                                    <button type="button" className="btn btn-dark" style={{ borderRadius: '50px', padding: '8px 25px' }} onClick={closeTransactionDetailModal}>Close</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
                                                             </>
 
                                                         ))
