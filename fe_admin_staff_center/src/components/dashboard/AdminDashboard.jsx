@@ -488,26 +488,29 @@ const AdminDashboard = () => {
         setExpandedDetail(false);
     };
 
-    const toggleDetail = (id) => {
-        transactionService.getTransactionById(id)
-            .then((transactionRes) => {
-                courseService.getCourseById(transactionRes.data.courseId)
-                    .then((courseRes) => {
-                        setCourse(courseRes.data);
-                        if (!courseRes.data.tutor?.isFreelancer) {
-                            centerService.getCenterById(courseRes.data.tutor?.centerId)
-                                .then((centerRes) => {
-                                    setCenter(centerRes.data);
-                                })
-                        }
-
-                        setExpandedDetail(prevState => ({
-                            ...prevState,
-                            [id]: !prevState[id]
-                        }));
-                    });
-            });
+    const toggleDetail = async (id) => {
+        try {
+            const transactionRes = await transactionService.getTransactionById(id);
+            const transaction = transactionRes.data;
+            const courseRes = await courseService.getCourseById(transaction.courseId);
+            const courseData = courseRes.data;
+    
+            if (!courseData.tutor?.isFreelancer) {
+                const centerRes = await centerService.getCenterById(courseData.tutor?.centerId);
+                setCenter(centerRes.data);
+            }
+    
+            setCourse(courseData);
+    
+            setExpandedDetail((prevState) => ({
+                ...prevState,
+                [id]: !prevState[id],
+            }));
+        } catch (error) {
+            console.error('Error fetching transaction details:', error);
+        }
     };
+    
 
 
     return (

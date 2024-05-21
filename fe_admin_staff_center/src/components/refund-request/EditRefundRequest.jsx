@@ -94,25 +94,25 @@ const EditRefundRequest = () => {
     //approve refund request
     const handleApproveRefund = async () => {
         try {
-            // Get admin's wallet
-            const adminWalletResponse = await walletService.getWalletById("188e9df9-be4b-4531-858e-098ff8c3735c"); //admin's wallet
-            const adminWallet = adminWalletResponse.data;
+            // // Get admin's wallet
+            // const adminWalletResponse = await walletService.getWalletById("188e9df9-be4b-4531-858e-098ff8c3735c"); //admin's wallet
+            // const adminWallet = adminWalletResponse.data;
 
-            // Calculate updated admin wallet balance
-            const updatedAdminWallet = {
-                balance: adminWallet.balance - (refund.enrollment.transaction.amount / 24000),
-                accountId: "9b868733-8ab1-4191-92ab-65d1b82863c3",
-            };
+            // // Calculate updated admin wallet balance
+            // const updatedAdminWallet = {
+            //     balance: adminWallet.balance - (refund.enrollment.transaction.amount / 24000),
+            //     accountId: "9b868733-8ab1-4191-92ab-65d1b82863c3",
+            // };
 
-            // Update admin wallet balance
-            await walletService.updateWallet(adminWallet.id, updatedAdminWallet);
+            // // Update admin wallet balance
+            // await walletService.updateWallet(adminWallet.id, updatedAdminWallet);
 
-            const walletHistory = {
-                walletId: adminWallet.id,
-                note: `-${refund.enrollment.transaction.amount / 24000}$ for returning learner ${refund.enrollment.transaction.learner.account.fullName} by refund request ${refund.id}  at ${currentDateTime.toLocaleString()}`,
-            }
+            // const walletHistory = {
+            //     walletId: adminWallet.id,
+            //     note: `-${refund.enrollment.transaction.amount / 24000}$ for returning learner ${refund.enrollment.transaction.learner.account.fullName} by refund request ${refund.id}  at ${currentDateTime.toLocaleString()}`,
+            // }
 
-            await walletHistoryService.saveWalletHistory(walletHistory);
+            // await walletHistoryService.saveWalletHistory(walletHistory);
 
             // Update enrollment with refundStatus
             const updatedEnrollment = { ...enrollment, refundStatus: true };
