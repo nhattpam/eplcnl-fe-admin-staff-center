@@ -162,6 +162,8 @@ const EditCourse = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [enrollmentsPerPage] = useState(5);
+    const [selectedYear, setSelectedYear] = useState('');
+    const [selectedMonth, setSelectedMonth] = useState('');
     useEffect(() => {
         courseService
             .getAllEnrollmentsByCourse(id)
@@ -181,10 +183,28 @@ const EditCourse = () => {
 
     const filteredEnrollments = enrollmentList
         .filter((enrollment) => {
-            return (
-                enrollment.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+            const transactionDate = new Date(enrollment.enrolledDate);
+            const transactionYear = transactionDate.getFullYear();
+            const transactionMonth = transactionDate.getMonth() + 1; // getMonth() returns 0-11
+            const matchesYear = selectedYear ? transactionYear.toString() === selectedYear : true;
+            const matchesMonth = selectedMonth ? transactionMonth.toString() === selectedMonth : true;
+            return matchesYear && matchesMonth && (
+                enrollment.transaction?.course?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                enrollment.transaction?.learner?.account?.fullName.toLowerCase().includes(searchTerm.toLowerCase())
             );
         });
+
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleYearChange = (event) => {
+        setSelectedYear(event.target.value);
+    };
+
+    const handleMonthChange = (event) => {
+        setSelectedMonth(event.target.value);
+    };
 
     const pageCount = Math.ceil(filteredEnrollments.length / enrollmentsPerPage);
 
@@ -855,6 +875,32 @@ const EditCourse = () => {
                                                     </div>
                                                 </div>
                                             </div> {/* end card-box */}
+                                            <div className="mb-2">
+                                                <div className="row">
+                                                    <div className="col-12 text-sm-center form-inline">
+                                                        <div className="form-group">
+                                                            <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm}
+                                                                onChange={handleSearch} style={{ borderRadius: '50px', padding: `18px 25px` }} />
+                                                        </div>
+                                                        <div className="form-group ml-2">
+                                                            <select className="form-control" value={selectedYear} onChange={handleYearChange} style={{ borderRadius: '50px' }}>
+                                                                <option value="">Select Year</option>
+                                                                {[2022, 2023, 2024].map(year => (
+                                                                    <option key={year} value={year}>{year}</option>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+                                                        <div className="form-group ml-2">
+                                                            <select className="form-control" value={selectedMonth} onChange={handleMonthChange} style={{ borderRadius: '50px' }}>
+                                                                <option value="">Select Month</option>
+                                                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(month => (
+                                                                    <option key={month} value={month}>{month}</option>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div className="table-responsive text-center">
                                                 <table id="demo-foo-filtering" className="table table-borderless table-hover table-nowrap table-centered mb-0" data-page-size={7}>
                                                     <thead className="thead-light">
@@ -882,6 +928,11 @@ const EditCourse = () => {
                                                     </tbody>
                                                 </table>
 
+                                                {
+                                                    currentEnrollments.length === 0 && (
+                                                        <p className="text-center mt-3">No transactions found.</p>
+                                                    )
+                                                }
 
                                             </div>
                                         </div> {/* end col*/}
