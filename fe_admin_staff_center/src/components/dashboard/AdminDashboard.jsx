@@ -6,9 +6,14 @@ import { Chart, PieController, ArcElement, registerables } from "chart.js";
 import transactionService from "../../services/transaction.service";
 import enrollmentService from "../../services/enrollment.service";
 import accountService from "../../services/account.service";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import courseService from "../../services/course.service";
 import centerService from "../../services/center.service";
+import ReactPaginate from "react-paginate";
+import { IconContext } from "react-icons";
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
+import tutorService from "../../services/tutor.service";
+import * as XLSX from 'xlsx';
 
 const AdminDashboard = () => {
     const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
@@ -51,6 +56,7 @@ const AdminDashboard = () => {
         fetchTransactions();
         fetchEnrollmentsAndCalculateSum4();
         countUser();
+        fetchTransactions2();
     }, []);
 
     useEffect(() => {
@@ -477,6 +483,11 @@ const AdminDashboard = () => {
         name: ""
     });
 
+    const [tutor, setTutor] = useState({
+        id: "",
+        account: []
+    });
+
     const [course, setCourse] = useState({
         id: "",
         tutor: []
@@ -494,14 +505,19 @@ const AdminDashboard = () => {
             const transaction = transactionRes.data;
             const courseRes = await courseService.getCourseById(transaction.courseId);
             const courseData = courseRes.data;
-    
+
             if (!courseData.tutor?.isFreelancer) {
                 const centerRes = await centerService.getCenterById(courseData.tutor?.centerId);
                 setCenter(centerRes.data);
             }
-    
+
+            if (courseData.tutor?.isFreelancer) {
+                const tutorRes = await tutorService.getTutorById(courseData.tutorId);
+                setTutor(tutorRes.data);
+            }
+
             setCourse(courseData);
-    
+
             setExpandedDetail((prevState) => ({
                 ...prevState,
                 [id]: !prevState[id],
@@ -510,8 +526,111 @@ const AdminDashboard = () => {
             console.error('Error fetching transaction details:', error);
         }
     };
-    
 
+
+    //list transaction where courseId != null
+    const [searchTerm2, setSearchTerm2] = useState('');
+    const [currentPage2, setCurrentPage2] = useState(0);
+    const [transactionsPerPage2] = useState(7);
+    const [selectedYear, setSelectedYear] = useState('');
+    const [selectedMonth, setSelectedMonth] = useState('');
+
+    const [transactionList2, setTransactionList2] = useState([]);
+    const fetchTransactions2 = async () => {
+        try {
+            const res = await transactionService.getAllTransaction();
+            const transactions = res.data;
+
+            // Filter transactions where transaction.courseId is not null
+            const filteredTransactions = transactions.filter(transaction => transaction.courseId !== null && transaction.status === "DONE");
+
+            // Sort filtered transactions by transactionDate
+            filteredTransactions.sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate));
+
+            setTransactionList2(filteredTransactions);
+        } catch (error) {
+            console.error("Error fetching transactions where courseId != null:", error);
+        }
+    }
+
+    const handleSearch2 = (event) => {
+        setSearchTerm2(event.target.value);
+    };
+
+    const handleYearChange = (event) => {
+        setSelectedYear(event.target.value);
+    };
+
+    const handleMonthChange = (event) => {
+        setSelectedMonth(event.target.value);
+    };
+
+    const filteredTransactions2 = transactionList2
+        .filter((transaction) => {
+            const transactionDate = new Date(transaction.transactionDate);
+            const transactionYear = transactionDate.getFullYear();
+            const transactionMonth = transactionDate.getMonth() + 1; // getMonth() returns 0-11
+            const matchesYear = selectedYear ? transactionYear.toString() === selectedYear : true;
+            const matchesMonth = selectedMonth ? transactionMonth.toString() === selectedMonth : true;
+            return matchesYear && matchesMonth && (
+                transaction.course?.name.toLowerCase().includes(searchTerm2.toLowerCase()) ||
+                transaction.course?.code.toLowerCase().includes(searchTerm2.toLowerCase()) ||
+                transaction.learner?.account?.fullName.toLowerCase().includes(searchTerm2.toLowerCase()) ||
+                transaction.learner?.account?.email.toLowerCase().includes(searchTerm2.toLowerCase())
+            );
+        });
+
+    const pageCount2 = Math.ceil(filteredTransactions2.length / transactionsPerPage);
+
+    const handlePageClick2 = (data) => {
+        setCurrentPage2(data.selected);
+    };
+
+    const offset2 = currentPage2 * transactionsPerPage2;
+    const currentTransactions2 = filteredTransactions2.slice(offset2, offset2 + transactionsPerPage2);
+
+
+    //EXPORT TO EXCEL
+    const exportToExcel = () => {
+        // Create a new workbook
+        const wb = XLSX.utils.book_new();
+
+        // Data for the sheet
+        const data = [
+            ["Year", selectedYear],
+            ["Month", selectedMonth],
+            [],
+            ["Learner", "Course", "Date", "Payouts"]
+        ];
+
+        let totalAmount = 0;
+
+        filteredTransactions2.forEach(cus => {
+
+            const payout = (cus.amount / 24000).toFixed(2);
+            totalAmount += parseFloat(payout);
+
+            const row = [
+                cus.learner?.account?.fullName,
+                cus.course?.name,
+                new Date(cus.transactionDate).toLocaleString('en-US'),
+               `$${payout}`
+            ];
+            data.push(row);
+        });
+
+        data.push([]);
+        data.push(["Total", "", "", `$${totalAmount.toFixed(2)}`]);
+
+        // Convert data to a worksheet
+        const ws = XLSX.utils.aoa_to_sheet(data);
+
+        // Append the worksheet to the workbook
+        XLSX.utils.book_append_sheet(wb, ws, 'Transactions');
+
+        // Export the workbook
+        XLSX.writeFile(wb, `Transactions_${selectedYear}_${selectedMonth}.xlsx`);
+    };
 
     return (
         <>
@@ -686,7 +805,7 @@ const AdminDashboard = () => {
                                         <div className="dropdown float-right">
 
                                         </div>
-                                        <h4 className="header-title mb-3">Revenue History</h4>
+                                        <h4 className="header-title mb-3">Transaction History</h4>
                                         <div className="table-responsive">
                                             <table className="table table-btransactionless table-nowrap table-hover table-centered m-0">
                                                 <thead className="thead-light">
@@ -704,7 +823,7 @@ const AdminDashboard = () => {
                                                             <>
                                                                 <tr>
                                                                     <td>
-                                                                        <h5 className="m-0 font-weight-normal">{cus.learner.account.fullName}</h5>
+                                                                        <h5 className="m-0 font-weight-normal">{cus.learner?.account?.fullName}</h5>
                                                                     </td>
                                                                     <td>{new Date(cus.transactionDate).toLocaleString('en-US')}</td>
                                                                     <td>
@@ -750,8 +869,8 @@ const AdminDashboard = () => {
                                                                                     {course.tutor?.isFreelancer && (
                                                                                         <>
                                                                                             <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
-                                                                                            <h4>Tutor {course.tutor?.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
-
+                                                                                            <h4>Tutor {tutor.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
+                                                                                            asdsd
                                                                                         </>
                                                                                     )}
                                                                                     {!course.tutor?.isFreelancer && (
@@ -788,6 +907,156 @@ const AdminDashboard = () => {
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    <div className="card-box">
+                                        <h4 className="header-title mb-3">Revenue History</h4>
+
+                                        <div className="col-12 text-sm-center form-inline mb-2">
+                                            <div className="form-group">
+                                                <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm2}
+                                                    onChange={handleSearch2} style={{ borderRadius: '50px', padding: `18px 25px` }} />
+                                            </div>
+                                            <div className="form-group ml-2">
+                                                <select className="form-control" value={selectedYear} onChange={handleYearChange} style={{ borderRadius: '50px' }}>
+                                                    <option value="">Select Year</option>
+                                                    {[2022, 2023, 2024].map(year => (
+                                                        <option key={year} value={year}>{year}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="form-group ml-2">
+                                                <select className="form-control" value={selectedMonth} onChange={handleMonthChange} style={{ borderRadius: '50px' }}>
+                                                    <option value="">Select Month</option>
+                                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(month => (
+                                                        <option key={month} value={month}>{month}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+
+                                            <div className="form-group ml-2">
+                                                <button className="btn btn-success" onClick={exportToExcel} style={{ borderRadius: '50px' }}>
+                                                    Export to Excel
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="table-responsive">
+                                            <table className="table table-btransactionless table-nowrap table-hover table-centered m-0">
+                                                <thead className="thead-light">
+                                                    <tr>
+                                                        <th>Learner</th>
+                                                        <th>Course</th>
+                                                        <th>Date</th>
+                                                        <th>Payouts</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        currentTransactions2.length > 0 && currentTransactions2.map((cus) => (
+                                                            <>
+                                                                <tr>
+                                                                    <td>
+                                                                        <h5 className="m-0 font-weight-normal">{cus.learner?.account?.fullName}</h5>
+                                                                    </td>
+                                                                    <td>
+                                                                        <h5 className="m-0 font-weight-normal"><a href={`/edit-course/${cus.course?.id}`} className="text-success">{cus.course?.name}</a></h5>
+                                                                    </td>
+                                                                    <td>{new Date(cus.transactionDate).toLocaleString('en-US')}</td>
+                                                                    <td>
+                                                                        ${cus.amount / 24000}
+                                                                    </td>
+
+
+                                                                    {
+                                                                        cus.course !== null && cus.status === "DONE" && (
+                                                                            <td>
+                                                                                <i className="fa-regular fa-eye" style={{ cursor: 'pointer' }} onClick={() => toggleDetail(cus.id)}></i>
+                                                                            </td>
+                                                                        )
+                                                                    }
+                                                                </tr>
+                                                                {expandedDetail[cus.id] && (
+                                                                    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
+                                                                        <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                                                            <div className="modal-content">
+                                                                                <div className="modal-header">
+                                                                                    <h5 className="modal-title">Transaction Detail</h5>
+                                                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeTransactionDetailModal}>
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
+                                                                                    <h4>Amount: <span className='text-danger'>${cus.amount / 24000}</span></h4>
+                                                                                    {course.tutor?.isFreelancer && (
+                                                                                        <>
+                                                                                            <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
+                                                                                            <h4>Tutor {tutor.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
+                                                                                        </>
+                                                                                    )}
+                                                                                    {!course.tutor?.isFreelancer && (
+                                                                                        <>
+                                                                                            <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
+                                                                                            <h4>Center {center.name} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
+
+                                                                                        </>
+
+                                                                                    )}
+                                                                                </div>
+                                                                                <div className="modal-footer">
+                                                                                    <button type="button" className="btn btn-dark" style={{ borderRadius: '50px', padding: '8px 25px' }} onClick={closeTransactionDetailModal}>Close</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </>
+
+                                                        ))
+                                                    }
+
+
+                                                </tbody>
+                                            </table>
+                                            {
+                                                currentTransactions2.length === 0 && (
+                                                    <p className="mt-3">No transactions found.</p>
+                                                )
+                                            }
+                                        </div> {/* end .table-responsive*/}
+                                        <div className='container-fluid mt-3'>
+                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                <ReactPaginate
+                                                    previousLabel={
+                                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                            <AiFillCaretLeft />
+                                                        </IconContext.Provider>
+                                                    }
+                                                    nextLabel={
+                                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                            <AiFillCaretRight />
+                                                        </IconContext.Provider>
+                                                    } breakLabel={'...'}
+                                                    breakClassName={'page-item'}
+                                                    breakLinkClassName={'page-link'}
+                                                    pageCount={pageCount2}
+                                                    marginPagesDisplayed={2}
+                                                    pageRangeDisplayed={5}
+                                                    onPageChange={handlePageClick2}
+                                                    containerClassName={'pagination'}
+                                                    activeClassName={'active'}
+                                                    previousClassName={'page-item'}
+                                                    nextClassName={'page-item'}
+                                                    pageClassName={'page-item'}
+                                                    previousLinkClassName={'page-link'}
+                                                    nextLinkClassName={'page-link'}
+                                                    pageLinkClassName={'page-link'}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div> {/* container */}
                     </div> {/* content */}
                     {/* Footer Start */}
@@ -832,7 +1101,11 @@ const AdminDashboard = () => {
                                                 transform: rotate(360deg);
                                             }
                                         }
-                                        
+                                        .page-item.active .page-link{
+                                            background-color: #20c997;
+                                            border-color: #20c997;
+                                        }
+                        
                                         
                                         `}
             </style>

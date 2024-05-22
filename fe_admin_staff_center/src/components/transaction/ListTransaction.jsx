@@ -9,6 +9,8 @@ import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import transactionService from '../../services/transaction.service';
 import courseService from '../../services/course.service';
 import centerService from '../../services/center.service';
+import tutorService from '../../services/tutor.service';
+import * as XLSX from 'xlsx';
 
 const ListTransaction = () => {
     const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
@@ -91,10 +93,16 @@ const ListTransaction = () => {
         name: ""
     });
 
+    const [tutor, setTutor] = useState({
+        id: "",
+        account: []
+    });
+
     const [course, setCourse] = useState({
         id: "",
         tutor: []
     });
+
     const [expandedDetail, setExpandedDetail] = useState({});
 
 
@@ -108,14 +116,19 @@ const ListTransaction = () => {
             const transaction = transactionRes.data;
             const courseRes = await courseService.getCourseById(transaction.courseId);
             const courseData = courseRes.data;
-    
+
             if (!courseData.tutor?.isFreelancer) {
                 const centerRes = await centerService.getCenterById(courseData.tutor?.centerId);
                 setCenter(centerRes.data);
             }
-    
+
+            if (courseData.tutor?.isFreelancer) {
+                const tutorRes = await tutorService.getTutorById(courseData.tutorId);
+                setTutor(tutorRes.data);
+            }
+
             setCourse(courseData);
-    
+
             setExpandedDetail((prevState) => ({
                 ...prevState,
                 [id]: !prevState[id],
@@ -124,7 +137,40 @@ const ListTransaction = () => {
             console.error('Error fetching transaction details:', error);
         }
     };
-    
+
+
+    //EXPORT TO EXCEL
+    const exportToExcel = () => {
+        // Create a new workbook
+        const wb = XLSX.utils.book_new();
+
+        // Data for the sheet
+        const data = [
+            ["Year", selectedYear],
+            ["Month", selectedMonth],
+            [],
+            ["Learner", "Course", "Date", "Payouts"]
+        ];
+
+        transactionList.forEach(cus => {
+            const row = [
+                cus.learner?.account?.fullName,
+                cus.course?.name,
+                new Date(cus.transactionDate).toLocaleString('en-US'),
+                `$${(cus.amount / 24000).toFixed(2)}`
+            ];
+            data.push(row);
+        });
+
+        // Convert data to a worksheet
+        const ws = XLSX.utils.aoa_to_sheet(data);
+
+        // Append the worksheet to the workbook
+        XLSX.utils.book_append_sheet(wb, ws, 'Transactions');
+
+        // Export the workbook
+        XLSX.writeFile(wb, `Transactions_${selectedYear}_${selectedMonth}.xlsx`);
+    };
 
 
     return (
@@ -174,6 +220,11 @@ const ListTransaction = () => {
                                                             ))}
                                                         </select>
                                                     </div>
+                                                    <div className="form-group ml-2">
+                                                        <button className="btn btn-success" onClick={exportToExcel} style={{ borderRadius: '50px' }}>
+                                                            Export to Excel
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -222,7 +273,7 @@ const ListTransaction = () => {
                                                                         cus.course !== null && (
                                                                             <>
                                                                                 <td>
-                                                                                    <Link to={`/edit-course/${cus.course?.id}`} className='text-secondary'>
+                                                                                    <Link to={`/edit-course/${cus.course?.id}`} className='text-success'>
                                                                                         {cus.course?.name}
                                                                                     </Link>
                                                                                 </td>
@@ -277,7 +328,7 @@ const ListTransaction = () => {
                                                                     {
                                                                         cus.course !== null && cus.status === "DONE" && (
                                                                             <td>
-                                                                                <i className="fa-regular fa-eye" style={{cursor: 'pointer'}} onClick={() => toggleDetail(cus.id)}></i>
+                                                                                <i className="fa-regular fa-eye" style={{ cursor: 'pointer' }} onClick={() => toggleDetail(cus.id)}></i>
                                                                             </td>
                                                                         )
                                                                     }
@@ -298,7 +349,7 @@ const ListTransaction = () => {
                                                                                     {course.tutor?.isFreelancer && (
                                                                                         <>
                                                                                             <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
-                                                                                            <h4>Tutor {course.tutor?.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
+                                                                                            <h4>Tutor {tutor.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
 
                                                                                         </>
                                                                                     )}
