@@ -124,15 +124,22 @@ const CenterDashboard = () => {
     const [walletHistoryList, setWalletHistoryList] = useState([]);
 
     useEffect(() => {
-        walletService
-            .getAllWalletHistoryByWallet(account?.wallet?.id)
-            .then((res) => {
-                setWalletHistoryList(res.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [account.wallet?.id]);
+        if (account?.wallet?.id) {
+            walletService
+                .getAllWalletHistoryByWallet(account.wallet.id)
+                .then((res) => {
+                    // Sort the response data by transactionDate
+                    const sortedData = res.data.sort((a, b) => {
+                        return new Date(b.transactionDate) - new Date(a.transactionDate);
+                    });
+                    // Set the sorted data to the state
+                    setWalletHistoryList(sortedData);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [account?.wallet?.id]);
 
 
     const filteredHistories = walletHistoryList
