@@ -9,6 +9,7 @@ import walletService from '../../services/wallet.service';
 import enrollmentService from '../../services/enrollment.service';
 import learnerService from '../../services/learner.service';
 import walletHistoryService from '../../services/wallet-history.service';
+import courseService from '../../services/course.service';
 import refundRequestHistoryService from '../../services/refund-request-history.service';
 
 const EditRefundRequest = () => {
@@ -16,7 +17,6 @@ const EditRefundRequest = () => {
     const [errors, setErrors] = useState({});
     const [msg, setMsg] = useState('');
     const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
-    console.log("STatus: " + storedLoginStatus)
     const navigate = useNavigate();
     if (!storedLoginStatus) {
         navigate(`/login`)
@@ -171,6 +171,49 @@ const EditRefundRequest = () => {
         }
     })
 
+    //for video course after 2 minutes lock refund button
+    const isTransactionDateValid = (transactionDate) => {
+        const currentDate = new Date();
+        const diffInMilliseconds = currentDate - new Date(transactionDate);
+        const diffInMinutes = diffInMilliseconds / (1000 * 60);
+        return diffInMinutes <= 2;
+    };
+
+
+    //for class course after 7 days from first start date lock refund button
+    const [classModuleDates, setClassModuleDates] = useState({});
+
+    useEffect(() => {
+        const fetchAndSetClassModuleDates = async () => {
+            const dates = {};
+            if (refund.enrollment?.transaction?.course?.isOnlineClass) {
+                const res = await courseService.getAllClassModulesByCourse(refund.enrollment.transaction?.courseId);
+                const modules = res.data;
+                console.log(`Fetched modules for course ${refund.enrollment?.transaction?.courseId}:`, modules);
+
+                if (modules.length > 0) {
+                    const startDates = modules.map(module => new Date(module.startDate));
+                    console.log(`Start dates for course ${refund.enrollment?.transaction?.courseId}:`, startDates);
+                    const earliestStartDate = new Date(Math.min(...startDates));
+                    console.log(`Earliest start date for course ${refund.enrollment?.transaction?.courseId}:`, earliestStartDate);
+
+                    const currentDate = new Date();
+                    console.log(`Current date: ${currentDate}`);
+                    const differenceInDays = (earliestStartDate - currentDate) / (1000 * 60 * 60 * 24);
+                    console.log(`Difference in days: ${differenceInDays}`);
+                    dates[refund.enrollment?.transaction?.courseId] = differenceInDays <= -7;
+
+                } else {
+                    dates[refund.enrollment?.transaction?.courseId] = false;
+                }
+            }
+            setClassModuleDates(dates);
+            console.log('Class module dates:', dates);
+        };
+
+        fetchAndSetClassModuleDates();
+    }, [refund]);
+
     return (
         <>
             <div id="wrapper">
@@ -216,29 +259,62 @@ const EditRefundRequest = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-md-6">
-                                                {
-                                                    !isDoneOrNot && (
-                                                        <>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-success" onClick={() => handleApproveRefund()}
-                                                                style={{ borderRadius: '50px', padding: `8px 25px` }}
-                                                            >
-                                                                <i class="fa-solid fa-thumbs-up"></i>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-danger ml-1" onClick={() => handleDisApproveRefund()}
-                                                                style={{ borderRadius: '50px', padding: `8px 25px` }}
-                                                            >
-                                                                <i class="fa-solid fa-thumbs-down"></i>
-                                                            </button>
-                                                        </>
+                                            {
+                                                !refund.enrollment?.transaction?.course?.isOnlineClass && isTransactionDateValid(refund.enrollment?.enrolledDate) && (
+                                                    <div className="col-md-6">
+                                                        {
+                                                            !isDoneOrNot && (
+                                                                <>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-success" onClick={() => handleApproveRefund()}
+                                                                        style={{ borderRadius: '50px', padding: `8px 25px` }}
+                                                                    >
+                                                                        <i class="fa-solid fa-thumbs-up"></i>
+                                                                    </button>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-danger ml-1" onClick={() => handleDisApproveRefund()}
+                                                                        style={{ borderRadius: '50px', padding: `8px 25px` }}
+                                                                    >
+                                                                        <i class="fa-solid fa-thumbs-down"></i>
+                                                                    </button>
+                                                                </>
 
-                                                    )
-                                                }
-                                            </div>
+                                                            )
+                                                        }
+                                                    </div>
+                                                )
+                                            }
+
+                                            {
+                                                refund.enrollment?.transaction?.course?.isOnlineClass && classModuleDates[refund.enrollment?.transaction?.courseId] === false && (
+                                                    <div className="col-md-6">
+                                                        {
+                                                            !isDoneOrNot && (
+                                                                <>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-success" onClick={() => handleApproveRefund()}
+                                                                        style={{ borderRadius: '50px', padding: `8px 25px` }}
+                                                                    >
+                                                                        <i class="fa-solid fa-thumbs-up"></i>
+                                                                    </button>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-danger ml-1" onClick={() => handleDisApproveRefund()}
+                                                                        style={{ borderRadius: '50px', padding: `8px 25px` }}
+                                                                    >
+                                                                        <i class="fa-solid fa-thumbs-down"></i>
+                                                                    </button>
+                                                                </>
+
+                                                            )
+                                                        }
+                                                    </div>
+                                                )
+                                            }
+
                                         </div>
 
                                         <label htmlFor="transactionId">Course Information:</label>
