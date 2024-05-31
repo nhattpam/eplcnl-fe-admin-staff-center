@@ -38,7 +38,6 @@ const AdminDashboard = () => {
     const [monthlyData, setMonthlyData] = useState([]);
     //list transaction
     const [transactionList, setTransactionList] = useState([]);
-    const [enrollmentList, setEnrollmentList] = useState([]);
     const [transactionsPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
@@ -538,20 +537,72 @@ const AdminDashboard = () => {
     const [transactionList2, setTransactionList2] = useState([]);
     const fetchTransactions2 = async () => {
         try {
-            const res = await transactionService.getAllTransaction();
+            const res = await enrollmentService.getAllEnrollment();
             const transactions = res.data;
 
             // Filter transactions where transaction.courseId is not null
-            const filteredTransactions = transactions.filter(transaction => transaction.courseId !== null && transaction.status === "DONE");
+            const filteredTransactions = transactions.filter(enrollment => enrollment.transaction?.courseId !== null && enrollment.transaction?.status === "DONE" && enrollment.refundStatus === false);
 
             // Sort filtered transactions by transactionDate
-            filteredTransactions.sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate));
+            filteredTransactions.sort((a, b) => new Date(b.transaction?.transactionDate) - new Date(a.transaction?.transactionDate));
 
             setTransactionList2(filteredTransactions);
         } catch (error) {
             console.error("Error fetching transactions where courseId != null:", error);
         }
     }
+
+    //for video course after 2 minutes lock refund button
+    const isTransactionDateValid = (transactionDate) => {
+        const currentDate = new Date();
+        const diffInMilliseconds = currentDate - new Date(transactionDate);
+        const diffInMinutes = diffInMilliseconds / (1000 * 60);
+        return diffInMinutes <= 2;
+    };
+
+
+    //for class course after 7 days from first start date lock refund button
+    const [classModuleDates, setClassModuleDates] = useState({});
+
+    useEffect(() => {
+        const fetchAndSetClassModuleDates = async () => {
+            const dates = {};
+            for (const enrollment of transactionList2) {
+                if (enrollment.transaction?.course?.isOnlineClass) {
+                    try {
+                        const res = await courseService.getAllClassModulesByCourse(enrollment.transaction?.courseId);
+                        const modules = res.data;
+                        console.log(`Fetched modules for course ${enrollment.transaction?.courseId}:`, modules);
+
+                        if (modules.length > 0) {
+                            const startDates = modules.map(module => new Date(module.startDate));
+                            console.log(`Start dates for course ${enrollment.transaction.courseId}:`, startDates);
+                            const earliestStartDate = new Date(Math.min(...startDates));
+                            console.log(`Earliest start date for course ${enrollment.transaction.courseId}:`, earliestStartDate);
+
+                            const currentDate = new Date();
+                            console.log(`Current date: ${currentDate}`);
+                            const differenceInDays = (earliestStartDate - currentDate) / (1000 * 60 * 60 * 24);
+                            console.log(`Difference in days: ${differenceInDays}`);
+                            dates[enrollment.transaction.courseId] = differenceInDays <= -7;
+
+                        } else {
+                            dates[enrollment.transaction.courseId] = false;
+                        }
+                    }
+                    catch (error) {
+                        console.error(`Error fetching modules for course ${enrollment.transaction.courseId}:`, error);
+                        dates[enrollment.transaction?.courseId] = false; // Assuming default to false in case of error
+                    }
+
+                }
+            }
+            setClassModuleDates(dates);
+            console.log('Class module dates:', dates);
+        };
+
+        fetchAndSetClassModuleDates();
+    }, [transactionList2]);
 
     const handleSearch2 = (event) => {
         setSearchTerm2(event.target.value);
@@ -566,17 +617,17 @@ const AdminDashboard = () => {
     };
 
     const filteredTransactions2 = transactionList2
-        .filter((transaction) => {
-            const transactionDate = new Date(transaction.transactionDate);
+        .filter((enrollment) => {
+            const transactionDate = new Date(enrollment.transaction?.transactionDate);
             const transactionYear = transactionDate.getFullYear();
             const transactionMonth = transactionDate.getMonth() + 1; // getMonth() returns 0-11
             const matchesYear = selectedYear ? transactionYear.toString() === selectedYear : true;
             const matchesMonth = selectedMonth ? transactionMonth.toString() === selectedMonth : true;
             return matchesYear && matchesMonth && (
-                transaction.course?.name.toLowerCase().includes(searchTerm2.toLowerCase()) ||
-                transaction.course?.code.toLowerCase().includes(searchTerm2.toLowerCase()) ||
-                transaction.learner?.account?.fullName.toLowerCase().includes(searchTerm2.toLowerCase()) ||
-                transaction.learner?.account?.email.toLowerCase().includes(searchTerm2.toLowerCase())
+                enrollment.transaction?.course?.name.toLowerCase().includes(searchTerm2.toLowerCase()) ||
+                enrollment.transaction?.course?.code.toLowerCase().includes(searchTerm2.toLowerCase()) ||
+                enrollment.transaction?.learner?.account?.fullName.toLowerCase().includes(searchTerm2.toLowerCase()) ||
+                enrollment.transaction?.learner?.account?.email.toLowerCase().includes(searchTerm2.toLowerCase())
             );
         });
 
@@ -607,14 +658,14 @@ const AdminDashboard = () => {
 
         filteredTransactions2.forEach(cus => {
 
-            const payout = (cus.amount / 24000).toFixed(2);
+            const payout = (cus.transaction?.amount / 24000).toFixed(2);
             totalAmount += parseFloat(payout);
 
             const row = [
-                cus.learner?.account?.fullName,
-                cus.course?.name,
-                new Date(cus.transactionDate).toLocaleString('en-US'),
-               `$${payout}`
+                cus.transaction.learner?.account?.fullName,
+                cus.transaction?.course?.name,
+                new Date(cus.transaction?.transactionDate).toLocaleString('en-US'),
+                `$${payout}`
             ];
             data.push(row);
         });
@@ -733,7 +784,7 @@ const AdminDashboard = () => {
                                         <div className="dropdown float-right">
 
                                         </div>
-                                        <h4 className="header-title mb-0">Total Revenue</h4>
+                                        <h4 className="header-title mb-0">Estimate Total Revenue</h4>
                                         <div className="widget-chart text-center" dir="ltr">
                                             <div id="total-revenue" className="mt-0" data-colors="#f1556c" />
                                             <h5 className="text-muted mt-0">Total sales made today</h5>
@@ -957,26 +1008,51 @@ const AdminDashboard = () => {
                                                             <>
                                                                 <tr>
                                                                     <td>
-                                                                        <h5 className="m-0 font-weight-normal">{cus.learner?.account?.fullName}</h5>
+                                                                        <h5 className="m-0 font-weight-normal">{cus.transaction?.learner?.account?.fullName}</h5>
                                                                     </td>
                                                                     <td>
-                                                                        <h5 className="m-0 font-weight-normal"><a href={`/edit-course/${cus.course?.id}`} className="text-success">{cus.course?.name}</a></h5>
+                                                                        <h5 className="m-0 font-weight-normal"><a href={`/edit-course/${cus.transaction?.course?.id}`} className="text-success">{cus.transaction?.course?.name}</a></h5>
                                                                     </td>
-                                                                    <td>{new Date(cus.transactionDate).toLocaleString('en-US')}</td>
+                                                                    <td>{new Date(cus.transaction?.transactionDate).toLocaleString('en-US')}</td>
                                                                     <td>
-                                                                        ${cus.amount / 24000}
+                                                                        <span style={{ fontWeight: 'bold' }}>Total:</span> ${(cus.transaction?.amount / 24000) * 0.2}
+                                                                        <div></div>
+                                                                        {
+                                                                            !cus.transaction?.course?.isOnlineClass &&
+                                                                            new Date(cus.enrolledDate) < new Date(Date.now() - 2 * 60 * 1000) &&
+                                                                            !cus.refundStatus && (
+                                                                                <>
+                                                                                    <span style={{ fontWeight: 'bold' }}>Paid:</span> ${(cus.transaction?.amount / 24000) * 0.2}
+                                                                                    <div> </div>
+                                                                                    <span style={{ fontWeight: 'bold' }}>Not Paid:</span> $0
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                        {
+                                                                            !cus.transaction?.course?.isOnlineClass &&
+                                                                            new Date(cus.enrolledDate) > new Date(Date.now() - 2 * 60 * 1000) && (
+                                                                                <>
+                                                                                    <span style={{ fontWeight: 'bold' }}>Paid:</span> $0
+                                                                                    <div></div>
+                                                                                    <span style={{ fontWeight: 'bold' }}>Not Paid:</span> ${(cus.transaction?.amount / 24000) * 0.2}
+                                                                                </>
+                                                                            )
+                                                                        }
+
+                                                                      
+
                                                                     </td>
 
 
                                                                     {
-                                                                        cus.course !== null && cus.status === "DONE" && (
+                                                                        cus.transaction?.course !== null && cus.transaction?.status === "DONE" && (
                                                                             <td>
-                                                                                <i className="fa-regular fa-eye" style={{ cursor: 'pointer' }} onClick={() => toggleDetail(cus.id)}></i>
+                                                                                <i className="fa-regular fa-eye" style={{ cursor: 'pointer' }} onClick={() => toggleDetail(cus.transaction?.id)}></i>
                                                                             </td>
                                                                         )
                                                                     }
                                                                 </tr>
-                                                                {expandedDetail[cus.id] && (
+                                                                {expandedDetail[cus.transaction?.id] && (
                                                                     <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(29, 29, 29, 0.75)' }}>
                                                                         <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
                                                                             <div className="modal-content">
@@ -987,17 +1063,17 @@ const AdminDashboard = () => {
                                                                                     </button>
                                                                                 </div>
                                                                                 <div className="modal-body" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
-                                                                                    <h4>Amount: <span className='text-danger'>${cus.amount / 24000}</span></h4>
+                                                                                    <h4>Amount: <span className='text-danger'>${cus.transaction?.amount / 24000}</span></h4>
                                                                                     {course.tutor?.isFreelancer && (
                                                                                         <>
-                                                                                            <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
-                                                                                            <h4>Tutor {tutor.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
+                                                                                            <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.transaction?.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.transaction?.amount / 24000) * 0.2}</span></h4>
+                                                                                            <h4>Tutor {tutor.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.transaction?.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
                                                                                         </>
                                                                                     )}
                                                                                     {!course.tutor?.isFreelancer && (
                                                                                         <>
-                                                                                            <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
-                                                                                            <h4>Center {center.name} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
+                                                                                            <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.transaction?.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.transaction?.amount / 24000) * 0.2}</span></h4>
+                                                                                            <h4>Center {center.name} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.transaction?.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.transaction?.amount / 24000) * 0.8}</span></h4>
 
                                                                                         </>
 
