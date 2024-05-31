@@ -17,7 +17,6 @@ import * as XLSX from 'xlsx';
 
 const AdminDashboard = () => {
     const storedLoginStatus = sessionStorage.getItem('isLoggedIn');
-    console.log("STatus: " + storedLoginStatus)
     const navigate = useNavigate();
     if (!storedLoginStatus) {
         navigate(`/login`)
@@ -118,7 +117,7 @@ const AdminDashboard = () => {
 
             const sumForCurrentMonth = calculateSumByMonth(enrollments);
             setSumForCurrentMonth(sumForCurrentMonth);
-            console.log("Sum for current month:", sumForCurrentMonth);
+            // console.log("Sum for current month:", sumForCurrentMonth);
         } catch (error) {
             console.error("Error fetching enrollments:", error);
         }
@@ -160,7 +159,7 @@ const AdminDashboard = () => {
 
             const sumForCurrentYear = calculateSumByYear(enrollments);
             setSumForCurrentYear(sumForCurrentYear);
-            console.log("Sum for current year:", sumForCurrentYear);
+            // console.log("Sum for current year:", sumForCurrentYear);
         } catch (error) {
             console.error("Error fetching enrollments:", error);
         }
@@ -251,7 +250,7 @@ const AdminDashboard = () => {
 
             const sumForPreviousMonth = calculateSumByPreviousMonth(enrollments);
             setSumForPreviousMonth(sumForPreviousMonth);
-            console.log("Sum for previous month:", sumForPreviousMonth);
+            // console.log("Sum for previous month:", sumForPreviousMonth);
         } catch (error) {
             console.error("Error fetching enrollments:", error);
         }
@@ -269,7 +268,7 @@ const AdminDashboard = () => {
 
             const sumForToday = calculateSumByToday(enrollments);
             setSumForToday(sumForToday);
-            console.log("Sum for today:", sumForToday);
+            // console.log("Sum for today:", sumForToday);
         } catch (error) {
             console.error("Error fetching enrollments:", error);
         }
@@ -577,24 +576,20 @@ const AdminDashboard = () => {
                         if (modules.length > 0) {
                             const startDates = modules.map(module => new Date(module.startDate));
                             console.log(`Start dates for course ${enrollment.transaction.courseId}:`, startDates);
-                            const earliestStartDate = new Date(Math.min(...startDates));
-                            console.log(`Earliest start date for course ${enrollment.transaction.courseId}:`, earliestStartDate);
+                            const latestStartDate = new Date(Math.max(...startDates));
+                            console.log(`Latest start date for course ${enrollment.transaction.courseId}:`, latestStartDate);
 
                             const currentDate = new Date();
                             console.log(`Current date: ${currentDate}`);
-                            const differenceInDays = (earliestStartDate - currentDate) / (1000 * 60 * 60 * 24);
-                            console.log(`Difference in days: ${differenceInDays}`);
-                            dates[enrollment.transaction.courseId] = differenceInDays <= -7;
+                            dates[enrollment.transaction.courseId] = latestStartDate < currentDate;
 
                         } else {
                             dates[enrollment.transaction.courseId] = false;
                         }
-                    }
-                    catch (error) {
+                    } catch (error) {
                         console.error(`Error fetching modules for course ${enrollment.transaction.courseId}:`, error);
                         dates[enrollment.transaction?.courseId] = false; // Assuming default to false in case of error
                     }
-
                 }
             }
             setClassModuleDates(dates);
@@ -1039,7 +1034,24 @@ const AdminDashboard = () => {
                                                                             )
                                                                         }
 
-                                                                      
+                                                                        {cus.transaction?.course?.isOnlineClass && (
+                                                                            <>
+                                                                                {classModuleDates[cus.transaction?.courseId] ? (
+                                                                                    <>
+                                                                                        <span style={{ fontWeight: 'bold' }}>Paid:</span> ${(cus.transaction?.amount / 24000) * 0.2}
+                                                                                        <div> </div>
+                                                                                        <span style={{ fontWeight: 'bold' }}>Not Paid:</span> $0
+                                                                                    </>
+                                                                                ) : (
+                                                                                    <>
+                                                                                        <span style={{ fontWeight: 'bold' }}>Paid:</span> $0
+                                                                                        <div> </div>
+                                                                                        <span style={{ fontWeight: 'bold' }}>Not Paid:</span> ${(cus.transaction?.amount / 24000) * 0.2}
+                                                                                    </>
+                                                                                )}
+                                                                            </>
+                                                                        )}
+
 
                                                                     </td>
 
