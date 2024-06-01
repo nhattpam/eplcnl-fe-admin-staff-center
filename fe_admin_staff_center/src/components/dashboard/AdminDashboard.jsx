@@ -334,8 +334,8 @@ const AdminDashboard = () => {
             const monthlyData = Array(12).fill(0);
 
             // Iterate over each transaction
-            enrollments.forEach((enrollment) => {
-                const transactionDate = new Date(enrollment.enrolledDate);
+            transactionList2.forEach((enrollment) => {
+                const transactionDate = new Date(enrollment.transaction?.transactionDate);
                 const transactionYear = transactionDate.getFullYear();
                 const transactionMonth = transactionDate.getMonth();
 
