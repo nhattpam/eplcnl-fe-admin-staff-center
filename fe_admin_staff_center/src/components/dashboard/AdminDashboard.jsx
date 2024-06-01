@@ -115,7 +115,7 @@ const AdminDashboard = () => {
 
             const enrollments = activeEnrollments;
 
-            const sumForCurrentMonth = calculateSumByMonth(enrollments);
+            const sumForCurrentMonth = calculateSumByMonth(transactionList2);
             setSumForCurrentMonth(sumForCurrentMonth);
             // console.log("Sum for current month:", sumForCurrentMonth);
         } catch (error) {
@@ -157,7 +157,7 @@ const AdminDashboard = () => {
             const enrollments = activeEnrollments;
 
 
-            const sumForCurrentYear = calculateSumByYear(enrollments);
+            const sumForCurrentYear = calculateSumByYear(transactionList2);
             setSumForCurrentYear(sumForCurrentYear);
             // console.log("Sum for current year:", sumForCurrentYear);
         } catch (error) {
@@ -171,24 +171,24 @@ const AdminDashboard = () => {
     const calculateSumByToday = (enrollments) => {
         // Get the current date
         const currentDate = new Date();
-        const currentDay = currentDate.getDate();
-
+    
         // Initialize sum for today
         let sumForToday = 0;
-
+    
         // Iterate over each transaction
         enrollments.forEach((enrollment) => {
-            // Extract the day from the transaction date
-            const transactionDay = new Date(enrollment.enrolledDate).getDate();
-
+            // Extract the date from the transaction date
+            const transactionDate = new Date(enrollment.enrolledDate);
+    
             // Check if the transaction occurred today
-            if (transactionDay === currentDay) {
+            if (transactionDate.toDateString() === currentDate.toDateString()) {
                 sumForToday += (enrollment.transaction?.amount / 24000) * 0.2; // Assuming transaction.amount is the amount of the transaction
             }
         });
-
+    
         return sumForToday;
     };
+    
 
     const calculateSumByYear = (enrollments) => {
         // Get the current year
@@ -201,11 +201,11 @@ const AdminDashboard = () => {
         // Iterate over each transaction
         enrollments.forEach((enrollment) => {
             // Extract the year from the transaction date
-            const transactionYear = new Date(enrollment.enrolledDate).getFullYear();
+            const transactionYear = new Date(enrollment.transaction?.transactionDate).getFullYear();
 
             // Check if the transaction belongs to the current year
             if (transactionYear === currentYear) {
-                sumForCurrentYear += enrollment.transaction?.amount;
+                sumForCurrentYear += (enrollment.transaction?.amount / 24000) * 0.2 ;
             }
         });
 
@@ -613,28 +613,38 @@ const AdminDashboard = () => {
         const calculateTotals = () => {
             let notPaidTotal = 0;
             let paidTotal = 0;
-
-            for (const enrollment of transactionList2) {
+            const currentDate = new Date();
+    
+            transactionList2.forEach(enrollment => {
                 const isOnlineClass = enrollment.transaction?.course?.isOnlineClass;
                 const amount = (enrollment.transaction?.amount / 24000) * 0.2;
-
-                if (!isOnlineClass && new Date(enrollment.enrolledDate) > new Date(Date.now() - 2 * 60 * 1000)) {
-                    notPaidTotal += amount;
-                } else if (isOnlineClass && !classModuleDates[enrollment.transaction?.courseId]) {
-                    notPaidTotal += amount;
-                } else if (!isOnlineClass && new Date(enrollment.enrolledDate) < new Date(Date.now() - 2 * 60 * 1000)) {
-                    paidTotal += amount;
-                } else if (isOnlineClass && classModuleDates[enrollment.transaction?.courseId]) {
-                    paidTotal += amount;
+                const enrolledDate = new Date(enrollment.enrolledDate);
+    
+                if (isOnlineClass) {
+                    // For online classes, check against class module dates
+                    if (classModuleDates[enrollment.transaction?.courseId] === false) {
+                        notPaidTotal += amount;
+                    } else if (classModuleDates[enrollment.transaction?.courseId] === true) {
+                        paidTotal += amount;
+                    }
+                } else {
+                    // For offline classes, check against 2-minute window
+                    const diffInMinutes = (currentDate - enrolledDate) / (1000 * 60);
+                    if (diffInMinutes <= 2) {
+                        notPaidTotal += amount;
+                    } else {
+                        paidTotal += amount;
+                    }
                 }
-            }
-
+            });
+    
             setTotalNotPaid(notPaidTotal);
             setTotalPaid(paidTotal);
         };
-
+    
         calculateTotals();
     }, [transactionList2, classModuleDates]);
+    
 
     const handleSearch2 = (event) => {
         setSearchTerm2(event.target.value);
@@ -663,7 +673,7 @@ const AdminDashboard = () => {
             );
         });
 
-    const pageCount2 = Math.ceil(filteredTransactions2.length / transactionsPerPage);
+    const pageCount2 = Math.ceil(filteredTransactions2.length / transactionsPerPage2);
 
     const handlePageClick2 = (data) => {
         setCurrentPage2(data.selected);
@@ -766,7 +776,7 @@ const AdminDashboard = () => {
                                             </div>
                                             <div className="col-6">
                                                 <div className="text-right">
-                                                    <h3 className="text-dark mt-1">$<span data-plugin="counterup">{(sumForCurrentYear / 24000).toFixed(2)}</span></h3>
+                                                    <h3 className="text-dark mt-1">$<span data-plugin="counterup">{(sumForCurrentYear).toFixed(2)}</span></h3>
                                                     <p className="text-muted mb-1 text-truncate">Earnings (Annual)</p>
                                                 </div>
                                             </div>
@@ -1105,16 +1115,16 @@ const AdminDashboard = () => {
                                                                     </td>
                                                                     <td>{new Date(cus.transaction?.transactionDate).toLocaleString('en-US')}</td>
                                                                     <td>
-                                                                        <span style={{ fontWeight: 'bold' }}>Total:</span> ${(cus.transaction?.amount / 24000) * 0.2}
+                                                                        <span style={{ fontWeight: 'bold' }}>Total:</span> <span className="text-primary" style={{ fontWeight: 'bold' }}>${(cus.transaction?.amount / 24000) * 0.2}</span>
                                                                         <div></div>
                                                                         {
                                                                             !cus.transaction?.course?.isOnlineClass &&
                                                                             new Date(cus.enrolledDate) < new Date(Date.now() - 2 * 60 * 1000) &&
                                                                             !cus.refundStatus && (
                                                                                 <>
-                                                                                    <span style={{ fontWeight: 'bold' }}>Paid:</span> ${(cus.transaction?.amount / 24000) * 0.2}
+                                                                                    <span style={{ fontWeight: 'bold' }}>Paid:</span> <span className="text-success" style={{ fontWeight: 'bold' }}>${(cus.transaction?.amount / 24000) * 0.2}</span>
                                                                                     <div> </div>
-                                                                                    <span style={{ fontWeight: 'bold' }}>Not Paid:</span> $0
+                                                                                    <span style={{ fontWeight: 'bold' }}>Not Paid:</span> <span className="text-danger" style={{ fontWeight: 'bold' }}>$0</span>
                                                                                 </>
                                                                             )
                                                                         }
@@ -1122,9 +1132,9 @@ const AdminDashboard = () => {
                                                                             !cus.transaction?.course?.isOnlineClass &&
                                                                             new Date(cus.enrolledDate) > new Date(Date.now() - 2 * 60 * 1000) && (
                                                                                 <>
-                                                                                    <span style={{ fontWeight: 'bold' }}>Paid:</span> $0
+                                                                                    <span style={{ fontWeight: 'bold' }}>Paid:</span> <span className="text-success" style={{ fontWeight: 'bold' }}>$0</span>
                                                                                     <div></div>
-                                                                                    <span style={{ fontWeight: 'bold' }}>Not Paid:</span> ${(cus.transaction?.amount / 24000) * 0.2}
+                                                                                    <span style={{ fontWeight: 'bold' }}>Not Paid:</span> <span className="text-danger" style={{ fontWeight: 'bold' }}>${(cus.transaction?.amount / 24000) * 0.2}</span>
                                                                                 </>
                                                                             )
                                                                         }
@@ -1133,15 +1143,15 @@ const AdminDashboard = () => {
                                                                             <>
                                                                                 {classModuleDates[cus.transaction?.courseId] ? (
                                                                                     <>
-                                                                                        <span style={{ fontWeight: 'bold' }}>Paid:</span> ${(cus.transaction?.amount / 24000) * 0.2}
+                                                                                        <span style={{ fontWeight: 'bold' }}>Paid:</span> <span className="text-success" style={{ fontWeight: 'bold' }}>${(cus.transaction?.amount / 24000) * 0.2}</span>
                                                                                         <div> </div>
-                                                                                        <span style={{ fontWeight: 'bold' }}>Not Paid:</span> $0
+                                                                                        <span style={{ fontWeight: 'bold' }}>Not Paid:</span> <span className="text-danger" style={{ fontWeight: 'bold' }}>$0</span>
                                                                                     </>
                                                                                 ) : (
                                                                                     <>
-                                                                                        <span style={{ fontWeight: 'bold' }}>Paid:</span> $0
+                                                                                        <span style={{ fontWeight: 'bold' }}>Paid:</span> <span className="text-success" style={{ fontWeight: 'bold' }}>$0</span>
                                                                                         <div> </div>
-                                                                                        <span style={{ fontWeight: 'bold' }}>Not Paid:</span> ${(cus.transaction?.amount / 24000) * 0.2}
+                                                                                        <span style={{ fontWeight: 'bold' }}>Not Paid:</span> <span className="text-danger" style={{ fontWeight: 'bold' }}>${(cus.transaction?.amount / 24000) * 0.2}</span>
                                                                                     </>
                                                                                 )}
                                                                             </>
