@@ -534,18 +534,28 @@ const AdminDashboard = () => {
     const [selectedMonth, setSelectedMonth] = useState('');
 
     const [transactionList2, setTransactionList2] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [totalNotPaid, setTotalNotPaid] = useState(0);
+    const [totalPaid, setTotalPaid] = useState(0);
     const fetchTransactions2 = async () => {
         try {
             const res = await enrollmentService.getAllEnrollment();
             const transactions = res.data;
 
             // Filter transactions where transaction.courseId is not null
-            const filteredTransactions = transactions.filter(enrollment => enrollment.transaction?.courseId !== null && enrollment.transaction?.status === "DONE" && enrollment.refundStatus === false);
+            const filteredTransactions = transactions.filter(enrollment => enrollment.transaction?.courseId
+                !== null && enrollment.transaction?.status === "DONE" && enrollment.refundStatus === false);
 
             // Sort filtered transactions by transactionDate
             filteredTransactions.sort((a, b) => new Date(b.transaction?.transactionDate) - new Date(a.transaction?.transactionDate));
 
+            // Calculate the total
+            const calculatedTotal = filteredTransactions.reduce((acc, enrollment) => {
+                return acc + (enrollment.transaction?.amount / 24000) * 0.2;
+            }, 0);
+
             setTransactionList2(filteredTransactions);
+            setTotal(calculatedTotal);
         } catch (error) {
             console.error("Error fetching transactions where courseId != null:", error);
         }
@@ -598,6 +608,33 @@ const AdminDashboard = () => {
 
         fetchAndSetClassModuleDates();
     }, [transactionList2]);
+
+    useEffect(() => {
+        const calculateTotals = () => {
+            let notPaidTotal = 0;
+            let paidTotal = 0;
+
+            for (const enrollment of transactionList2) {
+                const isOnlineClass = enrollment.transaction?.course?.isOnlineClass;
+                const amount = (enrollment.transaction?.amount / 24000) * 0.2;
+
+                if (!isOnlineClass && new Date(enrollment.enrolledDate) > new Date(Date.now() - 2 * 60 * 1000)) {
+                    notPaidTotal += amount;
+                } else if (isOnlineClass && !classModuleDates[enrollment.transaction?.courseId]) {
+                    notPaidTotal += amount;
+                } else if (!isOnlineClass && new Date(enrollment.enrolledDate) < new Date(Date.now() - 2 * 60 * 1000)) {
+                    paidTotal += amount;
+                } else if (isOnlineClass && classModuleDates[enrollment.transaction?.courseId]) {
+                    paidTotal += amount;
+                }
+            }
+
+            setTotalNotPaid(notPaidTotal);
+            setTotalPaid(paidTotal);
+        };
+
+        calculateTotals();
+    }, [transactionList2, classModuleDates]);
 
     const handleSearch2 = (event) => {
         setSearchTerm2(event.target.value);
@@ -653,7 +690,7 @@ const AdminDashboard = () => {
 
         filteredTransactions2.forEach(cus => {
 
-            const payout = (cus.transaction?.amount / 24000).toFixed(2);
+            const payout = ((cus.transaction?.amount / 24000) * 0.2).toFixed(2);
             totalAmount += parseFloat(payout);
 
             const row = [
@@ -713,7 +750,7 @@ const AdminDashboard = () => {
                                             <div className="col-6">
                                                 <div className="text-right">
                                                     <h3 className="mt-1">$<span data-plugin="counterup">{sumForCurrentMonth.toFixed(2)}</span></h3>
-                                                    <p className="text-muted mb-1 text-truncate">Earnings (Monthly)</p>
+                                                    <p className="text-muted mb-1 ">Earnings (Monthly)</p>
                                                 </div>
                                             </div>
                                         </div> {/* end row*/}
@@ -957,7 +994,65 @@ const AdminDashboard = () => {
                                 <div className="col-lg-12">
                                     <div className="card-box">
                                         <h4 className="header-title mb-3">Revenue History</h4>
+                                        <div className="row">
+                                            <div className="col-md-6 col-xl-4">
+                                                <div className="widget-rounded-circle card-box">
+                                                    <div className="row">
 
+                                                        <div className="col-6">
+                                                            <div className="text-right">
+                                                                <h4 className="text-muted mb-1 text-truncate">Total Not Paid</h4>
+
+                                                                <h3 className="mt-1 text-danger">$<span data-plugin="counterup">{totalNotPaid.toFixed(2)}</span></h3>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-2">
+                                                            <div className="avatar-lg">
+                                                                <i className="fas fa-hand-holding-usd fa-4x text-danger"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div> {/* end row*/}
+                                                </div> {/* end widget-rounded-circle*/}
+                                            </div> {/* end col*/}
+                                            <div className="col-md-6 col-xl-4">
+                                                <div className="widget-rounded-circle card-box">
+                                                    <div className="row">
+                                                        <div className="col-6">
+                                                            <div className="text-right">
+                                                                <h4 className="text-muted mb-1 text-truncate">Total Paid</h4>
+
+                                                                <h3 className="mt-1 text-success">$<span data-plugin="counterup">{totalPaid.toFixed(2)}</span></h3>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-2">
+                                                            <div className="avatar-lg">
+                                                                <i className="fas fa-coins fa-4x text-success"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div> {/* end row*/}
+                                                </div> {/* end widget-rounded-circle*/}
+                                            </div> {/* end col*/}
+                                            <div className="col-md-6 col-xl-4">
+                                                <div className="widget-rounded-circle card-box">
+                                                    <div className="row">
+                                                        <div className="col-6">
+                                                            <div className="text-right">
+                                                                <h4 className="text-muted mb-1 text-truncate">Total</h4>
+
+                                                                <h3 className="mt-1 text-primary">$<span data-plugin="counterup">{total.toFixed(2)}</span></h3>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-2">
+                                                            <div className="avatar-lg">
+                                                                <i className="fas fa-funnel-dollar fa-4x text-primary"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div> {/* end row*/}
+                                                </div> {/* end widget-rounded-circle*/}
+                                            </div> {/* end col*/}
+
+
+                                        </div>
                                         <div className="col-12 text-sm-center form-inline mb-2">
                                             <div className="form-group">
                                                 <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm2}
