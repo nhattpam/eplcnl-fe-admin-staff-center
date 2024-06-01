@@ -725,6 +725,10 @@ const AdminDashboard = () => {
         XLSX.writeFile(wb, `Transactions_${selectedYear}_${selectedMonth}.xlsx`);
     };
 
+    useEffect(() => {
+        fetchMonthlyData();
+    }, [transactionList2]);
+
     return (
         <>
             <div id="wrapper">
