@@ -7,6 +7,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import accountService from '../../services/account.service';
 import walletService from '../../services/wallet.service';
 import { Chart, PieController, ArcElement, registerables } from "chart.js";
+import * as XLSX from 'xlsx';
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
+import ReactPaginate from "react-paginate";
+import { IconContext } from "react-icons";
 
 const CenterDashboard = () => {
 
@@ -25,7 +29,7 @@ const CenterDashboard = () => {
     const navigate = useNavigate();
     if (!storedLoginStatus) {
         navigate(`/login`)
-    }    const [searchTerm, setSearchTerm] = useState('');
+    } const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [tutorsPerPage] = useState(5);
     const [currentPage2, setCurrentPage2] = useState(0);
@@ -309,6 +313,246 @@ const CenterDashboard = () => {
 
     };
 
+
+    //more details
+    const areaChartRef2 = useRef(null);
+    //aera enrollments chart
+
+
+    const [monthlyData, setMonthlyData] = useState([]);
+    //area chart
+    const fetchMonthlyData = async () => {
+        try {
+            const res = await centerService.getAllEnrollmentsByCenter(centerId);
+            const filteredTransactions = res.data.filter(enrollment => enrollment.transaction?.courseId
+                !== null && enrollment.transaction?.status === "DONE" && enrollment.refundStatus === false);
+            const enrollments = filteredTransactions;
+
+            const currentYear = new Date().getFullYear();
+
+            // Initialize an array to store monthly data
+            const monthlyData = Array(12).fill(0);
+
+            // Iterate over each transaction
+            enrollments.forEach((enrollment) => {
+                const transactionDate = new Date(enrollment.transaction?.transactionDate);
+                const transactionYear = transactionDate.getFullYear();
+                const transactionMonth = transactionDate.getMonth();
+
+                // Check if the transaction belongs to the current year
+                if (transactionYear === currentYear) {
+                    // Add the transaction's total price to the corresponding month's data
+                    monthlyData[transactionMonth] += (enrollment.transaction?.amount / 24000) * 0.8; //wait a minute
+                }
+            });
+
+            setMonthlyData(monthlyData);
+        } catch (error) {
+            console.error("Error fetching enrollments:", error);
+        }
+    };
+    const createAreaChart2 = () => {
+        const areaChartCanvas = areaChartRef2.current.getContext("2d");
+
+        if (areaChartRef2.current.chart) {
+            areaChartRef2.current.chart.destroy();
+        }
+
+        const data = {
+            labels: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ],
+            datasets: [
+                {
+                    label: "Income",
+                    data: monthlyData,
+                    backgroundColor: "rgba(54, 162, 235, 0.2)",
+                    btransactionColor: "rgba(54, 162, 235, 1)",
+                    btransactionWidth: 2,
+                    pointBackgroundColor: "rgba(54, 162, 235, 1)",
+                    pointBtransactionColor: "#fff",
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                },
+            ],
+        };
+
+        const options = {
+            scales: {
+                x: {
+                    grid: {
+                        display: false,
+                    },
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        btransactionDash: [2],
+                        btransactionDashOffset: [2],
+                        drawBtransaction: false,
+                        color: "rgba(0, 0, 0, 0.05)",
+                        zeroLineColor: "rgba(0, 0, 0, 0.1)",
+                    },
+                    ticks: {
+                        callback: (value) => {
+                            if (value >= 1000) {
+                                return `$${value / 1000}k`;
+                            }
+                            return `$${value}`;
+                        },
+                    },
+                },
+            },
+            plugins: {
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: (context) => {
+                            const label = context.dataset.label;
+                            const value = context.formattedValue;
+                            return `${label}: $${value}`;
+                        },
+                    },
+                },
+            },
+        };
+
+        areaChartRef2.current.chart = new Chart(areaChartCanvas, {
+            type: "line",
+            data: data,
+            options: options,
+        });
+    };
+
+    useEffect(() => {
+        if (monthlyData.length > 0) {
+            createAreaChart2();
+        }
+    }, [monthlyData]);
+
+    useEffect(() => {
+
+        fetchMonthlyData();
+        fetchEnrollmentListbyCenter();
+    }, []);
+
+
+    //list enrollments by tutor
+    //list transaction where courseId != null
+    const [searchTerm4, setSearchTerm4] = useState('');
+    const [currentPage4, setCurrentPage4] = useState(0);
+    const [transactionsPerPage4] = useState(7);
+    const [selectedYear4, setSelectedYear4] = useState('');
+    const [selectedMonth4, setSelectedMonth4] = useState('');
+    const [transactionList4, setTransactionList4] = useState([]);
+
+    const fetchEnrollmentListbyCenter = async () => {
+        try {
+            const res = await centerService.getAllEnrollmentsByCenter(centerId);
+            const filteredTransactions = res.data.filter(enrollment => enrollment.transaction?.courseId
+                !== null && enrollment.transaction?.status === "DONE" && enrollment.refundStatus === false);
+
+            // Filter transactions where transaction.courseId is not null
+
+            // Sort filtered transactions by transactionDate
+            filteredTransactions.sort((a, b) => new Date(b.transaction?.transactionDate) - new Date(a.transaction?.transactionDate));
+
+            setTransactionList4(filteredTransactions);
+        } catch (error) {
+            console.error("Error fetching transactions where courseId != null:", error);
+        }
+    }
+
+    const handleSearch4 = (event) => {
+        setSearchTerm4(event.target.value);
+    };
+
+    const handleYearChange4 = (event) => {
+        setSelectedYear4(event.target.value);
+    };
+
+    const handleMonthChange4 = (event) => {
+        setSelectedMonth4(event.target.value);
+    };
+
+    const filteredTransactions4 = transactionList4
+        .filter((enrollment) => {
+            const transactionDate = new Date(enrollment.transaction?.transactionDate);
+            const transactionYear = transactionDate.getFullYear();
+            const transactionMonth = transactionDate.getMonth() + 1; // getMonth() returns 0-11
+            const matchesYear = selectedYear4 ? transactionYear.toString() === selectedYear4 : true;
+            const matchesMonth = selectedMonth4 ? transactionMonth.toString() === selectedMonth4 : true;
+            return matchesYear && matchesMonth && (
+                enrollment.transaction?.course?.name.toLowerCase().includes(searchTerm4.toLowerCase()) ||
+                enrollment.transaction?.course?.code.toLowerCase().includes(searchTerm4.toLowerCase()) ||
+                enrollment.transaction?.learner?.account?.fullName.toLowerCase().includes(searchTerm4.toLowerCase()) ||
+                enrollment.transaction?.learner?.account?.email.toLowerCase().includes(searchTerm4.toLowerCase())
+            );
+        });
+
+    const pageCount4 = Math.ceil(filteredTransactions4.length / transactionsPerPage4);
+
+    const handlePageClick4 = (data) => {
+        setCurrentPage4(data.selected);
+    };
+
+    const offset4 = currentPage4 * transactionsPerPage4;
+    const currentTransactions4 = filteredTransactions4.slice(offset4, offset4 + transactionsPerPage4);
+
+
+    //EXPORT TO EXCEL
+    const exportToExcel = () => {
+        // Create a new workbook
+        const wb = XLSX.utils.book_new();
+
+        // Data for the sheet
+        const data = [
+            ["Year", selectedYear4],
+            ["Month", selectedMonth4],
+            [],
+            ["Learner", "Course", "Date", "Payouts"]
+        ];
+
+        let totalAmount = 0;
+
+        filteredTransactions4.forEach(cus => {
+
+            const payout = ((cus.transaction?.amount / 24000) * 0.8).toFixed(2);
+            totalAmount += parseFloat(payout);
+
+            const row = [
+                cus.transaction?.learner?.account?.fullName,
+                cus.transaction?.course?.name,
+                new Date(cus.transaction?.transactionDate).toLocaleString('en-US'),
+                `$${payout}`
+            ];
+            data.push(row);
+        });
+
+        data.push([]);
+        data.push(["Total", "", "", `$${totalAmount.toFixed(2)}`]);
+
+        // Convert data to a worksheet
+        const ws = XLSX.utils.aoa_to_sheet(data);
+
+        // Append the worksheet to the workbook
+        XLSX.utils.book_append_sheet(wb, ws, 'Transactions');
+
+        // Export the workbook
+        XLSX.writeFile(wb, `Transactions_${selectedYear4}_${selectedMonth4}.xlsx`);
+    };
+
     return (
         <>
             <div id="wrapper">
@@ -453,6 +697,137 @@ const CenterDashboard = () => {
                                 </div> {/* end col */}
                             </div>
                             {/* end row */}
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    <div className="card-box pb-2">
+                                        <div className="float-right d-none d-md-inline-block">
+
+                                        </div>
+                                        <h4 className="header-title mb-3">Sales Analytics</h4>
+                                        <div dir="ltr">
+                                            <div className="card-body">
+                                                <div className="chart-area">
+                                                    <canvas ref={areaChartRef2} id="myAreaChart2" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> {/* end card-box */}
+                                </div> {/* end col*/}
+                            </div>
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    <div className="card-box">
+                                        <h4 className="header-title mb-3">Payout History</h4>
+
+                                        <div className="col-12 text-sm-center form-inline mb-2">
+                                            <div className="form-group">
+                                                <input id="demo-foo-search" type="text" placeholder="Search" className="form-control form-control-sm" autoComplete="on" value={searchTerm4}
+                                                    onChange={handleSearch4} style={{ borderRadius: '50px', padding: `18px 25px` }} />
+                                            </div>
+                                            <div className="form-group ml-2">
+                                                <select className="form-control" value={selectedYear4} onChange={handleYearChange4} style={{ borderRadius: '50px' }}>
+                                                    <option value="">Select Year</option>
+                                                    {[2022, 2023, 2024].map(year => (
+                                                        <option key={year} value={year}>{year}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="form-group ml-2">
+                                                <select className="form-control" value={selectedMonth4} onChange={handleMonthChange4} style={{ borderRadius: '50px' }}>
+                                                    <option value="">Select Month</option>
+                                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(month => (
+                                                        <option key={month} value={month}>{month}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+
+                                            <div className="form-group ml-2">
+                                                <button className="btn btn-success" onClick={exportToExcel} style={{ borderRadius: '50px' }}>
+                                                    Export to Excel
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="table-responsive">
+                                            <table className="table table-btransactionless table-nowrap table-hover table-centered m-0">
+                                                <thead className="thead-light">
+                                                    <tr>
+                                                        <th>Learner</th>
+                                                        <th>Course</th>
+                                                        <th>Tutor</th>
+                                                        <th>Date</th>
+                                                        <th>Payouts</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        currentTransactions4.length > 0 && currentTransactions4.map((cus) => (
+                                                            <>
+                                                                <tr>
+                                                                    <td>
+                                                                        <h5 className="m-0 font-weight-normal">{cus.transaction?.learner?.account?.fullName}</h5>
+                                                                    </td>
+                                                                    <td>
+                                                                        <h5 className="m-0 font-weight-normal"><a href={`/tutor/courses/edit-course/${cus.transaction?.course?.id}`} className="text-success">{cus.transaction?.course?.name}</a></h5>
+                                                                    </td>
+                                                                    <td>
+                                                                        <h5 className="m-0 font-weight-normal"><a href={`/edit-tutor/${cus.transaction?.course?.tutor?.accountId}`} className="text-success">{cus.transaction?.course?.tutor?.account?.fullName}</a></h5>
+                                                                    </td>
+                                                                    <td>{new Date(cus.transaction?.transactionDate).toLocaleString('en-US')}</td>
+                                                                    <td>
+                                                                        ${(cus.transaction?.amount / 24000) * 0.8}
+                                                                    </td>
+
+
+                                                                    
+                                                                </tr>
+                                                               
+                                                            </>
+
+                                                        ))
+                                                    }
+
+
+                                                </tbody>
+                                            </table>
+                                            {
+                                                currentTransactions4.length === 0 && (
+                                                    <p className="mt-3">No transactions found.</p>
+                                                )
+                                            }
+                                        </div> {/* end .table-responsive*/}
+                                        <div className='container-fluid mt-3'>
+                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                <ReactPaginate
+                                                    previousLabel={
+                                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                            <AiFillCaretLeft />
+                                                        </IconContext.Provider>
+                                                    }
+                                                    nextLabel={
+                                                        <IconContext.Provider value={{ color: "#000", size: "14px" }}>
+                                                            <AiFillCaretRight />
+                                                        </IconContext.Provider>
+                                                    } breakLabel={'...'}
+                                                    breakClassName={'page-item'}
+                                                    breakLinkClassName={'page-link'}
+                                                    pageCount={pageCount4}
+                                                    marginPagesDisplayed={2}
+                                                    pageRangeDisplayed={5}
+                                                    onPageChange={handlePageClick4}
+                                                    containerClassName={'pagination'}
+                                                    activeClassName={'active'}
+                                                    previousClassName={'page-item'}
+                                                    nextClassName={'page-item'}
+                                                    pageClassName={'page-item'}
+                                                    previousLinkClassName={'page-link'}
+                                                    nextLinkClassName={'page-link'}
+                                                    pageLinkClassName={'page-link'}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div> {/* container */}
                     </div> {/* content */}
                     {/* Footer Start */}
@@ -530,6 +905,11 @@ const CenterDashboard = () => {
     box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
   }
   
+  .page-item.active .page-link{
+    background-color: #20c997;
+    border-color: #20c997;
+}
+
               
                 `}
             </style>

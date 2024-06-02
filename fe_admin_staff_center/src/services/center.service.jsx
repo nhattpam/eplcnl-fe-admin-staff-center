@@ -61,5 +61,14 @@ class CenterService {
     });
   }
 
+  getAllEnrollmentsByCenter(id) {
+    return axios.get(`${API_URL}/centers/${id}/enrollments`, {
+      headers: {
+        Authorization: `Bearer ${this.token}` // Include the bearer token in the headers
+      }
+    });
+  }
+
+
 }
 export default new CenterService;

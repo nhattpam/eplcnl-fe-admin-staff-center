@@ -54,7 +54,7 @@ const EditTutor = () => {
     if (!storedLoginStatus) {
         navigate(`/login`)
     }
-    
+
     const [showModal, setShowModal] = useState(false); // State variable for modal visibility
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
@@ -236,33 +236,36 @@ const EditTutor = () => {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     const renderSalaryTable = () => {
-        // Filter salary list for the selected year
-        const filteredSalaries = salaryList.filter(salary => salary.year === selectedYear);
+        if (salaryList.length > 0) {
+            // Filter salary list for the selected year
+            const filteredSalaries = salaryList.filter(salary => salary.year === selectedYear);
 
-        return (
-            <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
-                <thead className="thead-light">
-                    <tr>
-                        {months.map((month, index) => (
-                            <th key={index}>{month}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        {months.map((month, index) => {
-                            // Find the salary for the current month
-                            const salaryForMonth = filteredSalaries.find(salary => salary.month === index + 1);
-                            return (
-                                <td key={index}>
-                                    {salaryForMonth ? `$${salaryForMonth.amount.toFixed(2)}` : '-'}
-                                </td>
-                            );
-                        })}
-                    </tr>
-                </tbody>
-            </table>
-        );
+            return (
+                <table id="demo-foo-filtering" className="table table-borderless table-hover table-wrap table-centered mb-0" data-page-size={7}>
+                    <thead className="thead-light">
+                        <tr>
+                            {months.map((month, index) => (
+                                <th key={index}>{month}</th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {months.map((month, index) => {
+                                // Find the salary for the current month
+                                const salaryForMonth = filteredSalaries.find(salary => salary.month === index + 1);
+                                return (
+                                    <td key={index}>
+                                        {salaryForMonth ? `$${salaryForMonth.amount.toFixed(2)}` : '-'}
+                                    </td>
+                                );
+                            })}
+                        </tr>
+                    </tbody>
+                </table>
+            );
+        }
+
     };
 
 
@@ -283,90 +286,93 @@ const EditTutor = () => {
             }
 
             // Filter salary data for the selected year
-            const filteredSalaries = salaryList.filter(salary => salary.year === selectedYear);
+            if (salaryList.length > 0) {
+                const filteredSalaries = salaryList.filter(salary => salary.year === selectedYear);
 
-            // Extract salary for each month
-            const salaryByMonth = Array.from({ length: 12 }, (_, index) => {
-                const salaryForMonth = filteredSalaries.find(salary => salary.month === index + 1);
-                return salaryForMonth ? salaryForMonth.amount : 0;
-            });
+                // Extract salary for each month
+                const salaryByMonth = Array.from({ length: 12 }, (_, index) => {
+                    const salaryForMonth = filteredSalaries.find(salary => salary.month === index + 1);
+                    return salaryForMonth ? salaryForMonth.amount : 0;
+                });
 
-            const data = {
-                labels: [
-                    "January",
-                    "February",
-                    "March",
-                    "April",
-                    "May",
-                    "June",
-                    "July",
-                    "August",
-                    "September",
-                    "October",
-                    "November",
-                    "December",
-                ],
-                datasets: [
-                    {
-                        label: "Income",
-                        data: salaryByMonth, // Use salary data for each month
-                        backgroundColor: "rgba(54, 162, 235, 0.2)",
-                        borderColor: "rgba(54, 162, 235, 1)",
-                        borderWidth: 2,
-                        pointBackgroundColor: "rgba(54, 162, 235, 1)",
-                        pointBorderColor: "#fff",
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                    },
-                ],
-            };
-
-            const options = {
-                scales: {
-                    x: {
-                        grid: {
-                            display: false,
+                const data = {
+                    labels: [
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    ],
+                    datasets: [
+                        {
+                            label: "Income",
+                            data: salaryByMonth, // Use salary data for each month
+                            backgroundColor: "rgba(54, 162, 235, 0.2)",
+                            borderColor: "rgba(54, 162, 235, 1)",
+                            borderWidth: 2,
+                            pointBackgroundColor: "rgba(54, 162, 235, 1)",
+                            pointBorderColor: "#fff",
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
                         },
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            borderWidth: 1,
-                            borderDash: [2],
-                            borderDashOffset: [2],
-                            drawBorder: false,
-                            color: "rgba(0, 0, 0, 0.05)",
-                            zeroLineColor: "rgba(0, 0, 0, 0.1)",
+                    ],
+                };
+
+                const options = {
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                            },
                         },
-                        ticks: {
-                            callback: (value) => {
-                                if (value >= 1000) {
-                                    return `$${value / 1000}k`;
-                                }
-                                return `$${value}`;
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                borderWidth: 1,
+                                borderDash: [2],
+                                borderDashOffset: [2],
+                                drawBorder: false,
+                                color: "rgba(0, 0, 0, 0.05)",
+                                zeroLineColor: "rgba(0, 0, 0, 0.1)",
+                            },
+                            ticks: {
+                                callback: (value) => {
+                                    if (value >= 1000) {
+                                        return `$${value / 1000}k`;
+                                    }
+                                    return `$${value}`;
+                                },
                             },
                         },
                     },
-                },
-                plugins: {
-                    tooltip: {
-                        enabled: true,
-                        callbacks: {
-                            label: (context) => {
-                                const label = context.dataset.label;
-                                const value = context.formattedValue;
-                                return `${label}: $${value}`;
+                    plugins: {
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                label: (context) => {
+                                    const label = context.dataset.label;
+                                    const value = context.formattedValue;
+                                    return `${label}: $${value}`;
+                                },
                             },
                         },
                     },
-                },
-            };
+                };
 
-            areaChartRef.current.chart = new Chart(areaChartCanvas, {
-                type: "line",
-                data: data,
-                options: options,
-            });
+                areaChartRef.current.chart = new Chart(areaChartCanvas, {
+                    type: "line",
+                    data: data,
+                    options: options,
+                });
+            }
+
         }
 
     };
@@ -695,24 +701,22 @@ const EditTutor = () => {
                                         </div>
 
                                     </div>
-                                    <label>Salaries:</label>
+                                    {/* <label>Salaries:</label>
 
                                     <div className='form-group'>
-                                        {/* Salary */}
                                         <div style={{ float: 'left', marginRight: '20px', marginBottom: '5px' }}>
-                                            {/* Year selection dropdown */}
                                             <select className="form-select" value={selectedYear} onChange={(e) => setSelectedYear(parseInt(e.target.value))}>
                                                 {[...Array(5).keys()].map((_, index) => (
                                                     <option key={index} value={new Date().getFullYear() - index}>{new Date().getFullYear() - index}</option>
                                                 ))}
                                             </select>
                                         </div>
-                                        {/* Render salary table based on selected year */}
                                         {renderSalaryTable()}
                                         <div className="chart-area">
                                             <canvas ref={areaChartRef} id="myAreaChart" />
                                         </div>
-                                    </div>
+                                    </div> */}
+                                    
                                 </div> {/* end card-box*/}
 
                             </div> {/* end col*/}
