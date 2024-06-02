@@ -94,8 +94,9 @@ const EditCourse = () => {
             .getAllClassModulesByCourse(id)
             .then((res) => {
                 console.log(res.data);
-                setClassModuleList(res.data);
-
+                // Sort the data by startDate
+                const sortedData = res.data.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+                setClassModuleList(sortedData);
             })
             .catch((error) => {
                 console.log(error);
