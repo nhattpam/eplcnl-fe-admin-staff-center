@@ -967,7 +967,7 @@ const AdminDashboard = () => {
                                                                                         <>
                                                                                             <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.2}</span></h4>
                                                                                             <h4>Tutor {tutor.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
-                                                                                            asdsd
+                                                                                            
                                                                                         </>
                                                                                     )}
                                                                                     {!course.tutor?.isFreelancer && (
@@ -1188,7 +1188,7 @@ const AdminDashboard = () => {
                                                                                     {course.tutor?.isFreelancer && (
                                                                                         <>
                                                                                             <h4>Meowlish receives <span class='text-danger'>20%</span> of <span class='text-danger'>${cus.transaction?.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.transaction?.amount / 24000) * 0.2}</span></h4>
-                                                                                            <h4>Tutor {tutor.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.transaction?.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.amount / 24000) * 0.8}</span></h4>
+                                                                                            <h4>Tutor {tutor.account?.fullName} receives <span class='text-danger'>80%</span> of <span class='text-danger'>${cus.transaction?.amount / 24000}</span> ={'>'} <span class='text-success'>${(cus.transaction?.amount / 24000) * 0.8}</span></h4>
                                                                                         </>
                                                                                     )}
                                                                                     {!course.tutor?.isFreelancer && (
